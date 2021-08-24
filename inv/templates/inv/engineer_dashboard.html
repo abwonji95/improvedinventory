@@ -1,0 +1,38 @@
+<li >
+    <a href="{% url 'engineer_dashboard'%}">
+        My Dashboard
+    </a>
+</li>
+
+{% block content %}
+
+        <div >
+            <ul >
+                <li >
+                    <a href="{% url 'engineer_dashboard'%}">
+                        My Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'request_product_en'%}">Request Products</a>
+                </li>
+                <li>
+                    <a href="{% url 'create_return_en'%}">Return Products</a>
+                </li>
+                <li><span> signed in as {{request.user}}</span>
+                    <br>
+                </li>
+                <li>
+                    <a href="{% url 'logoutpage'%}">Sign out</a>
+                </li>   
+            </ul> 
+        </div>
+
+{% endblock %}
+
+
+
+
+
+
+

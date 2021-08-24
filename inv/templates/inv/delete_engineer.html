@@ -1,0 +1,12 @@
+
+{% block content%}
+<p>delete "{{item}}"?</p>
+
+<form action="{% url 'delete_engineer' engineer.id %}" method="POST" >
+{% csrf_token %}
+<a href="{% url engineers %}">Cancel</a>
+
+<input type="submit" name="Confirm">
+</form>
+
+{% endblock %}

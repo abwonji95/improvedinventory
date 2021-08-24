@@ -1,0 +1,42 @@
+
+{% block content %}
+{%include 'inv/navbar.html'%}
+<div>
+
+    <table>
+    
+    
+        <tr>
+            <th>counter</th>
+            <th>item</th>
+            <th>vendor</th>
+            <th>quantity</th>
+            <th><a  href=" {%url 'create_purchase'%}" >Add Stock</a></th>
+            <th><a  href=" {%url 'create_issuance'%}" >Issue products</a></th>
+            
+        </tr>
+    
+            {% for instance in stock %}
+            <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{instance.product}}</td>
+            <td>{{instance.vendor}}</td>
+            <td>{{instance.quantity}}</td>
+            <td><a href="" >edit</a></td>
+            <td><a href="">delete</a></td>
+            </tr>
+              
+              
+              {% endfor %}
+    
+    </table>
+    
+    <h4>products page</h4>
+    
+    
+    </div>
+
+
+
+<h1>my stock page</h1>
+{% endblock %}

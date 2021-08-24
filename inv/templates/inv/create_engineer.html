@@ -1,0 +1,30 @@
+
+{%block content%}
+<form action="" method="POST">
+    {% csrf_token %}
+ <div>  
+{{form.first_name.label}}
+{{form.first_name}}
+</div>
+{{form.last_name.label}}
+{{form.last_name}}
+</div>
+<div>
+{{form.email.label}}
+{{form.email}}
+</div>
+
+{%for messages in messages%}
+<a>{{messages}}</a>
+{%endfor%}
+<div>
+    <input type="submit" name="register">
+
+
+
+</form>
+
+
+
+
+{%endblock%}
