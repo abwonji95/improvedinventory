@@ -1,39 +1,57 @@
 
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 {% block content %}
 {%include 'inv/navbar.html'%}
-<div>
-
-    <table>
-    
-    
-        <tr>
+	<h2>Stock</h2>
+    <br>
+    <button><a  href=" {%url 'create_purchase'%}" >Add Stock</a></button>
+    <button><a  href=" {%url 'create_issuance'%}" >Issue products</a></button>
+	{% if purchases %}
+	<table id="example" class="table table-bordered display" style="width:100%">
+    		<thead class="thead-dark">
+          <tr>
             <th>counter</th>
-            <th>item</th>
+            <th>product</th>
             <th>vendor</th>
-            <th>quantity</th>
-            <th><a  href=" {%url 'create_purchase'%}" >Add Stock</a></th>
-            <th><a  href=" {%url 'create_issuance'%}" >Issue products</a></th>
+            <th>quantity purchased</th>
+            <th>quantity issued </th>
+            <th>current quantity</th>
+            <td>Actions</td>
+            
             
         </tr>
-    
-            {% for instance in stock %}
+        	</thead>
+        	<tbody>
+            {% for instance in purchases %}
             <tr>
             <th scope="row">{{forloop.counter}}</th>
             <td>{{instance.product}}</td>
             <td>{{instance.vendor}}</td>
             <td>{{instance.quantity}}</td>
-            <td><a href="" >edit</a></td>
-            <td><a href="">delete</a></td>
+            <td></td>
+            <td></td>
+            <td><a href="" >edit</a>
+            <a href="">delete</a></td>
             </tr>
-              
-              
-              {% endfor %}
-    
-    </table>
-    
-  </div>
-
-
-
-<h1>my stock page</h1>
+                  {% endfor %}
+		</tbody>
+		<tfoot>
+      <tr>
+        <th>counter</th>
+        <th>product</th>
+        <th>vendor</th>
+        <th>quantity purchased</th>
+        <th>quantity issued </th>
+        <th>current quantity</th>
+      
+        
+    </tr>
+        	</tfoot>
+	</table>
+	{% else %}
+    		<p>No details are available.</p>
+	{% endif %}
 {% endblock %}
+
+

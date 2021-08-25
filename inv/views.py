@@ -197,9 +197,8 @@ def create_purchase(request):
         form =PurchaseForm(request.POST)
         if form.is_valid():
             form.save()
-            
-            return redirect('purchases')
-    context={'form':form,'stock':stock}
+            return redirect('stock')
+    context={'form':form}
     return render(request,'inv/create_purchase.html',context)
 
 @login_required(login_url='loginpage')
@@ -291,14 +290,21 @@ def update_engineer(request,id):
 
 @login_required(login_url='loginpage')
 def delete_engineer(request, id):
-	queryset = Engineer.objects.get_object_or_404(id=id)
+	queryset = Engineer.objects.get(id=id)
 	if request.method == 'POST':
 		queryset.delete()
 		return redirect('engineers'+ id)
-	return render(request, 'delete_engineer.html')
+	return render(request, 'inv/delete_engineer.html')
 
-@login_required(login_url='loginpage')
 def stock(request):
-    stock=Purchase.objects.all()
-    
-    return render(request,'inv/stock.html',{'stock':stock})
+    purchases=Purchase.objects.all()
+    #issued=Issuance.objects.get()
+    return render(request,'inv/stock.html',{'purchases':purchases})
+
+def delete_all(request):
+    queryset = Engineer.objects.all()
+    if request.method=='POST':
+        queryset.delete()
+        return redirect('engineers')
+    return render(request,'inv/delete_all.html')
+

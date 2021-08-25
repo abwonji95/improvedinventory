@@ -1,0 +1,12 @@
+
+{% block content%}
+<p>delete all records</p>
+
+<form action="" method="POST" >
+{% csrf_token %}
+<a href="{% url 'engineers' %}">Cancel</a>
+
+<input type="submit" name="Confirm">
+</form>
+
+{% endblock %}

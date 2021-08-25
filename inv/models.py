@@ -64,6 +64,7 @@ class Issuance(models.Model):
     STATUS=(
             ('Issued','Issued'),('Available','Availabe'),
             )
+            
     products=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -106,8 +107,6 @@ class Purchase(models.Model):
     def __int__(self) :
         return self.po
    
-class Stock(models.Model):
-    product=models.ForeignKey(Purchase,null=True,on_delete=models.SET_NULL)
-    date_created=models.DateTimeField(auto_now_add=True)
+
     
 

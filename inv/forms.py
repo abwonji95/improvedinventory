@@ -57,8 +57,8 @@ class PurchaseForm(ModelForm):
 
 class StockForm(ModelForm):
     class Meta:
-        model=Stock
-        fields='__all__'
+        model=Purchase
+        fields=['product','vendor','quantity',]
 
 class CreateUserForm(UserCreationForm):
     class Meta:
