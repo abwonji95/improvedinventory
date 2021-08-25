@@ -258,11 +258,10 @@ def loginpage(request):
     context={}
     return render(request,'inv/loginpage.html',context)
 
-@login_required(login_url='loginpage')
 def logoutpage(request):
     user=authenticate(request)
     if request.method=='POST':
-        logout(request,user)
+        logout(request)
         messages.info(request,'you have been logged out successfully')
     return redirect('loginpage')
 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'inv',
     'phonenumber_field',
     'phone_field',
+    
 ]
 
 MIDDLEWARE = [
