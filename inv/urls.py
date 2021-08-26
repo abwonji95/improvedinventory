@@ -2,13 +2,13 @@ from django.urls import path
 from  . import views
 from .views import *
 from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 
 urlpatterns=[
     path('',views.home,name='home'),
     path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),
     path('engineer_dashboard/',views.engineer_dashboard,name='engineer_dashboard'),
     path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
-
 
     path('products/',views.products,name='products'),
     path('stock/',views.stock,name='stock'),
@@ -30,8 +30,6 @@ urlpatterns=[
     path('stores/',views.stores,name='stores'),
     path('delete_all/',views.delete_all,name='delete_all'),
 
-    path('create_return_en/',views.create_return_en,name='create_return_en'),
-    path('createreturn/',views.createreturn,name='createreturn'),
     path('create_vendor/',views.create_vendor,name='create_vendor'),
     path('create_store/',views.create_store,name='create_store'),
     path('create_product/',views.create_product,name='create_product'),
@@ -42,9 +40,11 @@ urlpatterns=[
     path('request_product_en/',views.request_product_en,name='request_product_en'),
     path('cards/',views.cards,name='cards'),
 
-    path('changepassword/',views.changepassword,name='changepassword'),
-    path('forgotpassword/',views.forgotpassword,name='forgotpassword'),
-
+  
+    path('reset_password/',auth_views.PasswordResetView.as_view(template_name='inv/forgotpassword.html'),name='reset_password'),
+    path('password_reset_done/',auth_views.PasswordResetDoneView.as_view(template_name='inv/password_reset_sent.html'),name='password_reset_sent'),
+    path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
+    path('resetpassword_success/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
 
 
 

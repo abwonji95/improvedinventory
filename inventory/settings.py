@@ -133,3 +133,12 @@ USE_TZ = False
 MEDIA_URL='/images/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR ,'static') ]
+
+#SMTP Configuration
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT= 587
+EMAIL_USE_TLS='TLS'
+EMAIL_HOST_USER='jackonyi90@gmail.com'
+EMAL_HOST_PASSWORD='TALL7777'

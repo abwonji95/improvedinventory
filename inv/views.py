@@ -20,6 +20,58 @@ def home(request):
     return render(request,'inv/main.html')
 
 @login_required(login_url='loginpage')
+def engineer_dashboard(request):
+    return render(request,'inv/engineer_dashboard.html')
+
+@login_required(login_url='loginpage')
+def teamleader_dashboard(request):
+    return render(request,'inv/teamleader_dashboard.html')
+
+@login_required(login_url='loginpage')
+def products(request):
+    products=Product.objects.all()
+    return render(request,'inv/products.html',{'products':products})
+
+@login_required(login_url='loginpage')
+def accounts(request):
+    users=User.objects.all()
+    return render(request,'inv/accounts.html',{'users':users})
+   
+@login_required(login_url='loginpage')
+def purchases(request):
+    purchases=Purchase.objects.all()
+    return render(request,'inv/purchases.html',{'purchases':purchases})
+
+
+@login_required(login_url='loginpage')
+def vendors(request):
+    vendors = Vendor.objects.all()
+    return render(request,'inv/vendors.html',{'vendors':vendors})
+
+@login_required(login_url='loginpage')
+def issuance(request):
+    issuances = Issuance.objects.all()
+    return render(request,'inv/issuance.html',{'issuances':issuances})
+
+@login_required(login_url='loginpage')
+def stores(request):
+    stores = Store.objects.all()
+    return render(request,'inv/stores.html',{'stores':stores})
+
+def logoutpage(request):
+    user=authenticate(request)
+    if request.method=='POST':
+        logout(request)
+        messages.info(request,'you have been logged out successfully')
+    return redirect('loginpage')
+
+def stock(request):
+    purchases=Purchase.objects.all()
+    #issued=Issuance.objects.get()
+    return render(request,'inv/stock.html',{'purchases':purchases})
+
+
+@login_required(login_url='loginpage')
 def admin_dashboard(request):
     
     engineers=Engineer.objects.all().order_by('-id')
@@ -40,13 +92,6 @@ def admin_dashboard(request):
     
     }
     return render(request,'inv/admin_dashboard.html',context=mydict)
-@login_required(login_url='loginpage')
-def engineer_dashboard(request):
-    return render(request,'inv/engineer_dashboard.html')
-
-@login_required(login_url='loginpage')
-def teamleader_dashboard(request):
-    return render(request,'inv/teamleader_dashboard.html')
 
 def home(request):
     if request.method=='POST':
@@ -62,6 +107,8 @@ def home(request):
             return render(request,'inv/loginpage.html')
     context={}
     return render(request,'inv/loginpage.html',context)
+
+
 @login_required(login_url='loginpage')
 def engineers(request):
     engineers = Engineer.objects.all()
@@ -71,32 +118,9 @@ def engineers(request):
     return render(request,'inv/engineers.html',{'engineers':engineers,
     'engineercount':engineercount,'engineer_tm':engineer_tm,'engineer_en':engineer_en})
 
-@login_required(login_url='loginpage')
-def products(request):
-    products=Product.objects.all()
-    return render(request,'inv/products.html',{'products':products})
 
 
-@login_required(login_url='loginpage')
-def accounts(request):
-    users=User.objects.all()
-    return render(request,'inv/accounts.html',{'users':users})
-   
-@login_required(login_url='loginpage')
-def purchases(request):
-    purchases=Purchase.objects.all()
-    return render(request,'inv/purchases.html',{'purchases':purchases})
 
-
-@login_required(login_url='loginpage')
-def vendors(request):
-    vendors = Vendor.objects.all()
-    return render(request,'inv/vendors.html',{'vendors':vendors})
-
-@login_required(login_url='loginpage')
-def stores(request):
-    stores = Store.objects.all()
-    return render(request,'inv/stores.html',{'stores':stores})
 
 def cards(request):
     productscount=Product.objects.all().count()
@@ -119,10 +143,7 @@ def teamleader_issuance(request):
     context={'form':form}
     return render(request,'inv/teamleader_issuance.html',context)
 
-@login_required(login_url='loginpage')
-def issuance(request):
-    issuances = Issuance.objects.all()
-    return render(request,'inv/issuance.html',{'issuances':issuances})
+
 
 @login_required(login_url='loginpage')
 def create_engineer(request):
@@ -244,12 +265,7 @@ def loginpage(request):
     context={}
     return render(request,'inv/loginpage.html',context)
 
-def logoutpage(request):
-    user=authenticate(request)
-    if request.method=='POST':
-        logout(request)
-        messages.info(request,'you have been logged out successfully')
-    return redirect('loginpage')
+
 
 
 @login_required(login_url='loginpage')
@@ -296,10 +312,7 @@ def delete_engineer(request, id):
 		return redirect('engineers'+ id)
 	return render(request, 'inv/delete_engineer.html')
 
-def stock(request):
-    purchases=Purchase.objects.all()
-    #issued=Issuance.objects.get()
-    return render(request,'inv/stock.html',{'purchases':purchases})
+
 
 def delete_all(request):
     queryset = Engineer.objects.all()
@@ -315,8 +328,7 @@ def changepassword(request):
         if form.is_valid():
             form.save()
             return redirect('loginpage')
-        context={'form':form}
-    return render (request,'inv/changepassword.html',context)
+    return render (request,'inv/changepassword.html',{'form':form})
 
 def forgotpassword(request):
     form = PasswordResetForm
