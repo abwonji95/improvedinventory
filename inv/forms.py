@@ -44,10 +44,10 @@ class TeamleaderissuanceForm(ModelForm):
         model=Teamleaderissuance
         fields='__all__'
 
-class RequestForm(ModelForm):
+class RequestproductForm(ModelForm):
     class Meta:
         model=Requestproduct
-        fields='__all__'
+        fields=['product','quantity','sitename','service']
 
 class PurchaseForm(ModelForm):
     class Meta:
@@ -66,3 +66,7 @@ class CreateUserForm(UserCreationForm):
         fields=['username','first_name','last_name','email','password1','password1'
 
         ]
+class ProductreturnForm(ModelForm):
+    class Meta:
+        model= Productreturn
+        fields='__all__'

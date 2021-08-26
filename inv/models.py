@@ -51,8 +51,8 @@ class Engineer(models.Model):
     email=models.EmailField(max_length=200,null=True)
     role=models.CharField(max_length=200,null=True,choices=ROLE)
     id=models.AutoField(primary_key=True)
-    def __int__(self) :
-        return self.employee_number
+    def __str__(self) :
+        return "{} {}".format(self.first_name,self.last_name)
    
 class Store(models.Model):
     name=models.CharField(max_length=200,null=True)
@@ -82,7 +82,7 @@ class Requestproduct(models.Model):
             ('installation','installation'),('support','support'),('survey','survey'),
             )
     sitename=models.CharField(max_length=200,null=True)
-    products=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -104,9 +104,12 @@ class Purchase(models.Model):
     def total_price(self):
         return self.quantity * self.price
     
-    def __int__(self) :
-        return self.po
+    def __str__(self) :
+        return "{} {}".format(self.po,self.product)
    
+class Productreturn(models.Model):
+    quantity=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    date_created=models.DateTimeField(auto_now_add=True)
 
-    
 

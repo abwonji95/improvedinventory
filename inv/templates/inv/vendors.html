@@ -2,6 +2,7 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 {% block content %}
 {%include 'inv/navbar.html'%}
+<div class="card">
 	<h2>Vendors</h2>
     <br>
     <button><a  href=" {%url 'create_vendor'%}" >Add vendor</a></button>
@@ -46,6 +47,6 @@
 	{% else %}
     		<p>No details are available.</p>
 	{% endif %}
-{% endblock %}
 
-
+</div>
+{%endblock%}

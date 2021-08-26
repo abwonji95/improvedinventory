@@ -3,15 +3,11 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    {{form.p}}
+    <tr>{{form}}</tr>
+    
     <input type="submit" name="submit">
-
-
-
+    <button><a href="{%url 'create_vendor'%}"></a></button>
 </form>
-
-
-
 
 {%endblock%}
 

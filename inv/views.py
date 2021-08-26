@@ -28,6 +28,7 @@ def admin_dashboard(request):
     vendorscount=Vendor.objects.all().count()
     userscount=User.objects.all().count()
     users=User.objects.all().count()
+    stores=Store.objects.all().count()
 
     mydict={
     'engineers':engineers,
@@ -97,17 +98,27 @@ def stores(request):
     stores = Store.objects.all()
     return render(request,'inv/stores.html',{'stores':stores})
 
-@login_required(login_url='loginpage')
-def requests(request):
-    return render(request,'inv/requests.html')
-
-@login_required(login_url='loginpage')
-def teamleader_request(request):
-    return render(request,'inv/teamleader_request.html')
+def cards(request):
+    productscount=Product.objects.all().count()
+    vendorscount = Vendor.objects.all().count()
+    purchasescount=Purchase.objects.all().count()
+    users=User.objects.all()
+    engineercount = Engineer.objects.count()
+    context={'productscount':productscount,'vendorscount':vendorscount,
+    'purchasescount':purchasescount,'users':users,'engineercount':engineercount}
+    return render(request,'inv/cards.html',context)
 
 @login_required(login_url='loginpage')
 def teamleader_issuance(request):
-    return render(request,'inv/teamleader_issuance.html')
+    form =TeamleaderissuanceForm
+    if request.method=='POST':
+        form =TeamleaderissuanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('teamleader_dashboard')
+    context={'form':form}
+    return render(request,'inv/teamleader_issuance.html',context)
+
 @login_required(login_url='loginpage')
 def issuance(request):
     issuances = Issuance.objects.all()
@@ -177,7 +188,6 @@ def create_issuance(request):
 
 @login_required(login_url='loginpage')
 def create_issuance_tm(request):
-
     form =TeamleaderissuanceForm()
     if request.method=='POST':
         form =TeamleaderissuanceForm(request.POST)
@@ -185,7 +195,7 @@ def create_issuance_tm(request):
             form.save()
             return redirect('issuance_tm')
     context={'form':form}
-    return render(request,'inv/create_issuance_tm.html',context)
+    return render(request,'inv/teamleader_issuance.html',context)
 
 
 
@@ -201,29 +211,6 @@ def create_purchase(request):
     context={'form':form}
     return render(request,'inv/create_purchase.html',context)
 
-@login_required(login_url='loginpage')
-def teamleader_request(request):
-
-    form =RequestForm()
-    if request.method=='POST':
-        form =RequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_request')
-    context={'form':form}
-    return render(request,'inv/create_request_tm.html',context)
-
-@login_required(login_url='loginpage')
-def engineer_request(request):
-
-    form =RequestForm()
-    if request.method=='POST':
-        form =RequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('engineer_request')
-    context={'form':form}
-    return render(request,'inv/create_request_eng.html',context)
 
 
 
@@ -266,11 +253,25 @@ def logoutpage(request):
 
 @login_required(login_url='loginpage')
 def request_product_tm(request):
-    return render(request,'inv/request_product_tm.html')
+    form =RequestproductForm
+    if request.method=='POST':
+        form =RequestproductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('teamleader_dashboard')
+    context={'form':form}
+    return render(request,'inv/request_product_tm.html',context)
 
 @login_required(login_url='loginpage')
 def request_product_en(request):
-    return render(request,'inv/request_product_en.html')
+    form =RequestproductForm()
+    if request.method=='POST':
+        form =RequestproductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('engineer_dashboard')
+    context={'form':form}
+    return render(request,'inv/request_product_en.html',context)
 # Create your views here.
 
 @login_required(login_url='loginpage')
@@ -283,9 +284,7 @@ def update_engineer(request,id):
 			form.save()
 			return HttpResponseRedirect("engineers"+id)
 
-	context = {
-		'form':form
-	}
+	context = {'form':form}
 	return render(request, 'create_engineer', context)
 
 @login_required(login_url='loginpage')
@@ -308,3 +307,22 @@ def delete_all(request):
         return redirect('engineers')
     return render(request,'inv/delete_all.html')
 
+def create_return_en(request):
+    form =Productreturn()
+    if request.method=='POST':
+        form =Productreturn(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('engineer_dashboard')
+    context={'form':form}
+    return render(request,'inv/create_return_en.html')
+
+def create_return_tm(request):
+    form =Productreturn()
+    if request.method=='POST':
+        form =Productreturn(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_returns')
+    context={'form':form}
+    return render(request,'inv/create_return_tm.html')
