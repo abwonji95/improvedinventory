@@ -31,7 +31,7 @@ urlpatterns=[
     path('delete_all/',views.delete_all,name='delete_all'),
 
     path('create_return_en/',views.create_return_en,name='create_return_en'),
-    path('create_return_tm/',views.create_return_tm,name='create_return_tm'),
+    path('createreturn/',views.createreturn,name='createreturn'),
     path('create_vendor/',views.create_vendor,name='create_vendor'),
     path('create_store/',views.create_store,name='create_store'),
     path('create_product/',views.create_product,name='create_product'),
@@ -40,7 +40,10 @@ urlpatterns=[
     path('create_purchase/',views.create_purchase,name='create_purchase'),
     path('request_product_tm/',views.request_product_tm,name='request_product_tm'),
     path('request_product_en/',views.request_product_en,name='request_product_en'),
-      path('cards/',views.cards,name='cards'),
+    path('cards/',views.cards,name='cards'),
+
+    path('changepassword/',views.changepassword,name='changepassword'),
+    path('forgotpassword/',views.forgotpassword,name='forgotpassword'),
 
 
 

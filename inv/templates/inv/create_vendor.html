@@ -3,7 +3,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <tr>{{form}}</tr>
+    {{form.as_p}}
     
     <input type="submit" name="submit">
     <button><a href="{%url 'create_vendor'%}"></a></button>

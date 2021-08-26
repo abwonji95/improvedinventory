@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
@@ -251,16 +251,6 @@ def logoutpage(request):
         messages.info(request,'you have been logged out successfully')
     return redirect('loginpage')
 
-@login_required(login_url='loginpage')
-def request_product_tm(request):
-    form =RequestproductForm
-    if request.method=='POST':
-        form =RequestproductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_dashboard')
-    context={'form':form}
-    return render(request,'inv/request_product_tm.html',context)
 
 @login_required(login_url='loginpage')
 def request_product_en(request):
@@ -272,6 +262,17 @@ def request_product_en(request):
             return redirect('engineer_dashboard')
     context={'form':form}
     return render(request,'inv/request_product_en.html',context)
+
+@login_required(login_url='loginpage')
+def request_product_tm(request):
+    form =RequestproductForm2()
+    if request.method=='POST':
+        form =RequestproductForm2(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('teamleader_dashboard')
+    context={'form':form}
+    return render(request,'inv/request_product_tm.html',context)
 # Create your views here.
 
 @login_required(login_url='loginpage')
@@ -307,22 +308,25 @@ def delete_all(request):
         return redirect('engineers')
     return render(request,'inv/delete_all.html')
 
-def create_return_en(request):
-    form =Productreturn()
+def changepassword(request):
+    form = PasswordChangeForm
     if request.method=='POST':
-        form =Productreturn(request.POST)
+        form=PasswordChangeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('engineer_dashboard')
-    context={'form':form}
-    return render(request,'inv/create_return_en.html')
+            return redirect('loginpage')
+        context={'form':form}
+    return render (request,'inv/changepassword.html',context)
 
-def create_return_tm(request):
-    form =Productreturn()
+def forgotpassword(request):
+    form = PasswordResetForm
     if request.method=='POST':
-        form =Productreturn(request.POST)
+        form=PasswordResetForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('product_returns')
-    context={'form':form}
-    return render(request,'inv/create_return_tm.html')
+            return redirect('loginpage')
+        context={'form':form}
+    return render (request,'inv/forgotpassword.html',context)
+
+
+

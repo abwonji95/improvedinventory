@@ -49,6 +49,12 @@ class RequestproductForm(ModelForm):
         model=Requestproduct
         fields=['product','quantity','sitename','service']
 
+class RequestproductForm2(ModelForm):
+    class Meta:
+        model=Requestproduct
+        fields=['product','quantity']
+
+
 class PurchaseForm(ModelForm):
     class Meta:
         model=Purchase
