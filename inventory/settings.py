@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'inv',
     'phonenumber_field',
     'phone_field',
+    'django_filters',
     
 ]
 
@@ -139,6 +140,6 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR ,'static') ]
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT= 587
-EMAIL_USE_TLS='TLS'
+EMAIL_USE_TLS=True
 EMAIL_HOST_USER='jackonyi90@gmail.com'
-EMAL_HOST_PASSWORD='TALL7777'
+EMAIL_HOST_PASSWORD='TALL7777'

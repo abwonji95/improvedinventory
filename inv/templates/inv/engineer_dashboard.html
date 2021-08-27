@@ -625,12 +625,7 @@ header {
                 <div class="navi">
                     <ul>
                         <li class="active"><a href="{% url 'engineer_dashboard'%}"><span class="hidden-xs hidden-sm">My Dashboard</span></a></li>
-                        <li>
-                            <a href="{% url 'request_product_en'%}">Request Products</a>
-                        </li>
-                        <li>
-                            <a href="">Return Products</a>
-                        </li>
+                        
                         <li>
                             <a href="{% url 'reset_password'%}">Change password</a>
                         </li>
@@ -642,8 +637,9 @@ header {
             <div class="navi">
                 <h2> Hey, {{request.user}}</h2>
             </div>
-
-     
+<br>
+<hr>
+{%include 'inv/engineer_cards.html'%}  
       
 {% endblock %}
 

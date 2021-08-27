@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
+from django.contrib.auth.views import *
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,11 @@ from .models import *
 from .forms import *
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from .filters import *
+from django.urls import reverse_lazy
+
+
+
 
 def main(request):
     return render(request,'inv/main.html')
@@ -40,6 +46,7 @@ def accounts(request):
 @login_required(login_url='loginpage')
 def purchases(request):
     purchases=Purchase.objects.all()
+
     return render(request,'inv/purchases.html',{'purchases':purchases})
 
 
@@ -70,17 +77,31 @@ def stock(request):
     #issued=Issuance.objects.get()
     return render(request,'inv/stock.html',{'purchases':purchases})
 
+def purchases_card(request):
+    purchases_recent=Purchase.objects.all()[:5]
+    return render(request,'inv/purchases_card.html',{'purchases_recent':purchases_recent})
+
+def engineer_cards(request):
+    return render(request,'inv/engineer_cards.html')
+def teamleader_cards(request):
+    return render(request,'inv/teamleader_cards.html')
+
+def create_return_en(request):
+    return render(request,'inv/create_return_en.html')
+
+def create_request_en(request):
+    return render(request,'inv/create_request_en.html')
+
 
 @login_required(login_url='loginpage')
 def admin_dashboard(request):
     
-    engineers=Engineer.objects.all().order_by('-id')
-    vendors=Vendor.objects.all().order_by('-id')
     engineerscount=Engineer.objects.all().count()
     vendorscount=Vendor.objects.all().count()
     userscount=User.objects.all().count()
     users=User.objects.all().count()
     stores=Store.objects.all().count()
+    purchases_recent=Purchase.objects.all()[:5]
 
     mydict={
     'engineers':engineers,
@@ -89,6 +110,7 @@ def admin_dashboard(request):
     'engineerscount':engineerscount,
     'userscount':userscount,
     'users':users,
+    'purchases_recent':purchases_recent,
     
     }
     return render(request,'inv/admin_dashboard.html',context=mydict)
@@ -306,7 +328,7 @@ def update_engineer(request,id):
 
 @login_required(login_url='loginpage')
 def delete_engineer(request, id):
-	queryset = Engineer.objects.get(id=id)
+	queryset = Engineer.objects.filter(id=id)
 	if request.method == 'POST':
 		queryset.delete()
 		return redirect('engineers'+ id)
@@ -321,24 +343,8 @@ def delete_all(request):
         return redirect('engineers')
     return render(request,'inv/delete_all.html')
 
-def changepassword(request):
-    form = PasswordChangeForm
-    if request.method=='POST':
-        form=PasswordChangeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('loginpage')
-    return render (request,'inv/changepassword.html',{'form':form})
-
-def forgotpassword(request):
-    form = PasswordResetForm
-    if request.method=='POST':
-        form=PasswordResetForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('loginpage')
-        context={'form':form}
-    return render (request,'inv/forgotpassword.html',context)
 
 
-
+class PasswordsChangeView(PasswordChangeView):
+    form_class=PasswordChangeForm
+    success_url=reverse_lazy('loginpage')

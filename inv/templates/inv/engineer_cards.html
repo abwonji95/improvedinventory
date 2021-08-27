@@ -5,41 +5,28 @@
 <div class="card-deck">
     <div class="card text-dark bg-warning mb-3">
       <div class="card-body text-center">
-        <h2><a href="{% url 'accounts'%}"><span class="hidden-xs hidden-sm"> Users</span></a></h2>
+        <h2><a href="{% url 'create_return_en'%}"><span class="hidden-xs hidden-sm"> Returns</span></a></h2>
         <hr>
         <br>
         <br>
-        <h2>Total Users  {{users}}</h2>
-        <br>
-        <br>
-        <a href="{% url 'accounts'%}" class="btn btn-primary">View</a>
-        <a href="{% url 'register'%}" class="btn btn-primary">Register</a>
-      </div>
-    </div>
-    <div class="card text-dark bg-warning mb-3">
-      <div class="card-body text-center">
-        <h2><a href="{% url 'accounts'%}"><span class="hidden-xs hidden-sm"> Vendors</span></a></h2>
-        <hr>
-        <br>
-        <br>
-        <h2>Total Vendors  {{vendorscount}}</h2>
+        <h2>My returns  {{returnscount}}</h2>
         <br>
         <br>
         <a href="{% url 'vendors'%}" class="btn btn-primary">View</a>
-        <a href="{% url 'create_vendor'%}" class="btn btn-primary">Add new</a>
+        <a href="{% url 'create_return_en'%}" class="btn btn-primary">Return Product</a>
       </div>
     </div>
     <div class="card text-dark bg-warning mb-3">
       <div class="card-body text-center">
-        <h2><a href="{% url 'engineers'%}"><span class="hidden-xs hidden-sm"> Engineers</span></a></h2>
+        <h2><a href="{% url 'create_request_en'%}"><span class="hidden-xs hidden-sm"> Request product</span></a></h2>
         <hr>
         <br>
         <br>
-        <h2>Total Engineers  {{engineerscount}}</h2>
+        <h2>My requests  {{requestscount}}</h2>
         <br>
         <br>
         <a href="{% url 'engineers'%}" class="btn btn-primary">View</a>
-        <a href="{% url 'create_engineer'%}" class="btn btn-primary">Add new</a>
+        <a href="{% url 'create_request_en'%}" class="btn btn-primary">Make request</a>
       </div>
     </div>
     </div>

@@ -33,7 +33,7 @@
                 <td>{{instance.email}}</td>
                 <td>{{instance.role}}</td>
                 <td><a href="">edit</a>
-                    <a href=" ">delete</a>
+                    <a href="{%url 'delete_engineer' engineer.id %} ">delete</a>
                 </td>
                 </tr>
                   {% endfor %}
