@@ -91,7 +91,8 @@ def create_return_en(request):
 
 def create_request_en(request):
     return render(request,'inv/create_request_en.html')
-
+def create_account(request):
+    return render(request,'inv/create_account.html')
 
 @login_required(login_url='loginpage')
 def admin_dashboard(request):
@@ -345,6 +346,4 @@ def delete_all(request):
 
 
 
-class PasswordsChangeView(PasswordChangeView):
-    form_class=PasswordChangeForm
-    success_url=reverse_lazy('loginpage')
+

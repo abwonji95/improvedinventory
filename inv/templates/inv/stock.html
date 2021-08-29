@@ -31,23 +31,13 @@
             <td>{{instance.quantity}}</td>
             <td></td>
             <td></td>
-            <td><a href="" >edit</a>
+            <td><a href="">view</a>
+                <a href="" >edit</a>
             <a href="">delete</a></td>
             </tr>
                   {% endfor %}
 		</tbody>
-		<tfoot>
-      <tr>
-        <th>counter</th>
-        <th>product</th>
-        <th>vendor</th>
-        <th>quantity purchased</th>
-        <th>quantity issued </th>
-        <th>current quantity</th>
-      
-        
-    </tr>
-        	</tfoot>
+	
 	</table>
 	{% else %}
     		<p>No details are available.</p>

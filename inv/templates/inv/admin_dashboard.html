@@ -636,9 +636,15 @@ header {
                 </div>
             </div>
             <br>
-            <div class="navi">
-                <h2> Hey, {{request.user}}</h2>
+           
+
+            <div class="card text-dark bg-light mb-3">
+                <div class="card-body text-left">
+                    <h2> Hey, {{request.user}}</h2>
+                </div>
             </div>
+
+            <hr>
             <br>
        {%include 'inv/cards.html'%}
        <br>

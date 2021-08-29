@@ -4,7 +4,7 @@
 {%include 'inv/navbar.html'%}
 	<h2>Users</h2>
     <br>
-    <button><a  href=" {%url 'create_account'%}" >Add user</a></button>
+    <button><a  href=" {%url 'register'%}" >Register</a></button>
 	{% if users %}
 	<table id="example" class="table table-bordered display" style="width:100%">
     		<thead class="thead-dark">
@@ -26,9 +26,10 @@
                     <td>{{instance.first_name}}</td>
                     <td>{{instance.last_name}}</td>
                     <td>{{instance.email}}</td>
-                    <td><a href="  ">edit</a>
+                    <td>
+                        <a href="">view</a>
+                        <a href="  ">edit</a>
                         <a href=" ">delete</a>
-                        <a href=" ">reset password</a>
                     </td>
                     </tr>
                     {% endfor %}

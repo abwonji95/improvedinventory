@@ -92,7 +92,7 @@ class Purchase(models.Model):
     STATUS=(
             ('COMPLETED','COMPLETED'),('PENDING','PENDING'),('CANCELED','CANCELED'),
             )
-    po= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    po= models.CharField(max_length=10,null=True)
     vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
     product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
