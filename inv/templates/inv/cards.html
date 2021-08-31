@@ -1,46 +1,63 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<div class="card-deck">
-    <div class="card text-dark bg-light mb-3">
-      <div class="card-body text-center">
-        <h2><a href="{% url 'accounts'%}"><span class="hidden-xs hidden-sm"> Users</span></a></h2>
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}
+
+
+
+
+<div class="col">
+  <div class="card" >
+    <div class="card-deck text-center" >
+
+  <div class="card text-dark bg-light mb-4">
+    <div class="card-body text-center">
+        <h4><a href="{% url 'userslist'%}"><span class="hidden-xs hidden-sm"> Users</span></a></h4>
         <hr>
-        <br>
-        <br>
-        <h2>Total Users  {{users}}</h2>
-        <br>
-        <br>
-        <a href="{% url 'accounts'%}" class="btn btn-primary btn-lg">View</a>
-        <a href="{% url 'register'%}" class="btn btn-primary btn-lg">Register</a>
+        <h5>Total Users  </h5>
+        <h4>{{users}}</h4>
+        <hr>
+        <a href="{% url 'userslist'%}" class="btn btn-primary btn-sm">View</a>
+        <a href="{% url 'register'%}" class="btn btn-primary btn-sm">Register</a>
       </div>
     </div>
-    <div class="card text-dark bg-light mb-3">
-      <div class="card-body text-center">
-        <h2><a href="{% url 'vendors'%}"><span class="hidden-xs hidden-sm"> Vendors</span></a></h2>
+    <div class="card text-dark bg-light mb-4" >
+      <div class="card-body text-center" >
+        <h4><a href="{% url 'storeslist'%}"><span class="hidden-xs hidden-sm"> Stores</span></a></h4>
         <hr>
-        <br>
-        <br>
-        <h2>Total Vendors  {{vendorscount}}</h2>
-        <br>
-        <br>
-        <a href="{% url 'vendors'%}" class="btn btn-primary btn-lg">View</a>
-        <a href="{% url 'create_vendor'%}" class="btn btn-primary btn-lg">Add new</a>
+        <h5>Total Stores</h5>  
+        <h4>{{stores}}</h4>
+        <hr>
+        <a href="{% url 'storeslist'%}" class="btn btn-primary btn-sm">View</a>
+        <a href="{% url 'store_insert'%}" class="btn btn-primary btn-sm">Add new</a>
       </div>
     </div>
-    <div class="card text-dark bg-light mb-3">
-      <div class="card-body text-center">
-        <h2><a href="{% url 'engineers'%}"><span class="hidden-xs hidden-sm"> Engineers</span></a></h2>
+    <div class="card text-dark bg-light mb-4" >
+      <div class="card-body text-center" >
+        <h4><a href="{% url 'vendor_list'%}"><span class="hidden-xs hidden-sm"> Vendors</span></a></h4>
         <hr>
-        <br>
-        <br>
-        <h2>Total Engineers  {{engineerscount}}</h2>
-        <br>
-        <br>
-        <a href="{% url 'engineers'%}" class="btn btn-primary btn-lg">View</a>
-        <a href="{% url 'create_engineer'%}" class="btn btn-primary btn-lg">Add new</a>
+        <h5>Total Vendors  </h5>
+        <h4>{{vendorscount}}</h4>
+        <hr>
+        <a href="{% url 'vendor_list'%}" class="btn btn-primary btn-sm">View</a>
+        <a href="{% url 'vendor_insert'%}" class="btn btn-primary btn-sm">Add new</a>
+      </div>
+    </div>
+    <div class="card text-dark bg-light mb-4" >
+      <div class="card-body text-center" >
+        <h4><a href="{% url 'engineer_insert'%}"><span class="hidden-xs hidden-sm"> Engineers</span></a></h4>
+        <hr>
+        <h5>Total Engineers  </h5>
+        <h4>{{engineercount}}</h4>
+        <hr>
+        <a href="{% url 'engineer_list'%}" class="btn btn-primary btn-sm">View</a>
+        <a href="{% url 'engineer_insert'%}" class="btn btn-primary btn-sm">Add new</a>
       </div>
     </div>
     </div>
+</div>
   
+  <div class="row">
+      {%include 'inv/purchases_card.html'%}
+  </div>
+</div>
+    {%endblock%}

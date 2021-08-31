@@ -1,48 +1,48 @@
+{%extends 'inv/sidebar.html'%}
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-{% block content %}
-{%include 'inv/navbar.html'%}
-	<h2>Stores</h2>
+{%block content%}  
+<div class="row">
+
+    <h1 class="display-4">Stores </h1>
     <br>
-    <button><a  href=" {%url 'create_store'%}" >Add Store</a></button>
-	{% if stores %}
-	<table id="example" class="table table-bordered display" style="width:100%">
-    		<thead class="thead-dark">
-                <tr>
-                    <th></th>
-                    <th>name</th>
-                    <th>engineer</th>
-                    <th>actions</th>
-                    
-                </tr>
-        	</thead>
-        	<tbody>
-                {% for instance in stores %}
-                    <tr>
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{instance.name}}</td>
-                    <td>{{instance.engineer.first_name}} {{instance.engineer.last_name}}</td>
-                    <td><a href="">view</a>
-                        <a href=" ">edit</a>
-                        <a href=" ">delete</a>
-                    </td>
-                    </tr>
-             {% endfor %}
-		</tbody>
-		<tfoot>
-            <tr>
-                <th></th>
-                <th>name</th>
-                <th>engineer</th>
-                <th>actions</th>
-                
-                
-            </tr>
-        	</tfoot>
-	</table>
-	{% else %}
-    		<p>No details are available.</p>
-	{% endif %}
-{% endblock %}
-
-
+    <p class="lead font-italic">List of stores</p>
+    <hr class="my-4">
+   
+            {% if list %}
+            <table id="example" class="table table-bordered " style="width:100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>name</th>
+                            <th>engineer</th>
+                            <th><button><a  href=" {%url 'store_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for instance in list %}
+                            <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{instance.name}}</td>
+                            <td>{{instance.engineer.first_name}} {{instance.engineer.last_name}}</td>
+                            <td><a href="{% url 'store_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <form action="{% url 'store_delete' instance.id %}" method="POST" class="d-inline"
+                                 autocomplete="off" autocapitalize="characters">
+                                   
+                                    {%csrf_token%}
+                                <button type="submit" class="btn">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button></form>
+                            </td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            
+            </table>
+            {% else %}
+                    <p>No details are available.</p>
+            {% endif %}
+    
+            {%endblock%}
+</div>
+</div>

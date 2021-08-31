@@ -1,0 +1,47 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}  
+<div class="row">
+
+                <h1 class="display-4">Items </h1>
+                <p class="lead font-italic">List of items</p>
+                <hr class="my-4">
+                <div class="card">
+
+                {% if list %}
+                <table id="example" class="table table-bordered display" style="width:100%">
+                        <thead class="thead-dark">
+                                <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th><button><a  href=" {%url 'item_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for instance in list %}
+                            <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{instance.name}}</td>
+                            <td>{{instance.item_description}}</td>
+       
+                            <td>
+                                <a href="{% url 'item_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <form action="{% url 'item_delete' instance.id %}" method="POST" class="d-inline"
+                                autocomplete="off" autocapitalize="characters">
+                                  
+                                   {%csrf_token%}
+                               <button type="submit" class="btn">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                               </button></form>
+                            </td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                        <p>No details are available.</p>
+                {% endif %}
+    
+{%endblock%}
+

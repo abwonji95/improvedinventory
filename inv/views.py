@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import *
 from .forms import *
+from inv.forms import *
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .filters import *
@@ -24,6 +25,8 @@ def main3(request):
     return render(request,'inv/main3.html')
 def home(request):
     return render(request,'inv/main.html')
+def reports(request):
+    return render(request,'inv/reports.html')
 
 @login_required(login_url='loginpage')
 def engineer_dashboard(request):
@@ -34,9 +37,9 @@ def teamleader_dashboard(request):
     return render(request,'inv/teamleader_dashboard.html')
 
 @login_required(login_url='loginpage')
-def products(request):
-    products=Product.objects.all()
-    return render(request,'inv/products.html',{'products':products})
+def items(request):
+    items=Item.objects.all()
+    return render(request,'inv/products.html',{'items':items})
 
 @login_required(login_url='loginpage')
 def accounts(request):
@@ -86,13 +89,6 @@ def engineer_cards(request):
 def teamleader_cards(request):
     return render(request,'inv/teamleader_cards.html')
 
-def create_return_en(request):
-    return render(request,'inv/create_return_en.html')
-
-def create_request_en(request):
-    return render(request,'inv/create_request_en.html')
-def create_account(request):
-    return render(request,'inv/create_account.html')
 
 @login_required(login_url='loginpage')
 def admin_dashboard(request):
@@ -112,6 +108,7 @@ def admin_dashboard(request):
     'userscount':userscount,
     'users':users,
     'purchases_recent':purchases_recent,
+    'store':stores,
     
     }
     return render(request,'inv/admin_dashboard.html',context=mydict)
@@ -141,18 +138,16 @@ def engineers(request):
     return render(request,'inv/engineers.html',{'engineers':engineers,
     'engineercount':engineercount,'engineer_tm':engineer_tm,'engineer_en':engineer_en})
 
-
-
-
-
 def cards(request):
-    productscount=Product.objects.all().count()
+    purchases_recent=Purchase.objects.all()[:5]
+    stores=Store.objects.all().count()
+    itemscount=Item.objects.all().count()
     vendorscount = Vendor.objects.all().count()
     purchasescount=Purchase.objects.all().count()
-    users=User.objects.all()
-    engineercount = Engineer.objects.count()
-    context={'productscount':productscount,'vendorscount':vendorscount,
-    'purchasescount':purchasescount,'users':users,'engineercount':engineercount}
+    users=User.objects.all().count()
+    engineercount = Engineer.objects.all().count()
+    context={'itemscount':itemscount,'vendorscount':vendorscount,  'purchases_recent' : purchases_recent,
+    'purchasescount':purchasescount,'users':users,'engineercount':engineercount, 'stores':stores}
     return render(request,'inv/cards.html',context)
 
 @login_required(login_url='loginpage')
@@ -165,56 +160,6 @@ def teamleader_issuance(request):
             return redirect('teamleader_dashboard')
     context={'form':form}
     return render(request,'inv/teamleader_issuance.html',context)
-
-
-
-@login_required(login_url='loginpage')
-def create_engineer(request):
-
-    form =EngineerForm()
-    if request.method=='POST':
-        form =EngineerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('engineers')
-    context={'form':form}
-    return render(request,'inv/engineer_form.html',context)
-
-@login_required(login_url='loginpage')
-def create_vendor(request):
-
-    form =VendorForm()
-    if request.method=='POST':
-        form =VendorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('vendors')
-    context={'form':form}
-    return render(request,'inv/create_vendor.html',context)
-
-@login_required(login_url='loginpage')
-def create_store(request):
-
-    form =StoreForm()
-    if request.method=='POST':
-        form =StoreForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('stores')
-    context={'form':form}
-    return render(request,'inv/create_store.html',context)
-
-@login_required(login_url='loginpage')
-def create_product(request):
-
-    form =ProductForm()
-    if request.method=='POST':
-        form =ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('products')
-    context={'form':form}
-    return render(request,'inv/create_product.html',context)
 
 
 @login_required(login_url='loginpage')
@@ -258,19 +203,6 @@ def create_purchase(request):
 
 
 
-@login_required(login_url='loginpage')
-def register(request):
-
-    form=CreateUserForm(request.POST)
-    if request.method=='POST':
-        if form.is_valid():
-            form.save()
-            user=form.cleaned_data.get('username')
-            messages.success(request,'Account was created for'+ user )
-            return redirect('admin_dashboard')
-    context={'form':form}
-    return render (request,'inv/register.html',context)
-
 
 def loginpage(request):
     if request.method=='POST':
@@ -288,54 +220,7 @@ def loginpage(request):
     context={}
     return render(request,'inv/loginpage.html',context)
 
-
-
-
-@login_required(login_url='loginpage')
-def request_product_en(request):
-    form =RequestproductForm()
-    if request.method=='POST':
-        form =RequestproductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('engineer_dashboard')
-    context={'form':form}
-    return render(request,'inv/request_product_en.html',context)
-
-@login_required(login_url='loginpage')
-def request_product_tm(request):
-    form =RequestproductForm2()
-    if request.method=='POST':
-        form =RequestproductForm2(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_dashboard')
-    context={'form':form}
-    return render(request,'inv/request_product_tm.html',context)
 # Create your views here.
-
-@login_required(login_url='loginpage')
-def update_engineer(request,id):
-	queryset = Engineer.objects.get_object_or_404(id=id)
-	form = EngineerUpdateForm(instance=queryset)
-	if request.method == 'POST':
-		form = EngineerUpdateForm(request.POST or None, instance=queryset)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect("engineers"+id)
-
-	context = {'form':form}
-	return render(request, 'create_engineer', context)
-
-@login_required(login_url='loginpage')
-def delete_engineer(request, id):
-	queryset = Engineer.objects.filter(id=id)
-	if request.method == 'POST':
-		queryset.delete()
-		return redirect('engineers'+ id)
-	return render(request, 'inv/delete_engineer.html')
-
-
 
 def delete_all(request):
     queryset = Engineer.objects.all()
@@ -344,6 +229,247 @@ def delete_all(request):
         return redirect('engineers')
     return render(request,'inv/delete_all.html')
 
+#new
+
+
+def engineerlist(request):
+    list=Engineer.objects.all()
+    context={
+        'list':list
+    }
+    return render(request,'inv/engineers.html',context)
+
+
+def engineerform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=EngineerForm()
+        else:
+            engineer=Engineer.objects.get(pk=id)
+            form=EngineerForm(instance=engineer)
+        return render(request,'inv/engineer_form.html',{'form':form})
+    else:
+        if id==0:
+            form=EngineerForm(request.POST)
+        else:
+           engineer=Engineer.objects.get(pk=id)
+           form=EngineerForm(request.POST,instance=engineer)
+        if form.is_valid():
+            form.save()
+        return redirect('/engineerlist')
+
+def engineerdelete(request,id):
+    employee=Engineer.objects.get(pk=id)
+    employee.delete()
+    return redirect('/engineerlist')
+
+
+def vendorlist(request):
+    list=Vendor.objects.all()
+    return render(request,'inv/vendors.html',{'list':list})
+
+
+def vendorform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=VendorForm()
+        else:
+            vendor=Vendor.objects.get(pk=id)
+            form=VendorForm(instance=vendor)
+        return render(request,'inv/vendorform.html',{'form':form})
+    else:
+        if id==0:
+            form=VendorForm(request.POST)
+        else:
+           vendor=Vendor.objects.get(pk=id)
+           form=VendorForm(request.POST,instance=vendor)
+        if form.is_valid():
+            form.save()
+        return redirect('/vendorslist')
+
+def vendordelete(request,id):
+    vendor=Vendor.objects.get(pk=id)
+    vendor.delete()
+    return redirect('/vendorslist')
 
 
 
+def userslist(request):
+    list=User.objects.all()
+    return render(request,'inv/accounts.html',{'list':list})
+
+
+def register(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=UserCreationForm()
+        else:
+            user=User.objects.get(pk=id)
+            form=UserCreationForm(instance=user)
+        return render(request,'inv/register.html',{'form':form})
+    else:
+        if id==0:
+            form=UserCreationForm(request.POST)
+        else:
+           user=User.objects.get(pk=id)
+           form=UserCreationForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+        return redirect('/accounts')
+
+def userdelete(request,id):
+    user=User.objects.get(pk=id)
+    user.delete()
+    return redirect('/accounts')
+
+
+
+def storeslist(request):
+    list=Store.objects.all()
+    return render(request,'inv/stores.html',{'list':list})
+
+
+def storeform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=StoreForm()
+        else:
+            store=Store.objects.get(pk=id)
+            form=StoreForm(instance=store)
+        return render(request,'inv/storeform.html',{'form':form})
+    else:
+        if id==0:
+            form=StoreForm(request.POST)
+        else:
+           store=Store.objects.get(pk=id)
+           form=StoreForm(request.POST,instance=store)
+        if form.is_valid():
+            form.save()
+        return redirect('/storeslist')
+
+def storedelete(request,id):
+    store=Store.objects.get(pk=id)
+    store.delete()
+    return redirect('/storeslist')
+
+
+def itemslist(request):
+    list=Item.objects.all()
+    return render(request,'inv/items.html',{'list':list})
+
+
+def itemform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=ItemForm()
+        else:
+            item=Item.objects.get(pk=id)
+            form=ItemForm(instance=item)
+        return render(request,'inv/itemform.html',{'form':form})
+    else:
+        if id==0:
+            form=ItemForm(request.POST)
+        else:
+           item=Item.objects.get(pk=id)
+           form=ItemForm(request.POST,instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect('/itemslist')
+
+def itemdelete(request,id):
+    item=Item.objects.get(pk=id)
+    item.delete()
+    return redirect('/itemslist')
+
+def sidebar(request):
+    return render(request,'inv/sidebar.html')
+    
+def purchaseslist(request):
+    list=Purchase.objects.all()
+    return render(request,'inv/purchases.html',{'list':list})
+
+
+def purchaseform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=PurchaseForm()
+        else:
+            purchase=Purchase.objects.get(pk=id)
+            form=PurchaseForm(instance=purchase)
+        return render(request,'inv/purchaseform.html',{'form':form})
+    else:
+        if id==0:
+            form=PurchaseForm(request.POST)
+        else:
+           purchase=Purchase.objects.get(pk=id)
+           form=PurchaseForm(request.POST,instance=purchase)
+        if form.is_valid():
+            form.save()
+        return redirect('/purchaseslist')
+
+def purchasedelete(request,id):
+    purchase=Purchase.objects.get(pk=id)
+    purchase.delete()
+    return redirect('/purchaseslist')
+
+    
+def issuancelist(request):
+    list=Issuance.objects.all()
+    return render(request,'inv/issuance.html',{'list':list})
+
+
+def issuanceform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=IssuanceForm()
+        else:
+            issuance=Issuance.objects.get(pk=id)
+            form=IssuanceForm(instance=issuance)
+        return render(request,'inv/issuanceform.html',{'form':form})
+    else:
+        if id==0:
+            form=IssuanceForm(request.POST)
+        else:
+           issuance=Issuance.objects.get(pk=id)
+           form=IssuanceForm(request.POST,instance=issuance)
+        if form.is_valid():
+            form.save()
+        return redirect('/issuancelist')
+
+def issuancedelete(request,id):
+    issuance=Issuance.objects.get(pk=id)
+    issuance.delete()
+    return redirect('/issuancelist')
+
+
+def returneditems(request):
+    return render (request,'inv/returneditems.html')
+
+   
+def returneditemslist(request):
+    list=Returneditems.objects.all()
+    return render(request,'inv/returneditems.html',{'list':list})
+
+
+def returneditemsform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=ReturneditemsForm()
+        else:
+            returneditems=Returneditems.objects.get(pk=id)
+            form=ReturneditemsForm(instance=returneditems)
+        return render(request,'inv/returneditemsform.html',{'form':form})
+    else:
+        if id==0:
+            form=ReturneditemsForm(request.POST)
+        else:
+           returneditems=Returneditems.objects.get(pk=id)
+           form=ReturneditemsForm(request.POST,instance=returneditems)
+        if form.is_valid():
+            form.save()
+        return redirect('/returneditemslist')
+
+def returneditemsdelete(request,id):
+    returneditems=Issuance.objects.get(pk=id)
+    returneditems.delete()
+    return redirect('/returneditemslist')

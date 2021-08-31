@@ -623,13 +623,14 @@ header {
                     <ul>
                         <li class="active"><a href="{% url 'admin_dashboard'%}"><span class="hidden-xs hidden-sm">My Dashboard</span></a></li>
                         
-                        <li><a href="{% url 'engineers'%}"><span class="hidden-xs hidden-sm">Engineers</span></a></li>
-                        <li><a href="{% url 'vendors'%}"><span class="hidden-xs hidden-sm">Vendors</span></a></li>
-                        <li><a href="{% url 'stores'%}"><span class="hidden-xs hidden-sm">Stores</span></a></li>
+                        <li><a href=""><span class="hidden-xs hidden-sm">Engineers</span></a></li>
+                        <li><a href=""><span class="hidden-xs hidden-sm">Vendors</span></a></li>
+                        <li><a href="{% url 'storeslist'%}"><span class="hidden-xs hidden-sm">Stores</span></a></li>
+                        <li><a href="{% url 'item_list'%}"><span class="hidden-xs hidden-sm">Items</span></a></li>
                         <li><a href="{% url 'stock'%}"><span class="hidden-xs hidden-sm">Stock</span></a></li>
-                        <li><a href="{% url 'purchases'%}"><span class="hidden-xs hidden-sm">Purchases</span></a></li>
-                        <li><a href="{% url 'accounts'%}"><span class="hidden-xs hidden-sm">Accounts</span></a></li>
-                        <li><a href="{% url 'issuance'%}"><span class="hidden-xs hidden-sm">Issuance</span></a></li>
+                        <li><a href="{% url 'purchase_list'%}"><span class="hidden-xs hidden-sm">Purchases</span></a></li>
+                        <li><a href="{% url 'userslist'%}"><span class="hidden-xs hidden-sm">Accounts</span></a></li>
+                        <li><a href="{% url 'issuance_list'%}"><span class="hidden-xs hidden-sm">Issuance</span></a></li>
                         <li><a href="{%url 'reset_password'%}"><span class="hidden-xs hidden-sm">Change password</span></a></li>
                         <li><a href="{% url 'logoutpage'%}"><span class="hidden-xs hidden-sm">Logout</span></a></li>
                     </ul>
@@ -646,9 +647,6 @@ header {
 
             <hr>
             <br>
-       {%include 'inv/cards.html'%}
-       <br>
-       {%include 'inv/purchases_card.html'%}
       
       
 {% endblock %}

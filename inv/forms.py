@@ -1,6 +1,6 @@
 from django.db.models import fields
 from django.db.models.expressions import Exists
-from django.forms import ModelForm
+from django.forms import ModelForm,fields
 from inv.myvalidators import *
 from .models import *
 from django import forms
@@ -8,26 +8,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
-class EngineerForm(ModelForm):
+
+class ItemForm(ModelForm):
     class Meta:
-        model=Engineer
-        fields=['first_name','last_name','email','phone','employee_number','role']
-
-
-class EngineerUpdateForm(ModelForm):
-    class Meta:
-        model=Engineer
-        fields=['first_name','last_name','email','phone','employee_number','role']
-
-class VendorForm(ModelForm):
-    class Meta:
-        model=Vendor
-        fields='__all__'
-
-
-class ProductForm(ModelForm):
-    class Meta:
-        model=Product
+        model=Item
         fields='__all__'
 
 class StoreForm(ModelForm):
@@ -38,22 +22,12 @@ class StoreForm(ModelForm):
 class IssuanceForm(ModelForm):
     class Meta:
         model=Issuance
-        fields='__all__'
+        fields=['item','store','quantity','status']
 
 class TeamleaderissuanceForm(ModelForm):
     class Meta:
-        model=Teamleaderissuance
-        fields='__all__'
-
-class RequestproductForm(ModelForm):
-    class Meta:
-        model=Requestproduct
-        fields=['product','quantity','sitename','service']
-
-class RequestproductForm2(ModelForm):
-    class Meta:
-        model=Requestproduct
-        fields=['product','quantity']
+        model=Issuance
+        fields=['item','issuedto','quantity','status']
 
 
 class PurchaseForm(ModelForm):
@@ -62,18 +36,34 @@ class PurchaseForm(ModelForm):
         fields='__all__'
 
 
-class StockForm(ModelForm):
-    class Meta:
-        model=Purchase
-        fields=['product','vendor','quantity',]
-
 class CreateUserForm(UserCreationForm):
     class Meta:
         model= User
-        fields=['username','first_name','last_name','email','password1','password1'
+        fields='__all__'
 
-        ]
-class ProductreturnForm(ModelForm):
+
+        #new
+class EngineerForm(forms.ModelForm):
     class Meta:
-        model= Productreturn
+        model=Engineer
+        fields=['first_name','last_name','email','phone','employee_number','role']
+        labels={
+            'first_name':'First Name',
+            'last_name':'Last Name',
+            'employee_number':'EMP No',
+        }
+
+    def __init__(self,*args,**kwargs):
+        super(EngineerForm,self).__init__(*args,**kwargs)
+        self.fields['role'].empty_label="Select"
+        self.fields['phone'].required=False
+
+class VendorForm(ModelForm):
+    class Meta:
+        model=Vendor
+        fields='__all__'
+
+class ReturneditemsForm(ModelForm):
+    class Meta:
+        model =Returneditems
         fields='__all__'

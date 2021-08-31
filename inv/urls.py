@@ -1,3 +1,4 @@
+from collections import namedtuple
 from django.urls import path
 from  . import views
 from django.conf.urls import url
@@ -5,54 +6,84 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns=[
+
+#home
     path('',views.home,name='home'),
-    path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),
-    path('engineer_dashboard/',views.engineer_dashboard,name='engineer_dashboard'),
-    path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
-    path('products/',views.products,name='products'),
+
+#stock
     path('stock/',views.stock,name='stock'),
+    path('reports/',views.reports,name='reports'),
+
+#engineer actions
+    path('engineer_dashboard/',views.engineer_dashboard,name='engineer_dashboard'),
+    path('engineers/',views.engineerform,name='engineer_insert'),
+    path('engineers/<int:id>/',views.engineerform,name='engineer_update'),
+    path('engineers/delete/<int:id>',views.engineerdelete,name='engineer_delete'),
+    path('engineerlist/',views.engineerlist,name='engineer_list'),
+    path('engineer_cards/',views.engineer_cards,name='engineer_cards'),
+
+#teamleader actions
+    path('teamleader_issuance/',views.teamleader_issuance,name='teamleader_issuance'),
+    path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
+#vendor actions
+    path('vendors/',views.vendorform,name='vendor_insert'),
+    path('vendors/<int:id>/',views.vendorform,name='vendor_update'),
+    path('vendors/delete/<int:id>',views.vendordelete,name='vendor_delete'),
+    path('vendorslist/',views.vendorlist,name='vendor_list'),
+    path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
+
+#admin actions
+    path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),
     path('register/',views.register,name='register'),
+    path('users/<int:id>/',views.register,name='user_update'),
+    path('users/delete/<int:id>',views.userdelete,name='user_delete'),
+    path('userslist/',views.userslist,name='userslist'),
+    path('cards/',views.cards,name='cards'),
+
+#store actions
+    path('store/',views.storeform,name='store_insert'),
+    path('store/<int:id>/',views.storeform,name='store_update'),
+    path('store/delete/<int:id>',views.storedelete,name='store_delete'),
+    path('storeslist/',views.storeslist,name='storeslist'),
+
+#product actions
+    path('items/',views.itemform,name='item_insert'),
+    path('items/<int:id>/',views.itemform,name='item_update'),
+    path('items/delete/<int:id>',views.itemdelete,name='item_delete'),
+    path('itemslist/',views.itemslist,name='item_list'),
+
+
+#purchases actions
+    path('purchases/',views.purchaseform,name='purchase_insert'),
+    path('purchases/<int:id>/',views.purchaseform,name='purchase_update'),
+    path('purchases/delete/<int:id>',views.purchasedelete,name='purchase_delete'),
+    path('purchaseslist/',views.purchaseslist,name='purchase_list'),
+    path('purchases_card/',views.purchases_card,name='purchases_card'),
+
+
+#issuance for admin
+    path('issuance/',views.issuance,name='issuance_insert'),
+    path('issuance/<int:id>/',views.issuanceform,name='issuance_update'),
+    path('issuance/delete/<int:id>',views.issuancedelete,name='issuance_delete'),
+    path('issuancelist/',views.issuancelist,name='issuance_list'),
+
+  
+
+#returneditems for admin
+    path('returneditems/',views.returneditems,name='returneditems_insert'),
+    path('returneditems/<int:id>/',views.returneditemsform,name='returneditems_update'),
+    path('returneditems/delete/<int:id>',views.returneditemsdelete,name='returneditems_delete'),
+    path('returneditemslist/',views.returneditemslist,name='returneditems_list'),
+
+
+
+   #common actions
     path('loginpage/',views.loginpage,name='loginpage'),
     path('logoutpage/',views.logoutpage,name='logoutpage'),
-    path('engineers/',views.engineers,name='engineers'),
-    path('create_engineer/',views.create_engineer,name='create_engineer'),
-    path('engineer/<id>/update',views.update_engineer,name='update_engineer'),
-    path('engineer/<id>/delete',views.delete_engineer,name='delete_engineer'),
-    path('purchases/',views.purchases,name='purchases'),
-    path('issuance/',views.issuance,name='issuance'),
-    path('teamleader_issuance/',views.teamleader_issuance,name='teamleader_issuance'),
-    path('vendors/',views.vendors,name='vendors'),
-    path('accounts/',views.accounts,name='accounts'),
-    path('stores/',views.stores,name='stores'),
-    path('delete_all/',views.delete_all,name='delete_all'),
-    path('create_vendor/',views.create_vendor,name='create_vendor'),
-    path('create_return_en/',views.create_return_en,name='create_return_en'),
-    path('create_request_en/',views.create_request_en,name='create_request_en'),
-    path('create_store/',views.create_store,name='create_store'),
-    path('create_product/',views.create_product,name='create_product'),
-     path('create_account/',views.create_account,name='create_account'),
-
-
-
-
-
-    path('register/',views.register,name='register'),
-    path('create_issuance/',views.create_issuance,name='create_issuance'),
-    path('create_purchase/',views.create_purchase,name='create_purchase'),
-    path('request_product_tm/',views.request_product_tm,name='request_product_tm'),
-    path('request_product_en/',views.request_product_en,name='request_product_en'),
-    path('cards/',views.cards,name='cards'),
-    path('purchases_card/',views.purchases_card,name='purchases_card'),
-    path('engineer_cards/',views.engineer_cards,name='engineer_cards'),
-    path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
     path('reset_password/',auth_views.PasswordResetView.as_view(),name='reset_password'),
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
-    
     path('password_change_done/',auth_views.PasswordChangeDoneView.as_view()),
-
-
-
-
+    path('sidebar/',views.sidebar,name='sidebar')
 ]

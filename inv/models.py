@@ -14,21 +14,17 @@ class Vendor(models.Model):
     def __str__(self) :
         return self.name
 
-class Product(models.Model):
+
+class Item(models.Model):
     UNITS=(
         ('METERS','METERS'),('PACKET','PACKET'),('EXACT','EXACT')
         )
-    product_number=models.IntegerField(primary_key=True)
     name=models.CharField(max_length=200,null=True)
-    vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
-    buying_price= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    selling_price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     units=models.CharField(max_length=200,null=True,choices=UNITS)
-    product_description=models.CharField(max_length=200,null=True)
+    item_description=models.TextField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
     def __str__(self) :
         return self.name
-
 
 
 class Account(models.Model):
@@ -53,6 +49,9 @@ class Engineer(models.Model):
     id=models.AutoField(primary_key=True)
     def __str__(self) :
         return "{} {}".format(self.first_name,self.last_name)
+    
+    def teamleaders(self):
+        return Engineer.objects.all().filter()
    
 class Store(models.Model):
     name=models.CharField(max_length=200,null=True)
@@ -65,28 +64,27 @@ class Issuance(models.Model):
             ('Issued','Issued'),('Available','Availabe'),
             )
             
-    products=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
+    issuedto=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
     status=models.CharField(max_length=200,null=True,choices=STATUS)
 
-class Teamleaderissuance(models.Model):
-    products=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
-    date_created=models.DateTimeField(auto_now_add=True)
-    quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    engineer=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
 
-class Requestproduct(models.Model):
+class Requestitem(models.Model):
     SERVICE=(
             ('installation','installation'),('support','support'),('survey','survey'),
             )
     sitename=models.CharField(max_length=200,null=True)
-    product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     service=models.CharField(max_length=200,null=True,choices=SERVICE)
+
+
+
 
 class Purchase(models.Model):
     STATUS=(
@@ -94,7 +92,7 @@ class Purchase(models.Model):
             )
     po= models.CharField(max_length=10,null=True)
     vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
-    product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -105,11 +103,15 @@ class Purchase(models.Model):
         return self.quantity * self.price
     
     def __str__(self) :
-        return "{} {}".format(self.po,self.product)
+        return "{} {}".format(self.po,self.item)
    
-class Productreturn(models.Model):
+
+class Returneditems(models.Model):
     quantity=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    product=models.ForeignKey(Product,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
+    returnedby=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
+    store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
 
-
+    def __str__(self) :
+            return "{} {}".format(self.item,self.returnedby)

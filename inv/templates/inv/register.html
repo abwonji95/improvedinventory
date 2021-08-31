@@ -1,51 +1,43 @@
+{%extends 'inv/sidebar.html'%}
 
-{%block content%}
-<form action="" method="POST">
-    {% csrf_token %}
- <div>  
-{{form.username.label}}
-{{form.username}}
-</div>
-<br>
-<div>  
-{{form.first_name.label}}
-{{form.first_name}}
-</div>
-<br>
-<div>  
-{{form.last_name.label}}
-{{form.last_name}}
-</div>
-<br>
-<div>
-{{form.email.label}}
-{{form.email}}
-</div>
-<br>
-<div>
-{{form.password1.label}}
-{{form.password1}}
-</div>
-<br>
-<div>
-{{form.password2.label}}
-{{form.password2}}
-</div>
-<br>
+{%block content%}  
+<div class="row">
 
-<div>
-{%for messages in messages%}
-<a>{{messages}}</a>
-    {%endfor%}
-</div>
-<div>
-    <input type="submit" name="register">
-</div>
-
-
-</form>
-
-
-
-
+                <h1 class="display-4">Users </h1>
+                <p class="lead font-italic">Register New User</p>
+                <hr class="my-4">
+                <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
+                  {%csrf_token%}
+                  
+                      <div class="row">
+                        <label for="username">Username</label>
+                        {{form.username}}
+                      </div>
+                        <div class="row">
+                            <label for="password1">Password</label>
+                            {{form.password1}}
+                          </div>
+                          <div class="row">
+                            <label for="name">Confirm Password</label>
+                            {{form.password2}}
+                          </div>
+                          <div class="row">
+                            {%for messages in messages%}
+                            <a>{{messages}}</a>
+                                {%endfor%}
+                            </div>
+                       
+                        <div class="row">
+                          <div class="col-md-4">
+                            <a href="{%url 'userslist'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
+                        </div>
+                          <div class="col-md-8">
+                              <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
+                          </div>
+                          
+                          </div>
+                    </form>
+              </div>
+        </div>
+    </div>
 {%endblock%}

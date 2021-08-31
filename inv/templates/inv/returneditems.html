@@ -3,40 +3,40 @@
 {%block content%}  
 <div class="row">
 
-                <h1 class="display-4">Engineers </h1>
-                <p class="lead font-italic">List of Engineers</p>
+                <h1 class="display-4">Returned Items </h1>
+                <p class="lead font-italic">List of returned items</p>
                 <hr class="my-4">
                 <div class="card">
                     
                     {% if list %}
-                    <table id="example" class="table table-bordered display" style="width:auto;">
+                    <table id="example" class="table table-bordered display" style="width:100%">
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
-                                    <th>name</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th><button><a  href=" {%url 'engineer_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                    <th>date created</th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Returned by</th>
+                                    <th><button><a  href=" {%url 'returneditems_insert'%}" >Add vendor</a></button></th>
+                       
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for instance in list %}
                                 <tr>
                                 <th>{{forloop.counter}}</th>
-                                <td>{{instance.first_name}}
-                                    {{instance.last_name}}
-                                </td>
-                                <td>{{instance.phone}}</td>
-                                <td>{{instance.email}}</td>
-                                <td>{{instance.role}}</td>
-                                <td><a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
+                                <td>{{instance.date_created}}</td>
+                                <td>{{instance.item}}</td>
+                                <td>{{instance.quatity}}</td>
+                                <td>{{instance.returnedby}}</td>
+                               
+                                <td><a href="{% url 'returneditems_update' instance.id %}">edit</a>
+                                    <form action="{% url 'returneditems_delete' instance.id %}" method="POST" class="d-inline"
                                      autocomplete="off" autocapitalize="characters">
                                        
                                         {%csrf_token%}
                                     <button type="submit" class="btn">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                        delete
                                     </button></form>
                                 </td>
                                 </tr>
@@ -52,4 +52,5 @@
               </div>
         </div>
     </div>
-    {%endblock%} 
+{%endblock%}
+

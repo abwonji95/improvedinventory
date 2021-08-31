@@ -1,67 +1,57 @@
+{%extends 'inv/sidebar.html'%}
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-{% block content %}
-{%include 'inv/navbar.html'%}
-	<h2>Purchases</h2>
-    <br>
-    <button><a  href=" {%url 'create_purchase'%}" >Add Purchase</a></button>
-	{% if purchases %}
-	<table id="example" class="table table-bordered display" style="width:100%">
-    		<thead class="thead-dark">
-                <tr>
-                    <th></th>
-                    <th>po number</th>
-                    <th>date</th>
-                    <th>vendor</th>
-                    <th>product</th>
-                    <th>quantity</th>
-                    <th>unit price</th>
-                    <th>total price</th>
-                    <th>status</th>
-                    <th>actions</th>
-        
-                    
-                </tr>
-        	</thead>
-        	<tbody>
-                {% for instance in purchases %}
-                <tr>
-                <th scope="row">{{forloop.counter}}</th>
-                <td>{{instance.po}}</td>
-                <td>{{instance.date_created}}</td>
-                <td>{{instance.vendor}}</td>
-                <td>{{instance.product}}</td>
-                <td>{{instance.quantity}}</td>
-                <td>{{instance.price}}</td>
-                <td>{{instance.total_price}}</td>
-                <td>{{instance.status}}</td>
-                <td><a href="">view</a>
-                    <a href="" >edit</a>
-                    <a href="">delete</a>
-                </td>
-                </tr>
-                  {% endfor %}
-		</tbody>
-		<tfoot>
-            <tr>
-                <th></th>
-                <th>po number</th>
-                <th>date</th>
-                <th>vendor</th>
-                <th>product</th>
-                <th>quantity</th>
-                <th>unit price</th>
-                <th>total price</th>
-                <th>status</th>
-                <th>actions</th>
+{%block content%}  
+<div class="col">
+<h1 class="display-4">Purchases </h1>
+<p class="lead font-italic">List of Purchases</p>
+<hr class="my-4"> 
                 
-                
-            </tr>
-        	</tfoot>
-	</table>
-	{% else %}
-    		<p>No details are available.</p>
-	{% endif %}
-{% endblock %}
-
+                    {% if list %}
+                    <table id="example" class="table table-bordered display">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>po number</th>
+                                    <th>date</th>
+                                    <th>vendor</th>
+                                    <th>item</th>
+                                    <th>quantity</th>
+                                    <th>unit price</th>
+                                    <th>total price</th>
+                                    <th>status</th>
+                                    <th><button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                        
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{instance.po}}</td>
+                                <td>{{instance.date_created}}</td>
+                                <td>{{instance.vendor}}</td>
+                                <td>{{instance.item}}</td>
+                                <td>{{instance.quantity}}</td>
+                                <td>{{instance.price}}</td>
+                                <td>{{instance.total_price}}</td>
+                                <td>{{instance.status}}</td>
+                                <td><a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
+                                     autocomplete="off" autocapitalize="characters">
+                                       
+                                        {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button></form>
+                                </td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                            <p>No details are available.</p>
+                    {% endif %}
+               
+{%endblock%}
 
