@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.db.models.fields import EmailField, IntegerField
 from django.db.models import Avg, Max, Min, Sum
 from django.core.validators import MinValueValidator,MinLengthValidator
@@ -87,7 +88,7 @@ class Requestitem(models.Model):
 
 
 class Purchase(models.Model):
-
+    po=models.CharField(max_length=200,null=True)
     vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
@@ -112,3 +113,7 @@ class Returneditems(models.Model):
 
     def __str__(self) :
             return "{} {}".format(self.item,self.returnedby)
+
+
+
+    

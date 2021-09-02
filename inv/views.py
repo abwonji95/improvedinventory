@@ -17,6 +17,8 @@ from django.urls import reverse_lazy
 
 
 
+def stock(request):
+    return render(request,'inv/stock.html')
 def main(request):
     return render(request,'inv/main.html')
 def main2(request):
@@ -75,10 +77,6 @@ def logoutpage(request):
         messages.info(request,'you have been logged out successfully')
     return redirect('loginpage')
 
-def stock(request):
-    purchases=Purchase.objects.all()
-    #issued=Issuance.objects.get()
-    return render(request,'inv/stock.html',{'purchases':purchases})
 
 def purchases_card(request):
     purchases_recent=Purchase.objects.all()[:5]

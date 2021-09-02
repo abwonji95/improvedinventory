@@ -14,7 +14,7 @@
                         <thead class="thead-dark">
                                 <tr>
                                         <th></th>
-                                       
+                                        <th>PO</th>
                                         <th>Item</th>
                                         <th>Vendor</th>
                                         <th>Quantity</th>
@@ -28,7 +28,7 @@
                             {% for instance in list %}
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
-                           
+                            <td>{{instance.po}}</td>
                             <td>{{instance.item}}</td>
                             <td>{{instance.vendor}}</td>
                             <td>{{instance.quantity}}</td>

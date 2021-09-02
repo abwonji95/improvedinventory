@@ -11,6 +11,10 @@
                   {%csrf_token%}
                   <hr>
                   <div class="row">
+                    <label for="po">PO</label>
+                    {{form.po}}
+                  </div>
+                  <div class="row">
                     <label for="name">Item</label>
                     {{form.item}}
                   </div>
