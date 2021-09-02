@@ -23,7 +23,7 @@ urlpatterns=[
     path('engineer_cards/',views.engineer_cards,name='engineer_cards'),
 
 #teamleader actions
-    path('teamleader_issuance/',views.teamleader_issuance,name='teamleader_issuance'),
+
     path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
 #vendor actions
     path('vendors/',views.vendorform,name='vendor_insert'),
@@ -38,7 +38,6 @@ urlpatterns=[
     path('users/<int:id>/',views.register,name='user_update'),
     path('users/delete/<int:id>',views.userdelete,name='user_delete'),
     path('userslist/',views.userslist,name='userslist'),
-    path('cards/',views.cards,name='cards'),
 
 #store actions
     path('store/',views.storeform,name='store_insert'),
@@ -62,7 +61,7 @@ urlpatterns=[
 
 
 #issuance for admin
-    path('issuance/',views.issuance,name='issuance_insert'),
+    path('issuance/',views.issuanceform,name='issuance_insert'),
     path('issuance/<int:id>/',views.issuanceform,name='issuance_update'),
     path('issuance/delete/<int:id>',views.issuancedelete,name='issuance_delete'),
     path('issuancelist/',views.issuancelist,name='issuance_list'),
@@ -70,7 +69,7 @@ urlpatterns=[
   
 
 #returneditems for admin
-    path('returneditems/',views.returneditems,name='returneditems_insert'),
+    path('returneditems/',views.returneditemsform,name='returneditems_insert'),
     path('returneditems/<int:id>/',views.returneditemsform,name='returneditems_update'),
     path('returneditems/delete/<int:id>',views.returneditemsdelete,name='returneditems_delete'),
     path('returneditemslist/',views.returneditemslist,name='returneditems_list'),

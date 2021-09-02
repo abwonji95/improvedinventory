@@ -19,17 +19,6 @@ class StoreForm(ModelForm):
         model=Store
         fields='__all__'
 
-class IssuanceForm(ModelForm):
-    class Meta:
-        model=Issuance
-        fields=['item','store','quantity','status']
-
-class TeamleaderissuanceForm(ModelForm):
-    class Meta:
-        model=Issuance
-        fields=['item','issuedto','quantity','status']
-
-
 class PurchaseForm(ModelForm):
     class Meta:
         model=Purchase
@@ -66,4 +55,9 @@ class VendorForm(ModelForm):
 class ReturneditemsForm(ModelForm):
     class Meta:
         model =Returneditems
-        fields='__all__'
+        fields=['item','store','quantity']
+
+class IssuanceForm(ModelForm):
+    class Meta:
+        model=Issuance
+        fields=['item','store','quantity']

@@ -138,70 +138,18 @@ def engineers(request):
     return render(request,'inv/engineers.html',{'engineers':engineers,
     'engineercount':engineercount,'engineer_tm':engineer_tm,'engineer_en':engineer_en})
 
-def cards(request):
-    purchases_recent=Purchase.objects.all()[:5]
+def admin_dashboard(request):
+    
+    users=User.objects.all().count()
     stores=Store.objects.all().count()
+    purchases_recent=Purchase.objects.all()[:5]
     itemscount=Item.objects.all().count()
     vendorscount = Vendor.objects.all().count()
     purchasescount=Purchase.objects.all().count()
-    users=User.objects.all().count()
     engineercount = Engineer.objects.all().count()
     context={'itemscount':itemscount,'vendorscount':vendorscount,  'purchases_recent' : purchases_recent,
     'purchasescount':purchasescount,'users':users,'engineercount':engineercount, 'stores':stores}
-    return render(request,'inv/cards.html',context)
-
-@login_required(login_url='loginpage')
-def teamleader_issuance(request):
-    form =TeamleaderissuanceForm
-    if request.method=='POST':
-        form =TeamleaderissuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_dashboard')
-    context={'form':form}
-    return render(request,'inv/teamleader_issuance.html',context)
-
-
-@login_required(login_url='loginpage')
-def create_issuance(request):
-
-    form =IssuanceForm()
-    if request.method=='POST':
-        form =IssuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('issuance')
-    context={'form':form}
-    return render(request,'inv/create_issuance.html',context)
-
-
-@login_required(login_url='loginpage')
-def create_issuance_tm(request):
-    form =TeamleaderissuanceForm()
-    if request.method=='POST':
-        form =TeamleaderissuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('issuance_tm')
-    context={'form':form}
-    return render(request,'inv/teamleader_issuance.html',context)
-
-
-
-@login_required(login_url='loginpage')
-def create_purchase(request):
-
-    form =PurchaseForm()
-    if request.method=='POST':
-        form =PurchaseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('stock')
-    context={'form':form}
-    return render(request,'inv/create_purchase.html',context)
-
-
-
+    return render(request,'inv/admin_dashboard.html',context)
 
 
 def loginpage(request):

@@ -145,7 +145,10 @@
     .sidebar li a,.sidebar li a.collapsed.active{ display:block; padding:8px 12px; color:#fff;border-left:0px solid #dedede;  text-decoration:none}
     .sidebar li a.active{background-color:#000;border-left:5px solid #dedede; transition: all 0.5s  ease-in-out}
     .sidebar li a:hover{background-color:#000 !important;}
-    .sidebar li a i{ padding-right:5px;}
+    .sidebar li a i{ padding-right:10px;
+    padding-left:10 ;
+    font-size: 15px;
+    }
     .sidebar ul li .sub-menu li a{ position:relative}
     .sidebar ul li .sub-menu li a:before{
         font-family: FontAwesome;
@@ -225,6 +228,22 @@
       padding: 20px 20px 20px 20px;
     }
  
+.header a{
+    font-size: 20px;
+    
+    color: white;
+    font-family: FontAwesome;
+}
+
+.fa-home{
+color: white;
+padding-right: 10px;
+}
+
+.fa-trash{
+    color: rgb(252, 6, 6); 
+}
+
 </style>
 <script>
     $(document).ready(function(){
@@ -241,7 +260,7 @@
 
     <header class="header">
               <nav class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
-                <div class="float-right"> <a href="{%url 'cards'%}" class="button-left"><span class="fa fa-home" aria-hidden="true"></span>Home</a> </div>
+                <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left"><span class="fa fa-home" aria-hidden="true"></span>Home</a> </div>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -266,11 +285,11 @@
                   </div>
                 </div>
                 <ul class="list-sidebar bg-defoult">
-                  <li> <a href="{% url 'cards'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a>
+                  <li> <a href="{% url 'admin_dashboard'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a>
                 </li>
               <li> <a href="{% url 'stock'%}"><i class="fa fa-diamond"></i> <span class="nav-label">Stock</span></a> </li>
               <li> <a href="{% url 'reports'%}" data-toggle="collapse"  class="collapsed active" > <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span></a></li>
-              <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
+            
               <li> <a href="{% url 'item_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-cubes"></i> <span class="nav-label">Items</span></a></li>
               <li> <a href="{% url 'purchase_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">Purchases</span></a>
               <li> <a href="{% url 'issuance_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-handshake-o"></i> <span class="nav-label">Issuance</span></a>
@@ -278,6 +297,7 @@
               <li> <a href="{% url 'storeslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-university" aria-hidden="true"></i> <span class="nav-label">Stores</span></a>
               <li> <a href="{% url 'engineer_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-gavel" aria-hidden="true"></i> <span class="nav-label">Engineers</span></a>
               <li> <a href="{% url 'vendor_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-balance-scale" aria-hidden="true"></i><span class="nav-label">Vendors</span></a>
+                <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
          
           </li>
         </ul>

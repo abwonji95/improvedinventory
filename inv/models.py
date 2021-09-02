@@ -87,17 +87,14 @@ class Requestitem(models.Model):
 
 
 class Purchase(models.Model):
-    STATUS=(
-            ('COMPLETED','COMPLETED'),('PENDING','PENDING'),('CANCELED','CANCELED'),
-            )
-    po= models.CharField(max_length=10,null=True)
+
     vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     total_price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
-    status=models.CharField(max_length=200,null=True,choices=STATUS)
+
     @property
     def total_price(self):
         return self.quantity * self.price

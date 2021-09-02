@@ -1,13 +1,14 @@
 {%extends 'inv/sidebar.html'%}
 
-{%block content%}  
+{%block content%}
+<div class="card">
 <div class="row">
 
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
                 <hr class="my-4">
                 <div class="card">
-                    
+                   
                     {% if list %}
                     <table id="example" class="table table-bordered display" style="width:auto;">
                             <thead class="thead-dark">
@@ -49,5 +50,5 @@
                 </div>
               </div>
         </div>
-    </div>
+   
     {%endblock%} 
