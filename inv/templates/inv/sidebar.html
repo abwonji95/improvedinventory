@@ -242,6 +242,37 @@ padding-right: 10px;
 
 .fa-trash{
     color: rgb(252, 6, 6); 
+    font-size: 16px;
+}
+
+.fa-pencil-square-o{
+    color: rgba(16, 35, 121, 0.781); 
+}
+
+.thead-dark button{
+    color: rgb(15, 247, 7);
+    border-radius: 10px;
+    background-color: yellow;
+    size: 16px;
+}
+
+.fa-address-book{
+    padding-right: 10px;
+    color: white;
+    width: 50% !important;
+    height: 50% !important;
+    font-size: 20px;
+}
+
+
+.float-left select{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    border-radius: 10px;
+    border-color: transparent;
+    font-size: 18px;
+    font-family: FontAwesome;
+
 }
 
 </style>
@@ -263,6 +294,25 @@ padding-right: 10px;
                 <div class="floatright">
                 <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">Home</a> </div>
                 <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
+            </div>
+            <div class="float-left">
+                <div class="float-left">
+                    <i class="fa fa-address-book"></i>
+                </div>
+                <select class="myselect">
+                <option > 
+                    <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">{{request.user}}</a></div>  
+                </option>  
+                <option><i class="fa  fa fa-refresh" aria-hidden="true"></i> Change Password
+                </option> 
+                <hr>
+                <option ><i class="fa fa-eye" aria-hidden="true"></i> View Profile
+                </option>  
+                <hr>
+                <option ><i class="fa fa-sign-out" aria-hidden="true"></i> Log out  
+                </option>  
+            </select>
+
             </div>
             </nav>
           </header>

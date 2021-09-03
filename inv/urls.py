@@ -53,6 +53,7 @@ urlpatterns=[
 
 
 #purchases actions
+    path('purchases/view/<int:id>/',views.viewpurchase,name='purchase_view'),
     path('purchases/',views.purchaseform,name='purchase_insert'),
     path('purchases/<int:id>/',views.purchaseform,name='purchase_update'),
     path('purchases/delete/<int:id>',views.purchasedelete,name='purchase_delete'),

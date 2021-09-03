@@ -38,7 +38,7 @@
                             
                             
        
-                            <td>
+                            <td><a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                 <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
                                 autocomplete="off" autocapitalize="characters">

@@ -12,6 +12,7 @@ class Vendor(models.Model):
     phone=models.CharField(max_length=15,validators=[MinLengthValidator(9)])
     email=models.EmailField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
     def __str__(self) :
         return self.name
 
@@ -24,6 +25,7 @@ class Item(models.Model):
     units=models.CharField(max_length=200,null=True,choices=UNITS)
     item_description=models.TextField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
     def __str__(self) :
         return self.name
 
@@ -41,6 +43,7 @@ class Engineer(models.Model):
         ('Team leader','Team leader'),('Engineer','Engineer'),
         )
     date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
     employee_number=models.CharField(max_length=200,null=True)
@@ -57,6 +60,8 @@ class Engineer(models.Model):
 class Store(models.Model):
     name=models.CharField(max_length=200,null=True)
     engineer=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    date_updated=models.DateTimeField(auto_now=True)
+    date_created=models.DateTimeField(auto_now_add=True)
     def __str__(self) :
         return self.name
 
@@ -71,6 +76,7 @@ class Issuance(models.Model):
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
     status=models.CharField(max_length=200,null=True,choices=STATUS)
+    date_updated=models.DateTimeField(auto_now=True)
 
 
 class Requestitem(models.Model):
@@ -83,7 +89,7 @@ class Requestitem(models.Model):
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     service=models.CharField(max_length=200,null=True,choices=SERVICE)
-
+    date_updated=models.DateTimeField(auto_now=True)
 
 
 
@@ -95,6 +101,7 @@ class Purchase(models.Model):
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     total_price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
+    date_updated=models.DateTimeField(auto_now=True)
 
     @property
     def total_price(self):
@@ -109,6 +116,7 @@ class Returneditems(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     returnedby=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
 
     def __str__(self) :

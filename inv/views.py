@@ -334,6 +334,12 @@ def purchaseslist(request):
     list=Purchase.objects.all()
     return render(request,'inv/purchases.html',{'list':list})
 
+def viewpurchase(request,id=0):
+    if request.method=="GET":
+        purchase=Purchase.objects.get(pk=id)
+        form=PurchaseForm(instance=purchase)
+        return render(request,'inv/viewpurchaseform.html',{'form':form})
+
 
 def purchaseform(request,id=0):
     if request.method=="GET":

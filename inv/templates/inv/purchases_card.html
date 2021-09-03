@@ -14,7 +14,7 @@
                     <th>Quantity</th>
                     <th>Unit Price</th>
                     <th>Total Price</th>
-                    <th>Status</th>
+                   
                     <th><button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
         
                     
@@ -31,7 +31,7 @@
           <td>{{instance.quantity}}</td>
           <td>{{instance.price}}</td>
           <td>{{instance.total_price}}</td>
-          <td>{{instance.status}}</td>
+         
           <td>
             <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
