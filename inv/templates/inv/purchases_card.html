@@ -1,5 +1,5 @@
 
-<div class="card" >
+<div class="jumbotron">
 <div class="card-body text-center" >
   <h2><a href="{% url 'purchases_card'%}"><span class="hidden-xs hidden-sm"> Recent Purchases</span></a></h2>
   <hr>
@@ -28,11 +28,11 @@
           <td>{{instance.date_created}}</td>
           <td>{{instance.vendor}}</td>
           <td>{{instance.item}}</td>
-          <td>{{instance.quantity}}</td>
+          <td>{{instance.purchased_qty}}</td>
           <td>{{instance.price}}</td>
           <td>{{instance.total_price}}</td>
          
-          <td>
+          <td><a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
             <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
               autocomplete="off" autocapitalize="characters">

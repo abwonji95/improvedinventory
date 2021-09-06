@@ -27,10 +27,11 @@
                     <th scope="row">{{forloop.counter}}</th>
                     <td>{{instance.item}}</td>
                     <td>{{instance.date_created}}</td>
-                    <td>{{instance.quantity}}</td>
+                    <td>{{instance.issuedqty}}</td>
                     <td>{{instance.store}}</td>
                    
-                    <td> <a href="{% url 'issuance_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    <td> <a href="{%url 'issuance_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a href="{% url 'issuance_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                         <form action="{% url 'issuance_delete' instance.id %}" method="POST" class="d-inline"
                         autocomplete="off" autocapitalize="characters">
                             

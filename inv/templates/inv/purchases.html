@@ -1,7 +1,35 @@
 {%extends 'inv/sidebar.html'%}
+{%load crispy_forms_tags%}
+{%load bootstrap%}
 
+<script>
+        $(function () {
+                $("#id_start_date").datepicker();
+              }); 
+        
+              $(function () {
+                $("#id_end_date").datepicker();
+              }); 
+</script>
 {%block content%}
-<div class="card">  
+<div class="jumbotron"> 
+        <div>
+                <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
+                
+                   {{myFilter.form|bootstrap}}
+                <button type="submit" class="btn btn-primary" value="Search">Search</button>
+              
+                
+                </form>
+        
+        </div>
+
+
+</div>
+
+
+
+<div class="jumbotron">  
 <div class="row">
 
                 <h1 class="display-4">Purchases </h1>
@@ -29,9 +57,9 @@
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{instance.po}}</td>
-                            <td>{{instance.item}}</td>
-                            <td>{{instance.vendor}}</td>
-                            <td>{{instance.quantity}}</td>
+                            <td><a href="{% url 'item_update' instance.id %}">{{instance.item}}</a></td>
+                            <td><a href="{% url 'vendor_update' instance.id %}">{{instance.vendor}}</a></td>
+                            <td>{{instance.purchased_qty}}</td>
                             <td>{{instance.price}}</td>
                             <td>{{instance.total_price}}</td>
                           
@@ -40,13 +68,7 @@
        
                             <td><a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                 <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
-                                autocomplete="off" autocapitalize="characters">
-                                  
-                                   {%csrf_token%}
-                               <button type="submit" class="btn">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                               </button></form>
+                                <a href="{% url 'purchase_delete' instance.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </td>
                             </tr>
                             {% endfor %}

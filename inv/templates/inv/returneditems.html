@@ -27,10 +27,11 @@
                                 <th>{{forloop.counter}}</th>
                                 <td>{{instance.date_created}}</td>
                                 <td>{{instance.item}}</td>
-                                <td>{{instance.quantity}}</td>
+                                <td>{{instance.returnedqty}}</td>
                                 <td>{{instance.store}}</td>
                                
-                                <td><a href="{% url 'returneditems_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <td><a href="{%url 'returneditems_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'returneditems_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     <form action="{% url 'returneditems_delete' instance.id %}" method="POST" class="d-inline"
                                      autocomplete="off" autocapitalize="characters">
                                        

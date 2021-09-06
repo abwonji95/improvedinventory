@@ -26,7 +26,7 @@
                             <td>{{instance.name}}</td>
                             <td>{{instance.item_description}}</td>
        
-                            <td>
+                            <td><a href="{%url 'items_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                 <a href="{% url 'item_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <form action="{% url 'item_delete' instance.id %}" method="POST" class="d-inline"
                                 autocomplete="off" autocapitalize="characters">

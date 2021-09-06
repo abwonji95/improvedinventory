@@ -40,12 +40,14 @@ urlpatterns=[
     path('userslist/',views.userslist,name='userslist'),
 
 #store actions
+    path('stores/view/<int:id>/',views.viewstore,name='store_view'),
     path('store/',views.storeform,name='store_insert'),
     path('store/<int:id>/',views.storeform,name='store_update'),
     path('store/delete/<int:id>',views.storedelete,name='store_delete'),
     path('storeslist/',views.storeslist,name='storeslist'),
 
 #product actions
+    path('items/view/<int:id>/',views.viewitems,name='items_view'),
     path('items/',views.itemform,name='item_insert'),
     path('items/<int:id>/',views.itemform,name='item_update'),
     path('items/delete/<int:id>',views.itemdelete,name='item_delete'),
@@ -62,6 +64,7 @@ urlpatterns=[
 
 
 #issuance for admin
+    path('issuance/view/<int:id>/',views.viewissuance,name='issuance_view'),
     path('issuance/',views.issuanceform,name='issuance_insert'),
     path('issuance/<int:id>/',views.issuanceform,name='issuance_update'),
     path('issuance/delete/<int:id>',views.issuancedelete,name='issuance_delete'),
@@ -70,6 +73,7 @@ urlpatterns=[
   
 
 #returneditems for admin
+    path('returneditems/view/<int:id>/',views.viewreturneditems,name='returneditems_view'),
     path('returneditems/',views.returneditemsform,name='returneditems_insert'),
     path('returneditems/<int:id>/',views.returneditemsform,name='returneditems_update'),
     path('returneditems/delete/<int:id>',views.returneditemsdelete,name='returneditems_delete'),

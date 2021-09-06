@@ -1,7 +1,8 @@
 {%extends 'inv/sidebar.html'%}
+{%load crispy_forms_tags%}
 
 {%block content%} 
-<div class="card">
+<div class="jumbotron">
 <div class="row">
 
           <h1 class="display-4">Purchase Form </h1>
@@ -10,26 +11,9 @@
                 <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
                   {%csrf_token%}
                   <hr>
-                  <div class="row">
-                    <label for="po">PO</label>
-                    {{form.po}}
-                  </div>
-                  <div class="row">
-                    <label for="item">Item</label>
-                    {{form.item}}
-                  </div>
-                  <div class="row">
-                    <label for="vendor">Vendor</label>
-                    {{form.vendor}}
-                  </div>
-                  <div class="row">
-                    <label for="price">Price</label>
-                    {{form.price}}
-                  </div>
-                  <div class="row">
-                      <label for="quantity">Quantity</label>
-                      {{form.quantity}}
-                  </div>  
+                
+                    {{form|crispy}}
+                 
                   <hr>
                   <div class="row">
                     <div class="col-md-4">
@@ -37,9 +21,13 @@
                   </div>
                   <div class="col-md-8">
                       <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
-                  </div>         
+                  </div> 
+                          
               </div>
             </form>
+            {%for message in messages%}
+              <h3>{{message}}</h3>
+            {%endfor%}
           </div>
         </div>
     

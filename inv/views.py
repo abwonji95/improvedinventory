@@ -13,7 +13,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .filters import *
 from django.urls import reverse_lazy
-
+import csv
 
 
 
@@ -231,6 +231,8 @@ def vendorform(request,id=0):
            form=VendorForm(request.POST,instance=vendor)
         if form.is_valid():
             form.save()
+   
+
         return redirect('/vendorslist')
 
 def vendordelete(request,id):
@@ -261,18 +263,41 @@ def register(request,id=0):
            form=UserCreationForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
-        return redirect('/accounts')
+            messages.info(request,'User was Created Successfully')
+        else:
+            messages.info(request,'Error check the details and try again')
+            return redirect('/register')
+        return redirect('/')
 
 def userdelete(request,id):
     user=User.objects.get(pk=id)
     user.delete()
-    return redirect('/accounts')
+    return redirect('/')
 
 
 
 def storeslist(request):
     list=Store.objects.all()
     return render(request,'inv/stores.html',{'list':list})
+
+
+def viewstore(request,id=0):
+    if request.method=="GET":
+        store=Store.objects.get(pk=id)
+        name=store.name
+        engineer=store.engineer
+        date_created=store.date_created
+        date_updated=store.date_updated
+
+        context={
+            'name':name,
+            'engineer':engineer,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewstoreform.html',context)
+
 
 
 def storeform(request,id=0):
@@ -304,6 +329,27 @@ def itemslist(request):
     return render(request,'inv/items.html',{'list':list})
 
 
+def viewitems(request,id=0):
+    if request.method=="GET":
+        item=Item.objects.get(pk=id)
+        name=item.name
+        units=item.units
+        description=item.item_description
+        date_created=item.date_created
+        date_updated=item.date_updated
+
+        context={
+            'name':name,
+            'units':item.units,
+            'description':description ,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewitemsform.html',context)
+
+
+
 def itemform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -329,16 +375,43 @@ def itemdelete(request,id):
 
 def sidebar(request):
     return render(request,'inv/sidebar.html')
-    
+
+
 def purchaseslist(request):
     list=Purchase.objects.all()
-    return render(request,'inv/purchases.html',{'list':list})
+
+    myFilter=PurchaseFilter(request.GET,queryset=list)
+    list=myFilter.qs
+    context={'myFilter':myFilter ,'list':list  }
+
+    return render(request,'inv/purchases.html',context)
 
 def viewpurchase(request,id=0):
     if request.method=="GET":
         purchase=Purchase.objects.get(pk=id)
-        form=PurchaseForm(instance=purchase)
-        return render(request,'inv/viewpurchaseform.html',{'form':form})
+        item=purchase.item
+        po=purchase.po
+        vendor=purchase.vendor
+        purchased_qty=purchase.purchased_qty
+        price=purchase.price
+        total_price=purchase.total_price
+        date_created=purchase.date_created
+        date_updated=purchase.date_updated
+
+        context={
+            'item':item,
+            'po': po,
+            'vendor': vendor,
+            'purchased_qty':purchased_qty ,
+            'price': price,
+            'total_price': total_price,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+
+
+        }
+        return render(request,'inv/viewpurchaseform.html',context)
 
 
 def purchaseform(request,id=0):
@@ -357,17 +430,51 @@ def purchaseform(request,id=0):
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
             form.save()
+            messages.info(request,'User was Created Successfully')
+        else:
+            messages.info(request,'Error check the details and try again')
+            return redirect('/purchases')
+
+
         return redirect('/purchaseslist')
+
+
+
 
 def purchasedelete(request,id):
     purchase=Purchase.objects.get(pk=id)
-    purchase.delete()
-    return redirect('/purchaseslist')
+    if request.method=='POST':
+        purchase.delete()
+        return redirect('/purchaseslist')
+    return render(request,'inv/purchase_delete.html')
 
     
 def issuancelist(request):
     list=Issuance.objects.all()
     return render(request,'inv/issuance.html',{'list':list})
+
+
+def viewissuance(request,id=0):
+    if request.method=="GET":
+        issuance=Issuance.objects.get(pk=id)
+        issuedto=  issuance.issuedto
+        item=  issuance.item
+        issuedqty=  issuance.issuedqty
+        store= issuance.store
+        date_created=  issuance.date_created
+        date_updated=  issuance.date_updated
+
+        context={
+            
+            'issuedto':issuedto,
+            'item': item,
+            'store':store,
+            'issuedqty':issuedqty,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewissuanceform.html',context)
 
 
 def issuanceform(request,id=0):
@@ -394,13 +501,32 @@ def issuancedelete(request,id):
     return redirect('/issuancelist')
 
 
-def returneditems(request):
-    return render (request,'inv/returneditems.html')
 
-   
 def returneditemslist(request):
     list=Returneditems.objects.all()
     return render(request,'inv/returneditems.html',{'list':list})
+
+def viewreturneditems(request,id=0):
+    if request.method=="GET":
+        returneditem=Returneditems.objects.get(pk=id)
+        returnedby= returneditem.returnedby
+        item= returneditem.item
+        returnedqty= returneditem.returnedqty
+        store=returneditem.store
+        date_created= returneditem.date_created
+        date_updated= returneditem.date_updated
+
+        context={
+            
+            'returnedby':returnedby,
+            'item': item,
+            'store':store,
+            'returnedqty':returnedqty,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+        }
+        return render(request,'inv/viewreturneditemsform.html',context)
+
 
 
 def returneditemsform(request,id=0):
