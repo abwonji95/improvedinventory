@@ -215,6 +215,36 @@ def vendorlist(request):
     return render(request,'inv/vendors.html',{'list':list})
 
 
+
+def viewvendor(request,id=0):
+    if request.method=="GET":
+        vendor=Vendor.objects.get(pk=id)
+        name =  vendor.name
+        shippingaddress =  vendor.shipping_address
+        billingaddress=  vendor.billing_address
+        phone=  vendor.phone
+        website=  vendor.website
+        primarycontactperson=  vendor.primary_contact_person
+        otherdetails=vendor.other_details
+        date_created=vendor.date_created
+        date_updated=vendor.date_updated
+       
+
+        context={
+            
+           'name':name ,
+           'shippingaddress': shippingaddress ,
+           'billingaddress':billingaddress ,
+           'phone':phone,
+           'website': website,
+           'primarycontactperson': primarycontactperson,
+           'otherdetails':otherdetails,
+           'date_created':date_created,
+           'date_updated':date_updated,
+            
+        }
+        return render(request,'inv/viewvendorform.html',context)
+
 def vendorform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -231,9 +261,23 @@ def vendorform(request,id=0):
            form=VendorForm(request.POST,instance=vendor)
         if form.is_valid():
             form.save()
-   
-
+        else:
+            messages.danger(request,'Invalid form details')
+            return redirect('/vendor_insert')
         return redirect('/vendorslist')
+
+
+
+
+
+#def vendormultiple(request):
+    ##form=VendorForm()
+        #if form.is_valid:
+           # form.save()
+        #return redirect('/vendors',{'form':form})
+  
+    #return render(request,'inv/vendorform.html')
+
 
 def vendordelete(request,id):
     vendor=Vendor.objects.get(pk=id)
@@ -430,13 +474,13 @@ def purchaseform(request,id=0):
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
             form.save()
-            messages.info(request,'User was Created Successfully')
+            messages.success(request,'Purchase  Created Successfully')
+            return redirect('/purchaseslist')
         else:
-            messages.info(request,'Error check the details and try again')
+            messages.warning(request,'Error check the details and try again')
             return redirect('/purchases')
 
 
-        return redirect('/purchaseslist')
 
 
 

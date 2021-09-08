@@ -1,7 +1,9 @@
 {%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
 
 {%block content%}
-<div class="card"> 
+
+<div class="jumbotron" style="max-width:700px;"> 
 <div class="row">
 
     <h1 class="display-4">Vendor Form</h1>
@@ -9,33 +11,23 @@
     
                 <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
                   {%csrf_token%}
-                  <hr>
+                      <hr>
+                 
+                      {{form|bootstrap}}
+
+                      <hr>
                       <div class="row">
-                        <label for="name">Name</label>
-                        {{form.name}}
+                      <div class="col-md-4">
+                      <a href="{%url 'vendor_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
                       </div>
-                      
-                      <div class="row">
-                          <label for="email">Email</label>
-                          {{form.email}}
-                        </div>
-                        <div class="row">
-                          <label for="phone">Phone</label>
-                          {{form.phone}}
-                        </div>
-                        <hr>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <a href="{%url 'vendor_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
-                        </div>
-                          <div class="col-md-8">
-                              <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
-                          </div>
-                        
-                          </div>
+                      <div class="col-md-8">
+                      <button type="submit" class="btn btn-success btn-block btn-dark">Save</button>
+                      </div>
+                    
+                      </div>
                     </form>
               </div>
         </div>
- 
+
 
     {%endblock%}

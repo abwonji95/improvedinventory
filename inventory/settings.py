@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrapform',
     'simple_history',
+    'multiselectfield',
     
     
 ]

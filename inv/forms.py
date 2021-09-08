@@ -61,9 +61,9 @@ class VendorForm(ModelForm):
 class ReturneditemsForm(ModelForm):
     class Meta:
         model =Returneditems
-        fields=['item','store','returnedqty']
+        fields=['item','store','returned_qty']
 
 class IssuanceForm(ModelForm):
     class Meta:
         model=Issuance
-        fields=['item','store','issuedqty']
+        fields=['item','store','issued_qty']

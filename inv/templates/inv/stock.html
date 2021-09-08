@@ -1,7 +1,14 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}  
-<div class="card">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Stock </li>
+ 
+  </ol>
+</nav>
+<div class="jumbotron"> 
 <div class="row">
 
                 <h1 class="display-4">Stock </h1>

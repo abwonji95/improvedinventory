@@ -1,7 +1,9 @@
 {%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
 
 {%block content%} 
-<div class="card"> 
+<div class="row">
+<div class="card" style="max-width:768px;"> 
 <div class="row">
 
                 <h1 class="display-4">Items </h1>
@@ -9,23 +11,33 @@
                 <hr class="my-4">
                 <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
                   {%csrf_token%}
-                  
-                      <div class="row">
-                        <label for="name">Item</label>
-                        {{form.name}}
-                      </div>
-                      
- 
-                        <div class="row">
-                          <label for="units">Units</label>
-                          {{form.units}}
+
+
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                          {{form.name|bootstrap}}
+                        
                         </div>
-                        <div class="row">
-                            <label for="item_description">Description</label>
-                            {{form.item_description}}
+                        <div class="form-group col-md-6">
+                         {{form.sku|bootstrap}}
+                        </div>
+                      </div>
+                      <div class="form-row">
+                      <div class="form-group col-md-6">
+                            {{form.item_type|bootstrap}}
+                          
+                          </div>
+                          <div class="form-group col-md-6">
+                          {{form.units|bootstrap}}
+                          </div>
+                        </div>
+
+                      <div class="form-group col-md-10 center">
+                            
+                            {{form.item_description|bootstrap}}
                           </div>
                        
-                        <div class="row">
+                        <div class="form-inline ">
                           <div class="col-md-4">
                             <a href="{%url 'item_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
                         </div>
@@ -37,5 +49,5 @@
                     </form>
               </div>
         </div>
-    
+    </div>
 {%endblock%}

@@ -1,8 +1,8 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-<div class="card">
-<div class="row">
+<div class="jumbotron"> 
+<div class="row" style="max-width:900px;">
 
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
@@ -10,14 +10,20 @@
                 <div class="card">
                    
                     {% if list %}
-                    <table id="example" class="table table-bordered display" style="width:auto;">
+                    <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " >
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
-                                    <th>name</th>
-                                    <th>phone</th>
-                                    <th>email</th>
-                                    <th>date created</th>
+                                    <th>Name</th>
+                                
+                                    <th>Billing Address</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Website</th>
+                                    <th> Contact person phone</th>
+                                   
+                                   
                                     <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
                                 </tr>
                             </thead>
@@ -26,10 +32,16 @@
                                 <tr>
                                 <th>{{forloop.counter}}</th>
                                 <td>{{instance.name}}</td>
+                               
+                                <td>{{instance.billing_address}}</td>
                                 <td>{{instance.phone}}</td>
                                 <td>{{instance.email}}</td>
-                                <td>{{instance.date_created}}</td>
-                                <td><a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <td>{{instance.website}}</td>
+                                <td>{{instance.primary_contact_person}}</td>
+            
+
+                                <td><a href="{%url 'vendor_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
                                      autocomplete="off" autocapitalize="characters">
                                        
@@ -43,6 +55,7 @@
                         </tbody>
                         
                     </table>
+                    </div>
                     {% else %}
                             <p>No details are  available.</p>
                     {% endif %}

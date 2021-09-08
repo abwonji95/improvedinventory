@@ -12,33 +12,18 @@
               }); 
 </script>
 {%block content%}
-<div class="jumbotron"> 
-        <div>
-                <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
-                
-                   {{myFilter.form|bootstrap}}
-                <button type="submit" class="btn btn-primary" value="Search">Search</button>
-              
-                
-                </form>
-        
-        </div>
+<div class="card-deck">
 
-
-</div>
-
-
-
-<div class="jumbotron">  
-<div class="row">
+<div class="card">
 
                 <h1 class="display-4">Purchases </h1>
                 <p class="lead font-italic">List of purchases</p>
                 <hr class="my-4">
-                <div class="card">
+                <div class="card" >
 
                 {% if list %}
-                <table id="example" class="table table-bordered display" style="width:100%">
+            <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
                         <thead class="thead-dark">
                                 <tr>
                                         <th></th>
@@ -74,9 +59,31 @@
                             {% endfor %}
                     </tbody>
                 </table>
+                </div>
                 {% else %}
                         <p>No details are available.</p>
                 {% endif %}
     </div>
+    </div>
+    </div>
+
+<div class="form-row">
+<p class="lead font-italic">Filter</p>
+        <div class="form-row">
+         
+            <hr>
+                <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
+                
+                   {{myFilter.form|bootstrap}}
+                <button type="submit" class="btn btn-primary" value="Search">Search</button>
+              
+                
+                </form>
+        
+        </div>
+
+
+</div>
+      </div>
 {%endblock%}
 

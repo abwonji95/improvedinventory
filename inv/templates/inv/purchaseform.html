@@ -1,5 +1,5 @@
 {%extends 'inv/sidebar.html'%}
-{%load crispy_forms_tags%}
+{%load bootstrap%}
 
 {%block content%} 
 <div class="jumbotron">
@@ -12,7 +12,7 @@
                   {%csrf_token%}
                   <hr>
                 
-                    {{form|crispy}}
+                    {{form|bootstrap}}
                  
                   <hr>
                   <div class="row">

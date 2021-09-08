@@ -7,18 +7,20 @@ from django.db.models import Avg, Max, Min, Sum
 from django.core.validators import MinValueValidator,MinLengthValidator
 from phone_field import PhoneField
 from phonenumber_field.modelfields import PhoneNumberField
+#from multiselectfield import MultiSelectField
 
 
 # Create your models here.
 class Vendor(models.Model):
     name=models.CharField(max_length=200,null=True)
-    shippingaddress=models.CharField(max_length=200,null=True)
-    billingaddress=models.CharField(max_length=200,null=True)
-    otherdetails=models.CharField(max_length=200,null=True)
+    primary_contact_person=models.CharField(max_length=200,null=True)
     website=models.CharField(max_length=200,null=True)
-    primarycontactperson=models.CharField(max_length=200,null=True)
-    phone = PhoneNumberField(null=False, blank=False, unique=True)
+    primary_contact_person=models.CharField(max_length=200,null=True)
+    phone = PhoneNumberField(null=True, blank=False, unique=True)
     email=models.EmailField(max_length=200,null=True)
+    shipping_address=models.CharField(max_length=200,null=True)
+    billing_address=models.CharField(max_length=200,null=True)
+    other_details=models.TextField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -31,8 +33,8 @@ class Item(models.Model):
         ('METERS','METERS'),('PACKET','PACKET'))
     ITEMTYPE=(
         ('Service','Service'),('Goods','Goods'))
-    name=models.CharField(max_length=200,null=True)
-    itemtype=models.CharField(max_length=200,null=True,choices=ITEMTYPE)
+    name=models.CharField(max_length=200,null=True,unique=True)
+    item_type=models.CharField(max_length=200,null=True,choices=ITEMTYPE)
     sku=models.CharField(max_length=200,null=True,unique=True)
     units=models.CharField(max_length=200,null=True,choices=UNITS)
     item_description=models.TextField(max_length=200,null=True)
@@ -55,7 +57,6 @@ class Engineer(models.Model):
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
     employee_number=models.CharField(max_length=200,null=True,unique=True)
-    #phone=models.CharField(max_length=15,validators=[MinLengthValidator(9)])
     phone = PhoneNumberField(null=False, blank=False, unique=True)
     email=models.EmailField(max_length=200,null=True,unique=True)
     role=models.CharField(max_length=200,null=True,choices=ROLE)
@@ -83,8 +84,8 @@ class Issuance(models.Model):
             
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
-    issuedto=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
-    issuedqty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    issued_to=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    issued_qty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
     status=models.CharField(max_length=200,null=True,choices=STATUS)
     date_updated=models.DateTimeField(auto_now=True)
@@ -126,9 +127,9 @@ class Purchase(models.Model):
    
 
 class Returneditems(models.Model):
-    returnedqty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
-    returnedby=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    returned_by=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)

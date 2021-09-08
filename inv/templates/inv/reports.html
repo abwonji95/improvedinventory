@@ -2,13 +2,21 @@
 
 {%block content%}  
 <div class="row">
+<div class="row">
 
                 <h1 class="display-4">Reports </h1>
                 <p class="lead font-italic">File,View and Download Reports</p>
                 <hr class="my-4">
-                <div class="card">
-                    
-                                    
+               
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{%url 'reports'%}">Report</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Report details</li>
+                </ol>
+                </nav>
+                    <hr class="my-4">
+                    <div class="jumbotron">               
                     {% if list %}
                     <table id="example" class="table table-bordered display" style="width:100%">
                             <thead class="thead-dark">
@@ -55,6 +63,8 @@
                     {% else %}
                             <p>No details are available.</p>
                     {% endif %}
+                    </div>
+                    </div>
           {%endblock%}     
 
 

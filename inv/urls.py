@@ -25,12 +25,15 @@ urlpatterns=[
 #teamleader actions
 
     path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
+     path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
 #vendor actions
+    path('vendors/view/<int:id>/',views.viewvendor,name='vendor_view'),
     path('vendors/',views.vendorform,name='vendor_insert'),
+    path('vendors/m/',views.vendorform,name='vendor_multiple'),
     path('vendors/<int:id>/',views.vendorform,name='vendor_update'),
     path('vendors/delete/<int:id>',views.vendordelete,name='vendor_delete'),
     path('vendorslist/',views.vendorlist,name='vendor_list'),
-    path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
+   
 
 #admin actions
     path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),

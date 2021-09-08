@@ -10,7 +10,8 @@
     <hr class="my-4">
     <div class="card">
             {% if list %}
-            <table id="example" class="table table-bordered " style="width:100%">
+            <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
                     <thead class="thead-dark">
                         <tr>
                             <th></th>
@@ -41,6 +42,7 @@
                 </tbody>
             
             </table>
+            </div>
             {% else %}
                     <p>No details are available.</p>
             {% endif %}
