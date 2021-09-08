@@ -37,11 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'inv',
     'phonenumber_field',
     'phone_field',
+    'django_filters',
+    'bootstrapform',
+    'simple_history',
+    'multiselectfield',
+    
     
 ]
+
+CRISPY_TEMPLATE_PACK='bootstrap4'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'inventory.urls'
@@ -81,7 +91,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'postgres',
+        'NAME': 'inventoryDB',
 
         'USER': 'postgres',
 
@@ -133,3 +143,12 @@ USE_TZ = False
 MEDIA_URL='/images/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR ,'static') ]
+
+#SMTP Configuration
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT= 587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER='jackonyi90@gmail.com'
+EMAIL_HOST_PASSWORD='TALL7777'

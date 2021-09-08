@@ -1,15 +1,24 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
+from django.contrib.auth.views import *
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import *
 from .forms import *
+from inv.forms import *
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from .filters import *
+from django.urls import reverse_lazy
+import csv
 
+
+
+def stock(request):
+    return render(request,'inv/stock.html')
 def main(request):
     return render(request,'inv/main.html')
 def main2(request):
@@ -18,17 +27,76 @@ def main3(request):
     return render(request,'inv/main3.html')
 def home(request):
     return render(request,'inv/main.html')
+def reports(request):
+    return render(request,'inv/reports.html')
+
+@login_required(login_url='loginpage')
+def engineer_dashboard(request):
+    return render(request,'inv/engineer_dashboard.html')
+
+@login_required(login_url='loginpage')
+def teamleader_dashboard(request):
+    return render(request,'inv/teamleader_dashboard.html')
+
+@login_required(login_url='loginpage')
+def items(request):
+    items=Item.objects.all()
+    return render(request,'inv/products.html',{'items':items})
+
+@login_required(login_url='loginpage')
+def accounts(request):
+    users=User.objects.all()
+    return render(request,'inv/accounts.html',{'users':users})
+   
+@login_required(login_url='loginpage')
+def purchases(request):
+    purchases=Purchase.objects.all()
+
+    return render(request,'inv/purchases.html',{'purchases':purchases})
+
+
+@login_required(login_url='loginpage')
+def vendors(request):
+    vendors = Vendor.objects.all()
+    return render(request,'inv/vendors.html',{'vendors':vendors})
+
+@login_required(login_url='loginpage')
+def issuance(request):
+    issuances = Issuance.objects.all()
+    return render(request,'inv/issuance.html',{'issuances':issuances})
+
+@login_required(login_url='loginpage')
+def stores(request):
+    stores = Store.objects.all()
+    return render(request,'inv/stores.html',{'stores':stores})
+
+def logoutpage(request):
+    user=authenticate(request)
+    if request.method=='POST':
+        logout(request)
+        messages.info(request,'you have been logged out successfully')
+    return redirect('loginpage')
+
+
+def purchases_card(request):
+    purchases_recent=Purchase.objects.all()[:5]
+    return render(request,'inv/purchases_card.html',{'purchases_recent':purchases_recent})
+
+def engineer_cards(request):
+    return render(request,'inv/engineer_cards.html')
+def teamleader_cards(request):
+    return render(request,'inv/teamleader_cards.html')
+
 
 @login_required(login_url='loginpage')
 def admin_dashboard(request):
     
-    engineers=Engineer.objects.all().order_by('-id')
-    vendors=Vendor.objects.all().order_by('-id')
     engineerscount=Engineer.objects.all().count()
     vendorscount=Vendor.objects.all().count()
     userscount=User.objects.all().count()
     users=User.objects.all().count()
     stores=Store.objects.all().count()
+    purchases_recent=Purchase.objects.all()[:5]
 
     mydict={
     'engineers':engineers,
@@ -37,16 +105,11 @@ def admin_dashboard(request):
     'engineerscount':engineerscount,
     'userscount':userscount,
     'users':users,
+    'purchases_recent':purchases_recent,
+    'store':stores,
     
     }
     return render(request,'inv/admin_dashboard.html',context=mydict)
-@login_required(login_url='loginpage')
-def engineer_dashboard(request):
-    return render(request,'inv/engineer_dashboard.html')
-
-@login_required(login_url='loginpage')
-def teamleader_dashboard(request):
-    return render(request,'inv/teamleader_dashboard.html')
 
 def home(request):
     if request.method=='POST':
@@ -62,6 +125,8 @@ def home(request):
             return render(request,'inv/loginpage.html')
     context={}
     return render(request,'inv/loginpage.html',context)
+
+
 @login_required(login_url='loginpage')
 def engineers(request):
     engineers = Engineer.objects.all()
@@ -71,161 +136,18 @@ def engineers(request):
     return render(request,'inv/engineers.html',{'engineers':engineers,
     'engineercount':engineercount,'engineer_tm':engineer_tm,'engineer_en':engineer_en})
 
-@login_required(login_url='loginpage')
-def products(request):
-    products=Product.objects.all()
-    return render(request,'inv/products.html',{'products':products})
-
-
-@login_required(login_url='loginpage')
-def accounts(request):
-    users=User.objects.all()
-    return render(request,'inv/accounts.html',{'users':users})
-   
-@login_required(login_url='loginpage')
-def purchases(request):
-    purchases=Purchase.objects.all()
-    return render(request,'inv/purchases.html',{'purchases':purchases})
-
-
-@login_required(login_url='loginpage')
-def vendors(request):
-    vendors = Vendor.objects.all()
-    return render(request,'inv/vendors.html',{'vendors':vendors})
-
-@login_required(login_url='loginpage')
-def stores(request):
-    stores = Store.objects.all()
-    return render(request,'inv/stores.html',{'stores':stores})
-
-def cards(request):
-    productscount=Product.objects.all().count()
+def admin_dashboard(request):
+    
+    users=User.objects.all().count()
+    stores=Store.objects.all().count()
+    purchases_recent=Purchase.objects.all()[:5]
+    itemscount=Item.objects.all().count()
     vendorscount = Vendor.objects.all().count()
     purchasescount=Purchase.objects.all().count()
-    users=User.objects.all()
-    engineercount = Engineer.objects.count()
-    context={'productscount':productscount,'vendorscount':vendorscount,
-    'purchasescount':purchasescount,'users':users,'engineercount':engineercount}
-    return render(request,'inv/cards.html',context)
-
-@login_required(login_url='loginpage')
-def teamleader_issuance(request):
-    form =TeamleaderissuanceForm
-    if request.method=='POST':
-        form =TeamleaderissuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_dashboard')
-    context={'form':form}
-    return render(request,'inv/teamleader_issuance.html',context)
-
-@login_required(login_url='loginpage')
-def issuance(request):
-    issuances = Issuance.objects.all()
-    return render(request,'inv/issuance.html',{'issuances':issuances})
-
-@login_required(login_url='loginpage')
-def create_engineer(request):
-
-    form =EngineerForm()
-    if request.method=='POST':
-        form =EngineerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('engineers')
-    context={'form':form}
-    return render(request,'inv/engineer_form.html',context)
-
-@login_required(login_url='loginpage')
-def create_vendor(request):
-
-    form =VendorForm()
-    if request.method=='POST':
-        form =VendorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('vendors')
-    context={'form':form}
-    return render(request,'inv/create_vendor.html',context)
-
-@login_required(login_url='loginpage')
-def create_store(request):
-
-    form =StoreForm()
-    if request.method=='POST':
-        form =StoreForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('stores')
-    context={'form':form}
-    return render(request,'inv/create_store.html',context)
-
-@login_required(login_url='loginpage')
-def create_product(request):
-
-    form =ProductForm()
-    if request.method=='POST':
-        form =ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('products')
-    context={'form':form}
-    return render(request,'inv/create_product.html',context)
-
-
-@login_required(login_url='loginpage')
-def create_issuance(request):
-
-    form =IssuanceForm()
-    if request.method=='POST':
-        form =IssuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('issuance')
-    context={'form':form}
-    return render(request,'inv/create_issuance.html',context)
-
-
-@login_required(login_url='loginpage')
-def create_issuance_tm(request):
-    form =TeamleaderissuanceForm()
-    if request.method=='POST':
-        form =TeamleaderissuanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('issuance_tm')
-    context={'form':form}
-    return render(request,'inv/teamleader_issuance.html',context)
-
-
-
-@login_required(login_url='loginpage')
-def create_purchase(request):
-
-    form =PurchaseForm()
-    if request.method=='POST':
-        form =PurchaseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('stock')
-    context={'form':form}
-    return render(request,'inv/create_purchase.html',context)
-
-
-
-
-@login_required(login_url='loginpage')
-def register(request):
-
-    form=CreateUserForm(request.POST)
-    if request.method=='POST':
-        if form.is_valid():
-            form.save()
-            user=form.cleaned_data.get('username')
-            messages.success(request,'Account was created for'+ user )
-            return redirect('admin_dashboard')
-    context={'form':form}
-    return render (request,'inv/register.html',context)
+    engineercount = Engineer.objects.all().count()
+    context={'itemscount':itemscount,'vendorscount':vendorscount,  'purchases_recent' : purchases_recent,
+    'purchasescount':purchasescount,'users':users,'engineercount':engineercount, 'stores':stores}
+    return render(request,'inv/admin_dashboard.html',context)
 
 
 def loginpage(request):
@@ -244,62 +166,7 @@ def loginpage(request):
     context={}
     return render(request,'inv/loginpage.html',context)
 
-def logoutpage(request):
-    user=authenticate(request)
-    if request.method=='POST':
-        logout(request)
-        messages.info(request,'you have been logged out successfully')
-    return redirect('loginpage')
-
-
-@login_required(login_url='loginpage')
-def request_product_en(request):
-    form =RequestproductForm()
-    if request.method=='POST':
-        form =RequestproductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('engineer_dashboard')
-    context={'form':form}
-    return render(request,'inv/request_product_en.html',context)
-
-@login_required(login_url='loginpage')
-def request_product_tm(request):
-    form =RequestproductForm2()
-    if request.method=='POST':
-        form =RequestproductForm2(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teamleader_dashboard')
-    context={'form':form}
-    return render(request,'inv/request_product_tm.html',context)
 # Create your views here.
-
-@login_required(login_url='loginpage')
-def update_engineer(request,id):
-	queryset = Engineer.objects.get_object_or_404(id=id)
-	form = EngineerUpdateForm(instance=queryset)
-	if request.method == 'POST':
-		form = EngineerUpdateForm(request.POST or None, instance=queryset)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect("engineers"+id)
-
-	context = {'form':form}
-	return render(request, 'create_engineer', context)
-
-@login_required(login_url='loginpage')
-def delete_engineer(request, id):
-	queryset = Engineer.objects.get(id=id)
-	if request.method == 'POST':
-		queryset.delete()
-		return redirect('engineers'+ id)
-	return render(request, 'inv/delete_engineer.html')
-
-def stock(request):
-    purchases=Purchase.objects.all()
-    #issued=Issuance.objects.get()
-    return render(request,'inv/stock.html',{'purchases':purchases})
 
 def delete_all(request):
     queryset = Engineer.objects.all()
@@ -308,25 +175,423 @@ def delete_all(request):
         return redirect('engineers')
     return render(request,'inv/delete_all.html')
 
-def changepassword(request):
-    form = PasswordChangeForm
-    if request.method=='POST':
-        form=PasswordChangeForm(request.POST)
+#new
+
+
+def engineerlist(request):
+    list=Engineer.objects.all()
+    context={
+        'list':list
+    }
+    return render(request,'inv/engineers.html',context)
+
+
+def engineerform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=EngineerForm()
+        else:
+            engineer=Engineer.objects.get(pk=id)
+            form=EngineerForm(instance=engineer)
+        return render(request,'inv/engineer_form.html',{'form':form})
+    else:
+        if id==0:
+            form=EngineerForm(request.POST)
+        else:
+           engineer=Engineer.objects.get(pk=id)
+           form=EngineerForm(request.POST,instance=engineer)
         if form.is_valid():
             form.save()
-            return redirect('loginpage')
-        context={'form':form}
-    return render (request,'inv/changepassword.html',context)
+        return redirect('/engineerlist')
 
-def forgotpassword(request):
-    form = PasswordResetForm
-    if request.method=='POST':
-        form=PasswordResetForm(request.POST)
+def engineerdelete(request,id):
+    employee=Engineer.objects.get(pk=id)
+    employee.delete()
+    return redirect('/engineerlist')
+
+
+def vendorlist(request):
+    list=Vendor.objects.all()
+    return render(request,'inv/vendors.html',{'list':list})
+
+
+
+def viewvendor(request,id=0):
+    if request.method=="GET":
+        vendor=Vendor.objects.get(pk=id)
+        name =  vendor.name
+        shippingaddress =  vendor.shipping_address
+        billingaddress=  vendor.billing_address
+        phone=  vendor.phone
+        website=  vendor.website
+        primarycontactperson=  vendor.primary_contact_person
+        otherdetails=vendor.other_details
+        date_created=vendor.date_created
+        date_updated=vendor.date_updated
+       
+
+        context={
+            
+           'name':name ,
+           'shippingaddress': shippingaddress ,
+           'billingaddress':billingaddress ,
+           'phone':phone,
+           'website': website,
+           'primarycontactperson': primarycontactperson,
+           'otherdetails':otherdetails,
+           'date_created':date_created,
+           'date_updated':date_updated,
+            
+        }
+        return render(request,'inv/viewvendorform.html',context)
+
+def vendorform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=VendorForm()
+        else:
+            vendor=Vendor.objects.get(pk=id)
+            form=VendorForm(instance=vendor)
+        return render(request,'inv/vendorform.html',{'form':form})
+    else:
+        if id==0:
+            form=VendorForm(request.POST)
+        else:
+           vendor=Vendor.objects.get(pk=id)
+           form=VendorForm(request.POST,instance=vendor)
         if form.is_valid():
             form.save()
-            return redirect('loginpage')
-        context={'form':form}
-    return render (request,'inv/forgotpassword.html',context)
+        else:
+            messages.danger(request,'Invalid form details')
+            return redirect('/vendor_insert')
+        return redirect('/vendorslist')
 
 
 
+
+
+#def vendormultiple(request):
+    ##form=VendorForm()
+        #if form.is_valid:
+           # form.save()
+        #return redirect('/vendors',{'form':form})
+  
+    #return render(request,'inv/vendorform.html')
+
+
+def vendordelete(request,id):
+    vendor=Vendor.objects.get(pk=id)
+    vendor.delete()
+    return redirect('/vendorslist')
+
+
+
+def userslist(request):
+    list=User.objects.all()
+    return render(request,'inv/accounts.html',{'list':list})
+
+
+def register(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=UserCreationForm()
+        else:
+            user=User.objects.get(pk=id)
+            form=UserCreationForm(instance=user)
+        return render(request,'inv/register.html',{'form':form})
+    else:
+        if id==0:
+            form=UserCreationForm(request.POST)
+        else:
+           user=User.objects.get(pk=id)
+           form=UserCreationForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            messages.info(request,'User was Created Successfully')
+        else:
+            messages.info(request,'Error check the details and try again')
+            return redirect('/register')
+        return redirect('/')
+
+def userdelete(request,id):
+    user=User.objects.get(pk=id)
+    user.delete()
+    return redirect('/')
+
+
+
+def storeslist(request):
+    list=Store.objects.all()
+    return render(request,'inv/stores.html',{'list':list})
+
+
+def viewstore(request,id=0):
+    if request.method=="GET":
+        store=Store.objects.get(pk=id)
+        name=store.name
+        engineer=store.engineer
+        date_created=store.date_created
+        date_updated=store.date_updated
+
+        context={
+            'name':name,
+            'engineer':engineer,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewstoreform.html',context)
+
+
+
+def storeform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=StoreForm()
+        else:
+            store=Store.objects.get(pk=id)
+            form=StoreForm(instance=store)
+        return render(request,'inv/storeform.html',{'form':form})
+    else:
+        if id==0:
+            form=StoreForm(request.POST)
+        else:
+           store=Store.objects.get(pk=id)
+           form=StoreForm(request.POST,instance=store)
+        if form.is_valid():
+            form.save()
+        return redirect('/storeslist')
+
+def storedelete(request,id):
+    store=Store.objects.get(pk=id)
+    store.delete()
+    return redirect('/storeslist')
+
+
+def itemslist(request):
+    list=Item.objects.all()
+    return render(request,'inv/items.html',{'list':list})
+
+
+def viewitems(request,id=0):
+    if request.method=="GET":
+        item=Item.objects.get(pk=id)
+        name=item.name
+        units=item.units
+        description=item.item_description
+        date_created=item.date_created
+        date_updated=item.date_updated
+
+        context={
+            'name':name,
+            'units':item.units,
+            'description':description ,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewitemsform.html',context)
+
+
+
+def itemform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=ItemForm()
+        else:
+            item=Item.objects.get(pk=id)
+            form=ItemForm(instance=item)
+        return render(request,'inv/itemform.html',{'form':form})
+    else:
+        if id==0:
+            form=ItemForm(request.POST)
+        else:
+           item=Item.objects.get(pk=id)
+           form=ItemForm(request.POST,instance=item)
+        if form.is_valid():
+            form.save()
+        return redirect('/itemslist')
+
+def itemdelete(request,id):
+    item=Item.objects.get(pk=id)
+    item.delete()
+    return redirect('/itemslist')
+
+def sidebar(request):
+    return render(request,'inv/sidebar.html')
+
+
+def purchaseslist(request):
+    list=Purchase.objects.all()
+
+    myFilter=PurchaseFilter(request.GET,queryset=list)
+    list=myFilter.qs
+    context={'myFilter':myFilter ,'list':list  }
+
+    return render(request,'inv/purchases.html',context)
+
+def viewpurchase(request,id=0):
+    if request.method=="GET":
+        purchase=Purchase.objects.get(pk=id)
+        item=purchase.item
+        po=purchase.po
+        vendor=purchase.vendor
+        purchased_qty=purchase.purchased_qty
+        price=purchase.price
+        total_price=purchase.total_price
+        date_created=purchase.date_created
+        date_updated=purchase.date_updated
+
+        context={
+            'item':item,
+            'po': po,
+            'vendor': vendor,
+            'purchased_qty':purchased_qty ,
+            'price': price,
+            'total_price': total_price,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+
+
+        }
+        return render(request,'inv/viewpurchaseform.html',context)
+
+
+def purchaseform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=PurchaseForm()
+        else:
+            purchase=Purchase.objects.get(pk=id)
+            form=PurchaseForm(instance=purchase)
+        return render(request,'inv/purchaseform.html',{'form':form})
+    else:
+        if id==0:
+            form=PurchaseForm(request.POST)
+        else:
+           purchase=Purchase.objects.get(pk=id)
+           form=PurchaseForm(request.POST,instance=purchase)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Purchase  Created Successfully')
+            return redirect('/purchaseslist')
+        else:
+            messages.warning(request,'Error check the details and try again')
+            return redirect('/purchases')
+
+
+
+
+
+
+def purchasedelete(request,id):
+    purchase=Purchase.objects.get(pk=id)
+    if request.method=='POST':
+        purchase.delete()
+        return redirect('/purchaseslist')
+    return render(request,'inv/purchase_delete.html')
+
+    
+def issuancelist(request):
+    list=Issuance.objects.all()
+    return render(request,'inv/issuance.html',{'list':list})
+
+
+def viewissuance(request,id=0):
+    if request.method=="GET":
+        issuance=Issuance.objects.get(pk=id)
+        issuedto=  issuance.issuedto
+        item=  issuance.item
+        issuedqty=  issuance.issuedqty
+        store= issuance.store
+        date_created=  issuance.date_created
+        date_updated=  issuance.date_updated
+
+        context={
+            
+            'issuedto':issuedto,
+            'item': item,
+            'store':store,
+            'issuedqty':issuedqty,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewissuanceform.html',context)
+
+
+def issuanceform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=IssuanceForm()
+        else:
+            issuance=Issuance.objects.get(pk=id)
+            form=IssuanceForm(instance=issuance)
+        return render(request,'inv/issuanceform.html',{'form':form})
+    else:
+        if id==0:
+            form=IssuanceForm(request.POST)
+        else:
+           issuance=Issuance.objects.get(pk=id)
+           form=IssuanceForm(request.POST,instance=issuance)
+        if form.is_valid():
+            form.save()
+        return redirect('/issuancelist')
+
+def issuancedelete(request,id):
+    issuance=Issuance.objects.get(pk=id)
+    issuance.delete()
+    return redirect('/issuancelist')
+
+
+
+def returneditemslist(request):
+    list=Returneditems.objects.all()
+    return render(request,'inv/returneditems.html',{'list':list})
+
+def viewreturneditems(request,id=0):
+    if request.method=="GET":
+        returneditem=Returneditems.objects.get(pk=id)
+        returnedby= returneditem.returnedby
+        item= returneditem.item
+        returnedqty= returneditem.returnedqty
+        store=returneditem.store
+        date_created= returneditem.date_created
+        date_updated= returneditem.date_updated
+
+        context={
+            
+            'returnedby':returnedby,
+            'item': item,
+            'store':store,
+            'returnedqty':returnedqty,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+        }
+        return render(request,'inv/viewreturneditemsform.html',context)
+
+
+
+def returneditemsform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=ReturneditemsForm()
+        else:
+            returneditems=Returneditems.objects.get(pk=id)
+            form=ReturneditemsForm(instance=returneditems)
+        return render(request,'inv/returneditemsform.html',{'form':form})
+    else:
+        if id==0:
+            form=ReturneditemsForm(request.POST)
+        else:
+           returneditems=Returneditems.objects.get(pk=id)
+           form=ReturneditemsForm(request.POST,instance=returneditems)
+        if form.is_valid():
+            form.save()
+        return redirect('/returneditemslist')
+
+def returneditemsdelete(request,id):
+    returneditems=Issuance.objects.get(pk=id)
+    returneditems.delete()
+    return redirect('/returneditemslist')

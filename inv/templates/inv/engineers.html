@@ -1,59 +1,57 @@
+{%extends 'inv/sidebar.html'%}
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{%block content%}
+<div class="card"> 
+<div class="row">
 
-{% block content %}
-{%include 'inv/navbar.html'%}
-	<h2>Engineers</h2>
-    <br>
-    <button><a  href=" {%url 'create_engineer'%}" >Add engineer</a></button>
-    <button><a  href=" {%url 'delete_all'%}" >delete all engineers</a></button>
-	{% if engineers %}
-	<table id="example" class="table table-bordered display" style="width:100%">
-    		<thead class="thead-dark">
-                <tr>
-                    <th></th>
-                    <th>first name</th>
-                    <th>last name</th>
-                    <th>phone</th>
-                    <th>email</th>
-                    <th>role</th>
+                <h1 class="display-4">Engineers </h1>
+                <p class="lead font-italic">List of Engineers</p>
+                <hr class="my-4">
+                <div class="jumbotron">
                     
-                    <th>actions</th>
-                    
-                    
-                </tr>
-        	</thead>
-        	<tbody>
-                {% for instance in engineers %}
-                <tr>
-                <th scope="row">{{forloop.counter}}</th>
-                <td>{{instance.first_name}}</td>
-                <td>{{instance.last_name}}</td>
-                <td>{{instance.phone}}</td>
-                <td>{{instance.email}}</td>
-                <td>{{instance.role}}</td>
-                <td><a href="">edit</a>
-                    <a href=" ">delete</a>
-                </td>
-                </tr>
-                  {% endfor %}
-        
-		</tbody>
-		<tfoot>
-            <tr>
+                    {% if list %}
+                   <div class="table-responsive-sm">
+                     <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th><button><a  href=" {%url 'engineer_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.first_name}}
+                                    {{instance.last_name}}
+                                </td>
+                                <td>{{instance.phone}}</td>
+                                <td>{{instance.email}}</td>
+                                <td>{{instance.role}}</td>
+                                <td><a href="{% url 'engineer_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'engineer_delete' instance.id %}" method="POST" class="d-inline"
+                                     autocomplete="off" autocapitalize="characters">
+                                       
+                                        {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button></form>
+                                </td>
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
                         
-                <th></th>
-                <th>name</th>
-                <th>phone</th>
-                <th>email</th>
-                <th>role</th>
+                    </table>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
                 
-        </tr>
-        	</tfoot>
-	</table>
-	{% else %}
-    		<p>No details are available.</p>
-	{% endif %}
-{% endblock %}
-
-
+                </div>
+              </div>
+        </div>
+    
+    {%endblock%} 

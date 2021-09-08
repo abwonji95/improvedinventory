@@ -1,57 +1,59 @@
+{%extends 'inv/sidebar.html'%}
 
+{%block content%}  
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Stock </li>
+ 
+  </ol>
+</nav>
+<div class="jumbotron"> 
+<div class="row">
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-{% block content %}
-{%include 'inv/navbar.html'%}
-	<h2>Stock</h2>
-    <br>
-    <button><a  href=" {%url 'create_purchase'%}" >Add Stock</a></button>
-    <button><a  href=" {%url 'create_issuance'%}" >Issue products</a></button>
-	{% if purchases %}
-	<table id="example" class="table table-bordered display" style="width:100%">
-    		<thead class="thead-dark">
-          <tr>
-            <th>counter</th>
-            <th>product</th>
-            <th>vendor</th>
-            <th>quantity purchased</th>
-            <th>quantity issued </th>
-            <th>current quantity</th>
-            <td>Actions</td>
-            
-            
-        </tr>
-        	</thead>
-        	<tbody>
-            {% for instance in purchases %}
-            <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            <td>{{instance.product}}</td>
-            <td>{{instance.vendor}}</td>
-            <td>{{instance.quantity}}</td>
-            <td></td>
-            <td></td>
-            <td><a href="" >edit</a>
-            <a href="">delete</a></td>
-            </tr>
-                  {% endfor %}
-		</tbody>
-		<tfoot>
-      <tr>
-        <th>counter</th>
-        <th>product</th>
-        <th>vendor</th>
-        <th>quantity purchased</th>
-        <th>quantity issued </th>
-        <th>current quantity</th>
-      
-        
-    </tr>
-        	</tfoot>
-	</table>
-	{% else %}
-    		<p>No details are available.</p>
-	{% endif %}
-{% endblock %}
+                <h1 class="display-4">Stock </h1>
+                <p class="lead font-italic">List of Items in Stock</p>
+                <hr class="my-4">
+                <div class="card">
+                    
+                                    
+                    {% if list %}
+                    <table id="example" class="table table-bordered display" >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Item</th>
+                                    <th>Purchase Quantity</th>
+                                    <th>Issued Quantity</th>
+                                    <th>Returned Quantity</th>
+                                    <th>Current quantity</th>
+                                    <th>Re-order Level</th>
+                                    <th>total price</th>
+                                    <th>status</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{instance.item}}</td>
+                                <td>{{instance.purchaseqty}}</td>
+                                <td>{{instance.issueqty}}</td>
+                                <td>{{instance.returnedqty}}</td>
+                                <td>{{instance.reorderlevel}}</td>
+                                <td>{{instance.status}}</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                            <p>No details are available.</p>
+                    {% endif %}
+
+                </div>
+                </div>
+                </div>
+          {%endblock%}     
 
 

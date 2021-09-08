@@ -1,0 +1,56 @@
+
+<div class="jumbotron" style="max-width:768px;">
+<div class="card-body text-center" >
+  <h2><a href="{% url 'purchases_card'%}"><span class="hidden-xs hidden-sm"> Recent Purchases</span></a></h2>
+  <hr>
+            <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>PO number</th>
+                    <th>Date</th>
+                    <th>Vendor</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                   
+                    <th><button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+        
+                    
+                </tr>
+      </thead>
+      <tbody>
+          {% for instance in purchases_recent %}
+          <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{instance.po}}</td>
+          <td>{{instance.date_created}}</td>
+          <td>{{instance.vendor}}</td>
+          <td>{{instance.item}}</td>
+          <td>{{instance.purchased_qty}}</td>
+          <td>{{instance.price}}</td>
+          <td>{{instance.total_price}}</td>
+         
+          <td>
+            <a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+            <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
+              autocomplete="off" autocapitalize="characters">
+                
+                {%csrf_token%}
+            <button type="submit" class="btn">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+            </button></form>
+          </td>
+          </tr>
+            {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+    
+  

@@ -1,0 +1,35 @@
+{%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
+
+{%block content%} 
+<div class="jumbotron">
+<div class="row">
+
+          <h1 class="display-4">Purchase Form </h1>
+            <p class="lead font-italic">Add New Purchases</p>
+            
+                <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
+                  {%csrf_token%}
+                  <hr>
+                
+                    {{form|bootstrap}}
+                 
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <a href="{%url 'purchase_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
+                  </div>
+                  <div class="col-md-8">
+                      <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
+                  </div> 
+                          
+              </div>
+            </form>
+            {%for message in messages%}
+              <h3>{{message}}</h3>
+            {%endfor%}
+          </div>
+        </div>
+    
+  
+{%endblock%}

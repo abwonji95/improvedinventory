@@ -1,0 +1,57 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}  
+
+ <div class="jumbotron">
+ <div class="row">
+                <h1 class="display-4">Returned Items </h1>
+                <p class="lead font-italic">List of returned items</p>
+                <hr class="my-4">
+                <div class="card">
+                    
+                    {% if list %}
+                    <table id="example" class="table table-bordered display">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>date created</th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Returned by</th>
+                                    <th><button><a  href=" {%url 'returneditems_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                       
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.date_created}}</td>
+                                <td>{{instance.item}}</td>
+                                <td>{{instance.returnedqty}}</td>
+                                <td>{{instance.store}}</td>
+                               
+                                <td><a href="{%url 'returneditems_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'returneditems_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'returneditems_delete' instance.id %}" method="POST" class="d-inline"
+                                     autocomplete="off" autocapitalize="characters">
+                                       
+                                        {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button></form>
+                                </td>
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
+                
+                </div>
+              </div>
+     
+{%endblock%}
+

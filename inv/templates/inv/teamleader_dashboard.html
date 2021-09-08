@@ -623,20 +623,12 @@ header {
                 <div class="navi">
                     <ul>
                         <li class="active"><a href="{% url 'engineer_dashboard'%}"><span class="hidden-xs hidden-sm">My Dashboard</span></a></li>
-                        <li>
-                            <a href="{% url 'request_product_tm'%}">Request Products</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'createreturn'%}">Return Products</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'teamleader_issuance'%}">Issue Products</a>
-                        </li>
+                        
                         <li>
                             <a href="">In stock</a>
                         </li>
                         <li>
-                            <a href="">Change password</a>
+                            <a href="{% url 'reset_password'%}">Change password</a>
                         </li>
                         <li><a href="{% url 'logoutpage'%}"><span class="hidden-xs hidden-sm">Logout</span></a></li>
                     </ul>
@@ -646,9 +638,12 @@ header {
             <div class="navi">
                 <h2> Hey, {{request.user}}</h2>
             </div>
+<br>
+<hr>
+{%include 'inv/teamleader_cards.html'%} 
+<br>
 
-     
-      
+
 {% endblock %}
 
 

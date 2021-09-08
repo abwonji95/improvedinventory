@@ -1,0 +1,70 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%} 
+<div class="jumbotron">
+<div class="row">
+
+          <h1 class="display-4">Purchase  {{po}} </h1>
+            <p class="lead font-italic">Details</p>
+            <div class="fam">
+                <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
+                  {%csrf_token%}
+                  <hr>
+                    <div class="col" >
+                    <label for="po" style="font-size: 18px;font-weight: 300;">PO  :</label> {{po}}
+                   </div>
+              
+                  <div class="col">
+                    <label for="item" style="font-size: 18px;font-weight: 300;">Item : </label>
+                    {{item|capfirst}}
+                  </div>
+                  <div class="col">
+                    <label for="vendor" style="font-size: 18px;font-weight: 300;">Vendor :</label>
+                    {{vendor|capfirst}}
+                  </div>
+                  <div class="col">
+                    <label for="price" style="font-size: 18px;font-weight: 300;">Price :</label>
+                    {{price|floatformat:"2"}}
+                  </div>
+                  <div class="col">
+                      <label for="quantity" style="font-size: 18px;font-weight: 300;">Quantity :</label>
+                      {{purchased_qty}}
+                  </div>  
+                
+                <div class="col">
+                  <label for="quantity" style="font-size: 18px;font-weight: 300;">Total price  :</label>
+                  {{total_price|floatformat:"2"}}
+              </div>
+                   <div class="col">
+                <label for="date_created" style="font-size: 18px;font-weight: 300;">Created On :</label>
+                {{date_created|date:'dS N o'}} {{date_created|time:'H:i:s'}}
+            </div>
+              <div class="col">
+                  <label for="quantity" style="font-size: 18px;font-weight: 300;">Created by  :</label>
+                  {{request.user}}
+              </div>
+                <div class="col" >
+                  <label for="date_updated" style="font-size: 18px;font-weight: 300;">Updated On :</label>
+                  {{date_updated|date:'dS N o'}} {{date_created|time:'H:i:s'}}
+              </div>
+                <div class="col">
+                  <label for="quantity" style="font-size: 18px;font-weight: 300;">Updated by  :</label>
+                  {{request.user}}
+              </div>
+               
+            
+   
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <a href="{%url 'purchase_list'%}" class="btn btn-success btn-block btn-dark">BACK</a>
+                  </div>
+                          
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+    
+  
+{%endblock%}
