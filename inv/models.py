@@ -1,4 +1,4 @@
-#rom typing_extensions import Required
+#from typing_extensions import Required
 from django.db import models
 from simple_history.models import HistoricalRecords
 from django.db.models.deletion import CASCADE
@@ -7,7 +7,8 @@ from django.db.models import Avg, Max, Min, Sum
 from django.core.validators import MinValueValidator,MinLengthValidator
 from phone_field import PhoneField
 from phonenumber_field.modelfields import PhoneNumberField
-#from multiselectfield import MultiSelectField
+from multiselectfield import MultiSelectField
+from django.db.models.signals import post_delete, pre_save,post_save
 
 
 # Create your models here.
@@ -136,7 +137,7 @@ class Returneditems(models.Model):
     history = HistoricalRecords()
 
     def __str__(self) :
-            return "{} {}".format(self.item,self.returnedby)
+            return "{} {}".format(self.item,self.returned_by)
 
 
 class Stock(models.Model):
@@ -144,15 +145,35 @@ class Stock(models.Model):
     current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_by=models.CharField(max_length=200,null=True)
-    vendor=models.CharField(max_length=200,null=True)
     issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     issued_by=models.CharField(max_length=200,null=True)
     issued_to=models.CharField(max_length=200,null=True)
-    returneditems_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     returned_by=models.CharField(max_length=200,null=True)
     recieved_by=models.CharField(max_length=200,null=True)
     reorder_level=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_updated=models.DateTimeField(auto_now=True)
-    export=models.BooleanField(default=False)
     history = HistoricalRecords()
+   # @property
+    #def current_qty(self):
+        #return self.purchased_qty + self.current_qty
+    
 
+    def purchasestock(sender,instance,**kwargs):
+            stock=Stock()
+            stock.item=instance.item
+            stock.purchased_qty=instance.purchased_qty
+            stock.save()
+    
+    
+    post_save.connect(purchasestock,sender=Purchase)
+
+    def returnedstock(sender,instance,**kwargs):
+            stock=Stock()
+            stock.item=instance.item
+            stock.returned_qty=instance.returned_qty
+            print('returned success')
+            stock.save()
+    
+    
+    post_save.connect(returnedstock,sender=Returneditems)

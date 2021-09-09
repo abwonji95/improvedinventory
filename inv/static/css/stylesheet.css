@@ -168,9 +168,9 @@ a.navbar-brand {
 /***********************  TOP Bar ********************/
 
 .sidebar {
-    width: 220px;
+    width: 217px;
     background-color: #000;
-    transition: all 0.5s ease-in-out;
+    height: 100%;
 }
 
 .bg-defoult {
@@ -365,4 +365,11 @@ a.navbar-brand {
     border-color: transparent;
     font-size: 18px;
     font-family: FontAwesome;
+}
+
+.breadcrumb {
+    font-size: 26px;
+    padding: 8px 8px 8px 8px;
+    color: white;
+    background-color: black;
 }

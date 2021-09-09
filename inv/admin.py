@@ -10,12 +10,13 @@ class VendorCreateAdmin(admin.ModelAdmin):
     list_filter=['name','phone','email','date_created','date_updated']
     search_fields=['name']
 
-
+class StockCreateAdmin(admin.ModelAdmin):
+    list_display=['item','purchased_qty','issued_qty','returned_qty','current_qty']
 
 admin.site.register(Vendor,VendorCreateAdmin)
 admin.site.register(Purchase,SimpleHistoryAdmin)
 admin.site.register(Engineer)
 admin.site.register(Issuance)
 admin.site.register(Store)
-
+admin.site.register(Stock,StockCreateAdmin)
 admin.site.register(Returneditems)

@@ -18,7 +18,11 @@ import csv
 
 
 def stock(request):
-    return render(request,'inv/stock.html')
+    list=Stock.objects.all()
+    context={
+        'list':list
+    }
+    return render(request,'inv/stock.html',context)
 def main(request):
     return render(request,'inv/main.html')
 def main2(request):
@@ -186,6 +190,32 @@ def engineerlist(request):
     return render(request,'inv/engineers.html',context)
 
 
+def viewengineer(request,id=0):
+    if request.method=="GET":
+        engineer=Engineer.objects.get(pk=id)
+        first_name=engineer.first_name
+        last_name=engineer.last_name
+        employee_number=engineer.employee_number
+        email=engineer.email
+        role=engineer.role
+        date_created=engineer.date_created
+        date_updated=engineer.date_updated
+
+        context={
+            'first_name':first_name,
+            'last_name':last_name,
+            'employee_number':employee_number,
+           'email':email,
+           'role':role,
+            'date_created':date_created ,
+            'date_updated':date_updated ,
+            
+        }
+        return render(request,'inv/viewengineerform.html',context)
+
+
+
+
 def engineerform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -224,6 +254,7 @@ def viewvendor(request,id=0):
         billingaddress=  vendor.billing_address
         phone=  vendor.phone
         website=  vendor.website
+        email=vendor.email
         primarycontactperson=  vendor.primary_contact_person
         otherdetails=vendor.other_details
         date_created=vendor.date_created
@@ -237,6 +268,7 @@ def viewvendor(request,id=0):
            'billingaddress':billingaddress ,
            'phone':phone,
            'website': website,
+           'email':email,
            'primarycontactperson': primarycontactperson,
            'otherdetails':otherdetails,
            'date_created':date_created,
@@ -592,6 +624,6 @@ def returneditemsform(request,id=0):
         return redirect('/returneditemslist')
 
 def returneditemsdelete(request,id):
-    returneditems=Issuance.objects.get(pk=id)
+    returneditems=Returneditems.objects.get(pk=id)
     returneditems.delete()
     return redirect('/returneditemslist')

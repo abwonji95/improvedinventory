@@ -1,27 +1,18 @@
 {%extends 'inv/sidebar.html'%}
-{%load crispy_forms_tags%}
 {%load bootstrap%}
 
-<script>
-        $(function () {
-                $("#id_start_date").datepicker();
-              }); 
-        
-              $(function () {
-                $("#id_end_date").datepicker();
-              }); 
-</script>
 {%block content%}
-<div class="card-deck">
 
-<div class="card">
-
-                <h1 class="display-4">Purchases </h1>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+     <h1 class="display-4">Purchases </h1>
                 <p class="lead font-italic">List of purchases</p>
-                <hr class="my-4">
-                <div class="card" >
+                <hr>
 
-                {% if list %}
+      <div class="card" >
+
+        {% if list %}
             <div class="table-responsive-sm">
             <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
                         <thead class="thead-dark">
@@ -65,25 +56,19 @@
                 {% endif %}
     </div>
     </div>
+    <div class="col-2">
+    <div>
+    <p class="lead font-italic">Filter</p>
     </div>
-
-<div class="form-row">
-<p class="lead font-italic">Filter</p>
-        <div class="form-row">
-         
-            <hr>
-                <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
+         <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
                 
                    {{myFilter.form|bootstrap}}
-                <button type="submit" class="btn btn-primary" value="Search">Search</button>
+                <button type="submit" class="btn btn-primary" value="Search">Filter</button>
               
                 
-                </form>
-        
-        </div>
+        </form>
+    </div>
+  </div>
 
-
-</div>
-      </div>
 {%endblock%}
 

@@ -15,7 +15,8 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
-                                    <th>name</th>
+                                    <th>Name</th>
+                                    <th>Emp No</th>
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Role</th>
@@ -29,10 +30,12 @@
                                 <td>{{instance.first_name}}
                                     {{instance.last_name}}
                                 </td>
+                                <td>{{instance.employee_number}}</td>
                                 <td>{{instance.phone}}</td>
                                 <td>{{instance.email}}</td>
                                 <td>{{instance.role}}</td>
-                                <td><a href="{% url 'engineer_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <td><a href="{%url 'engineer_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'engineer_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     <form action="{% url 'engineer_delete' instance.id %}" method="POST" class="d-inline"
                                      autocomplete="off" autocapitalize="characters">
                                        

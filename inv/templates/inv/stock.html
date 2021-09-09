@@ -1,14 +1,17 @@
 {%extends 'inv/sidebar.html'%}
 
-{%block content%}  
-<nav aria-label="breadcrumb">
+{%block content%} 
+<div class="col-6"> 
+<nav>
+
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
     <li class="breadcrumb-item active" aria-current="page">Stock </li>
  
   </ol>
 </nav>
-<div class="jumbotron"> 
+</div>
+<div class="card"> 
 <div class="row">
 
                 <h1 class="display-4">Stock </h1>
@@ -18,7 +21,8 @@
                     
                                     
                     {% if list %}
-                    <table id="example" class="table table-bordered display" >
+          <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm ">
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
@@ -28,8 +32,7 @@
                                     <th>Returned Quantity</th>
                                     <th>Current quantity</th>
                                     <th>Re-order Level</th>
-                                    <th>total price</th>
-                                    <th>status</th>
+                                    <th>Status</th>
                                     
                                 </tr>
                             </thead>
@@ -38,10 +41,11 @@
                                 <tr>
                                 <th scope="row">{{forloop.counter}}</th>
                                 <td>{{instance.item}}</td>
-                                <td>{{instance.purchaseqty}}</td>
-                                <td>{{instance.issueqty}}</td>
-                                <td>{{instance.returnedqty}}</td>
-                                <td>{{instance.reorderlevel}}</td>
+                                <td>{{instance.purchased_qty}}</td>
+                                <td>{{instance.issued_qty}}</td>
+                                <td>{{instance.returned_qty}}</td>
+                                <td>{{instance.current_qty}}</td>
+                                <td>{{instance.reorder_level}}</td>
                                 <td>{{instance.status}}</td>
                                 </tr>
                                 {% endfor %}

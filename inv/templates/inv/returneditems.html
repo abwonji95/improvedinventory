@@ -26,9 +26,8 @@
                                 {% for instance in list %}
                                 <tr>
                                 <th>{{forloop.counter}}</th>
-                                <td>{{instance.date_created}}</td>
                                 <td>{{instance.item}}</td>
-                                <td>{{instance.returnedqty}}</td>
+                                <td>{{instance.returned_qty}}</td>
                                 <td>{{instance.store}}</td>
                                
                                 <td><a href="{%url 'returneditems_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>

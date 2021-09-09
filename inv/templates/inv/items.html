@@ -1,7 +1,7 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-<div class="row">
+<div class="container" style='max-width':800px;>
 
 
                 <h1 class="display-4">Items </h1>
@@ -11,7 +11,7 @@
 
                 {% if list %}
                 <div class="table-responsive-sm">
-                <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+                <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
                                         <th></th>
@@ -20,7 +20,7 @@
                                         <th>Type</th>
                                         <th>Units</th>
                                        
-                                        <th><button><a  href=" {%url 'item_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                        <th><button><a  href=" {%url 'item_insert'%}" ><i class="fa fa-plus-circle" ></i>ADD NEW</a></button></th>
                                         </tr>
                         </thead>
                         <tbody>

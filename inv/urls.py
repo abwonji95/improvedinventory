@@ -21,11 +21,11 @@ urlpatterns=[
     path('engineers/delete/<int:id>',views.engineerdelete,name='engineer_delete'),
     path('engineerlist/',views.engineerlist,name='engineer_list'),
     path('engineer_cards/',views.engineer_cards,name='engineer_cards'),
-
+    path('engineers/view/<int:id>/',views.viewengineer,name='engineer_view'),
 #teamleader actions
 
     path('teamleader_dashboard/',views.teamleader_dashboard,name='teamleader_dashboard'),
-     path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
+    path('teamleader_cards/',views.teamleader_cards,name='teamleader_cards'),
 #vendor actions
     path('vendors/view/<int:id>/',views.viewvendor,name='vendor_view'),
     path('vendors/',views.vendorform,name='vendor_insert'),

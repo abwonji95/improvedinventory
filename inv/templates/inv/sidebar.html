@@ -21,84 +21,72 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js" integrity="sha512-RCgrAvvoLpP7KVgTkTctrUdv7C6t7Un3p1iaoPr1++3pybCyCsCZZN7QEHMZTcJTmcJ7jzexTO+eFpHk4OCFAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<style>
 
-
-</style>
-<script>
-    $(document).ready(function(){
-        $('.button-left').click(function(){
-            $('.sidebar').toggleClass('fliph');
-        });
-          
-     });
-
-</script>
     <title>Inventory</title>
 </head>
 <body>
 
-    <header class="header">
-              <nav class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
-                <div class="floatright">
-                <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">Home</a> </div>
-                <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
-            </div>
+<header class="header">
+  <nav class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
+    <div class="floatright">
+    <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">Home</a> </div>
+    <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
+    </div>
+    <div class="float-left">
             <div class="float-left">
-                <div class="float-left">
-                    <i class="fa fa-address-book"></i>
-                </div>
-                <select class="myselect">
-                <option > 
-                    <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">{{request.user}}</a></div>  
-                </option>  
-                <option><i class="fa  fa fa-refresh" aria-hidden="true"></i> Change Password
-                </option> 
-                <hr>
-                <option ><i class="fa fa-eye" aria-hidden="true"></i> View Profile
-                </option>  
-                <hr>
-                <option ><i class="fa fa-sign-out" aria-hidden="true"></i> Log out  
-                </option>  
+                <i class="fa fa-address-book"></i>
+            </div>
+            <select class="myselect">
+              <option > 
+                <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">{{request.user}}</a></div>  
+              </option>  
+              <option>
+                <i class="fa  fa fa-refresh" aria-hidden="true"></i> Change Password
+              </option> 
+              <hr>
+              <option >
+                <i class="fa fa-eye" aria-hidden="true"></i> View Profile
+              </option>  
+              <hr>
+              <option >
+                <i class="fa fa-sign-out" aria-hidden="true"></i> Log out  
+              </option>  
             </select>
 
-            </div>
-            </nav>
-          </header>
-<div class="card-deck">
-          <div class="main">
-            <aside>
-              <div class="sidebar left ">
-                <div class="user-panel">
-                  <div class="pull-left info">
-                    <p> Hey , {{request.user}}</p>
-                  </div>
-                </div>
-                <ul class="list-sidebar bg-defoult">
-                  <li> <a href="{% url 'admin_dashboard'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a>
-                </li>
-              <li> <a href="{% url 'stock'%}"><i class="fa fa-diamond"></i> <span class="nav-label">Stock</span></a> </li>
-              <li> <a href="{% url 'reports'%}" data-toggle="collapse"  class="collapsed active" > <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span></a></li>
-            
-              <li> <a href="{% url 'item_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-cubes"></i> <span class="nav-label">Items</span></a></li>
-              <li> <a href="{% url 'purchase_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">Purchases</span></a>
-              <li> <a href="{% url 'issuance_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-handshake-o"></i> <span class="nav-label">Issuance</span></a>
-              <li> <a href="{% url 'returneditems_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-undo"></i></i> <span class="nav-label">Returned Items</span></a>
-              <li> <a href="{% url 'storeslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-university" aria-hidden="true"></i> <span class="nav-label">Stores</span></a>
-              <li> <a href="{% url 'engineer_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-gavel" aria-hidden="true"></i> <span class="nav-label">Engineers</span></a>
-              <li> <a href="{% url 'vendor_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-balance-scale" aria-hidden="true"></i><span class="nav-label">Vendors</span></a>
-                <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
-         
-          </li>
-        </ul>
-        </div>
-        </aside>
-        </div>
-        <div class="row">
-          {%block content%}
+    </div>
+  </nav>
+</header>
 
-         {%endblock%}
+
+ <div class="container-fluid"style='padding:0px;'>
+  <div class="row" style='padding:0px 0px 0px 0px;'>
+  
+    <div class="col-2" style="background:#000;">
+  
+      <aside>
+        <div class="sidebar">
+          <div class="sidebar">
+            <ul >
+                    <li> <a href="{% url 'admin_dashboard'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a></li>
+                    <li> <a href="{% url 'stock'%}"><i class="fa fa-diamond"></i> <span class="nav-label">Stock</span></a> </li>
+                    <li> <a href="{% url 'reports'%}" data-toggle="collapse"  class="collapsed active" > <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span></a></li>
+                    <li> <a href="{% url 'item_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-cubes"></i> <span class="nav-label">Items</span></a></li>
+                    <li> <a href="{% url 'purchase_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">Purchases</span></a>
+                    <li> <a href="{% url 'issuance_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-handshake-o"></i> <span class="nav-label">Issuance</span></a>
+                    <li> <a href="{% url 'returneditems_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-undo"></i></i> <span class="nav-label">Returned Items</span></a>
+                    <li> <a href="{% url 'storeslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-university" aria-hidden="true"></i> <span class="nav-label">Stores</span></a>
+                    <li> <a href="{% url 'engineer_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-gavel" aria-hidden="true"></i> <span class="nav-label">Engineers</span></a>
+                    <li> <a href="{% url 'vendor_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-balance-scale" aria-hidden="true"></i><span class="nav-label">Vendors</span></a>
+                    <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
+            </ul>
+          </div>          
         </div>
-      </div>
-     
+      </aside>
+    </div>
+    <div class="col-10">
+    {%block content%}
+
+     {%endblock%}
+    </div>
+  </div> 
  
