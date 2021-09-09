@@ -1,10 +1,10 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%} 
-<div class="jumbotron">
+<div class="card">
 <div class="row">
 
-          <h1 class="display-4">{{firstname|capfirst}} {{laststname|capfirst}}   </h1>
+          <h1 class="display-4">{{first_name|capfirst}} {{last_name|capfirst}}   </h1>
             <p class="lead font-italic">Details</p>
             <div class="fam">
                 <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
@@ -12,7 +12,7 @@
                   <hr>
                   
                     <div class="col" >
-                    <label  style="font-size: 18px;font-weight: 300;">Employee number  :</label> {{employeenumber}}
+                    <label  style="font-size: 18px;font-weight: 300;">Employee number  :</label> {{employee_number}}
                    </div>
                     <div class="col" >
                     <label  style="font-size: 18px;font-weight: 300;">Email  :</label> {{email}}
@@ -44,7 +44,7 @@
                   <hr>
                   <div class="row">
                     <div class="col-md-12">
-                      <a href="{%url 'issuance_list'%}" class="btn btn-success btn-block btn-dark">Back</a>
+                      <a href="{%url 'engineer_list'%}" class="btn btn-success btn-block btn-dark">Back</a>
                   </div>
                           
               </div>

@@ -17,6 +17,9 @@ import csv
 
 
 
+def proof(request):
+    return render(request,'inv/proof.html')
+
 def stock(request):
     list=Stock.objects.all()
     context={
@@ -195,8 +198,9 @@ def viewengineer(request,id=0):
         engineer=Engineer.objects.get(pk=id)
         first_name=engineer.first_name
         last_name=engineer.last_name
-        employee_number=engineer.employee_number
+        empnumber=engineer.employee_number
         email=engineer.email
+        phone=engineer. phone
         role=engineer.role
         date_created=engineer.date_created
         date_updated=engineer.date_updated
@@ -204,8 +208,9 @@ def viewengineer(request,id=0):
         context={
             'first_name':first_name,
             'last_name':last_name,
-            'employee_number':employee_number,
-           'email':email,
+            'employee_number':empnumber,
+            'email':email,
+            'phone': phone,
            'role':role,
             'date_created':date_created ,
             'date_updated':date_updated ,
@@ -253,9 +258,9 @@ def viewvendor(request,id=0):
         shippingaddress =  vendor.shipping_address
         billingaddress=  vendor.billing_address
         phone=  vendor.phone
-        website=  vendor.website
+        website=vendor.website
         email=vendor.email
-        primarycontactperson=  vendor.primary_contact_person
+        primarycontactperson=vendor.primary_contact_person
         otherdetails=vendor.other_details
         date_created=vendor.date_created
         date_updated=vendor.date_updated
@@ -505,7 +510,22 @@ def purchaseform(request,id=0):
            purchase=Purchase.objects.get(pk=id)
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
-            form.save()
+            purchase=Purchase()
+            if purchase.item is not None:
+                p=Stock.objects.get(item=purchase.item)
+                print('jjjj')
+                stock=Stock()
+                stock.item=purchase.item
+                stock.purchased_qty=purchase.purchased_qty
+                form.save()
+            else:
+                purchase=Purchase()
+                stock=Stock()
+                print('cccc')
+                purchased_qty=purchase.purchased_qty
+                stock.save()
+                form.save()
+
             messages.success(request,'Purchase  Created Successfully')
             return redirect('/purchaseslist')
         else:
@@ -533,19 +553,19 @@ def issuancelist(request):
 def viewissuance(request,id=0):
     if request.method=="GET":
         issuance=Issuance.objects.get(pk=id)
-        issuedto=  issuance.issuedto
+        issued_to=  issuance.issued_to
         item=  issuance.item
-        issuedqty=  issuance.issuedqty
+        issued_qty=  issuance.issued_qty
         store= issuance.store
         date_created=  issuance.date_created
         date_updated=  issuance.date_updated
 
         context={
             
-            'issuedto':issuedto,
+            'issued_to':issued_to,
             'item': item,
             'store':store,
-            'issuedqty':issuedqty,
+            'issued_qty':issued_qty,
             'date_created':date_created ,
             'date_updated':date_updated ,
             

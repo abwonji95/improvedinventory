@@ -4,11 +4,11 @@ from  . import views
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
-
 urlpatterns=[
 
 #home
     path('',views.home,name='home'),
+    path('proof',views.proof,name='proof'),
 
 #stock
     path('stock/',views.stock,name='stock'),

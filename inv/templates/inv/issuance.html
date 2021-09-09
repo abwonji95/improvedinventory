@@ -1,9 +1,21 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%} 
-<div class="card">
-<div class="row">
+<div class="container">
+  <div class="row">
+    <div class="col-10">
 
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+         <li class="breadcrumb-item active" aria-current="page">Issuance</li>
+        <li class="breadcrumb-item"><a href="{%url 'issuance_insert'%}">Add New Issuance</a></li>
+       
+  </ol>
+</nav>
+   <hr class="my-4">
     <h1 class="display-4">Issuance </h1>
     <p class="lead font-italic">List of items issued</p>
     <hr class="my-4">
@@ -19,7 +31,7 @@
                             <th>Quantity</th>
                             <th>Issue to</th>
                            
-                            <th><button><a  href=" {%url 'issuance_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                            <th><button><a  href=" {%url 'issuance_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                         </tr>
                 </thead>
                 <tbody>
@@ -28,7 +40,7 @@
                     <th scope="row">{{forloop.counter}}</th>
                     <td>{{instance.item}}</td>
                     <td>{{instance.date_created}}</td>
-                    <td>{{instance.issuedqty}}</td>
+                    <td>{{instance.issued_qty}}</td>
                     <td>{{instance.store}}</td>
                    
                     <td> <a href="{%url 'issuance_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
@@ -50,6 +62,8 @@
 {% endif %}
 
 </div>
+
 </div>
+  <hr class="my-4">
 </div>
 {%endblock%}

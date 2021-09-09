@@ -3,31 +3,92 @@
 
 {%block content%}
 
-<div class="jumbotron" style="max-width:700px;"> 
+    <div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{%url 'vendor_list'%}">Vendors</a></li>
+         <li class="breadcrumb-item active" aria-current="page"> Add New Vendor</li>
+        
+        
+        
+       
+  </ol>
+</nav>
+   <hr class="my-4">
+<div class="card"> 
 <div class="row">
 
     <h1 class="display-4">Vendor Form</h1>
     <p class="lead font-italic">Register New Vendor</p>
     
-                <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
+               <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
                   {%csrf_token%}
-                      <hr>
-                 
-                      {{form|bootstrap}}
+                    <hr>
 
-                      <hr>
-                      <div class="row">
-                      <div class="col-md-4">
-                      <a href="{%url 'vendor_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                          {{form.name|bootstrap}}
+                        
+                        </div>
+                        <div class="form-group col-md-6">
+                          {{form.website|bootstrap}}
+                        </div>
                       </div>
-                      <div class="col-md-8">
-                      <button type="submit" class="btn btn-success btn-block btn-dark">Save</button>
-                      </div>
-                    
-                      </div>
+                      <div class="form-row">
+                      <div class="form-group col-md-4">
+                           {{form.primary_contact_person|bootstrap}}
+                          
+                          </div>
+                          <div class="form-group col-md-4">
+                          {{form.phone|bootstrap}}
+                          </div>
+                           <div class="form-group col-md-4">
+                          {{form.email|bootstrap}}
+                          </div>
+                            <div class="form-row">
+                      <div class="form-group col-md-6">
+                            {{form.shipping_address|bootstrap}}
+                          
+                          </div>
+                          <div class="form-group col-md-6">
+                             {{form.billing_address|bootstrap}}
+                          </div>
+                        </div>
+              
+                      <div class="form-group col-md-12">
+                             {{form.other_details|bootstrap}}
+                          
+                        </div>
+                          
+                        
+                        </div>
+
+                     
+
+                        <div class="form-inline ">
+                          <div class="col-md-4">
+                            <a href="{%url 'item_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
+                        </div>
+                          <div class="col-md-8">
+                              <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
+                          </div>
+                         
+                          </div>
                     </form>
+
+  
+
               </div>
         </div>
-
+ </div>
 
     {%endblock%}
+
+
+ 

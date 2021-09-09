@@ -1,7 +1,13 @@
-{%extends 'inv/sidebar.html'%}
 
-{%block content%} 
-<div class="col-6"> 
+{%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
+
+{%block content%}
+
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+     <hr class="my-4">
 <nav>
 
   <ol class="breadcrumb">
@@ -10,17 +16,14 @@
  
   </ol>
 </nav>
-</div>
-<div class="card"> 
-<div class="row">
-
-                <h1 class="display-4">Stock </h1>
+ <hr class="my-4">
+      <h1 class="display-4">Stock </h1>
                 <p class="lead font-italic">List of Items in Stock</p>
                 <hr class="my-4">
-                <div class="card">
-                    
-                                    
-                    {% if list %}
+
+      <div class="card" >
+
+       {% if list %}
           <div class="table-responsive-sm">
             <table id="example" class="table table-bordered  table-hover table-sm ">
                             <thead class="thead-dark">
@@ -54,10 +57,11 @@
                     {% else %}
                             <p>No details are available.</p>
                     {% endif %}
+    </div>
+    </div>
+    <div class="col-2">
+   
+  </div>
 
-                </div>
-                </div>
-                </div>
-          {%endblock%}     
-
+{%endblock%}
 

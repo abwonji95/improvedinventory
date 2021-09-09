@@ -2,10 +2,22 @@
 {%load bootstrap%}
 
 {%block content%}
-
 <div class="container">
   <div class="row">
     <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Purchases </li>
+        <li class="breadcrumb-item"><a href="{%url 'purchase_insert'%}">Add New Purchase</a></li>
+       
+ 
+  </ol>
+</nav>
+ <hr class="my-4">
      <h1 class="display-4">Purchases </h1>
                 <p class="lead font-italic">List of purchases</p>
                 <hr>
@@ -14,7 +26,7 @@
 
         {% if list %}
             <div class="table-responsive-sm">
-            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+            <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
                                         <th></th>
@@ -25,7 +37,7 @@
                                         <th>Price</th>
                                         <th>Total Price</th>
                                        
-                                        <th><button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                        <th><button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                                         </tr>
                         </thead>
                         <tbody>
@@ -33,8 +45,8 @@
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{instance.po}}</td>
-                            <td><a href="{% url 'item_update' instance.id %}">{{instance.item}}</a></td>
-                            <td><a href="{% url 'vendor_update' instance.id %}">{{instance.vendor}}</a></td>
+                            <td>{{instance.item}}</a></td>
+                            <td>{{instance.vendor}}</a></td>
                             <td>{{instance.purchased_qty}}</td>
                             <td>{{instance.price}}</td>
                             <td>{{instance.total_price}}</td>
@@ -55,8 +67,11 @@
                         <p>No details are available.</p>
                 {% endif %}
     </div>
+     <hr class="my-4">
     </div>
+    
     <div class="col-2">
+    <button>filter</button>
     <div>
     <p class="lead font-italic">Filter</p>
     </div>
@@ -67,8 +82,10 @@
               
                 
         </form>
+         <hr class="my-4">
     </div>
+    
   </div>
-
+</div>
 {%endblock%}
 

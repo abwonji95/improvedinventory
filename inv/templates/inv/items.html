@@ -1,9 +1,22 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-<div class="container" style='max-width':800px;>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
 
+      <hr class="my-4">
+<nav>
 
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Items </li>
+        <li class="breadcrumb-item"><a href="{%url 'item_insert'%}">Add New items</a></li>
+       
+ 
+  </ol>
+</nav>
+ <hr class="my-4">
                 <h1 class="display-4">Items </h1>
                 <p class="lead font-italic">List of items</p>
                 <hr class="my-4">
@@ -20,7 +33,7 @@
                                         <th>Type</th>
                                         <th>Units</th>
                                        
-                                        <th><button><a  href=" {%url 'item_insert'%}" ><i class="fa fa-plus-circle" ></i>ADD NEW</a></button></th>
+                                        <th><button><a  href=" {%url 'item_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                                         </tr>
                         </thead>
                         <tbody>
@@ -51,6 +64,9 @@
                 {% else %}
                         <p>No details are available.</p>
                 {% endif %}
+    </div>
+    </div>
+     <hr class="my-4">
     </div>
     </div>
     </div>

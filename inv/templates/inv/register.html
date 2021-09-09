@@ -1,33 +1,52 @@
 {%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
 
 {%block content%} 
+   <div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+         <li class="breadcrumb-item"><a href="{%url 'userslist'%}">Users</a></li>
+         <li class="breadcrumb-item active" aria-current="page">Register </li>
+       
+        
+        
+       
+  </ol>
+</nav>
+   <hr class="my-4">
 <div class="card"> 
 <div class="row">
 
                 <h1 class="display-4">Users </h1>
                 <p class="lead font-italic">Register New User</p>
-                <hr class="my-4">
+           
                 <form  action="" method="POST" autocomplete="off" autocapitalize="characters">
                   {%csrf_token%}
-                  
+                       <hr class="my-4">
                       <div class="row">
-                        <label for="username">Username</label>
-                        {{form.username}}
+                     
+                        {{form.username|bootstrap}}
                       </div>
                         <div class="row">
-                            <label for="password1">Password</label>
-                            {{form.password1}}
+                         
+                            {{form.password1|bootstrap}}
                           </div>
                           <div class="row">
-                            <label for="name">Confirm Password</label>
-                            {{form.password2}}
+                      
+                            {{form.password2|bootstrap}}
                           </div>
                           <div class="row">
                             {%for messages in messages%}
                             <a>{{messages}}</a>
                                 {%endfor%}
                             </div>
-                       
+                            <hr class="my-4">
                         <div class="row">
                           <div class="col-md-4">
                             <a href="{%url 'userslist'%}" class="btn btn-success btn-block btn-dark">Cancel</a>

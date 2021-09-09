@@ -1,16 +1,32 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-<div class="jumbotron"> 
-<div class="row" style="max-width:900px;">
 
+
+    <div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+         <li class="breadcrumb-item active" aria-current="page"> Vendors</li>
+        <li class="breadcrumb-item"><a href="{%url 'vendor_insert'%}">Add New Vendor</a></li>
+        
+        
+       
+  </ol>
+</nav>
+   <hr class="my-4">
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
-                <hr class="my-4">
+                <hr>
                 <div class="card">
                    
                     {% if list %}
-                    <div class="table-responsive-sm">
+        <div class="table-responsive-sm">
             <table id="example" class="table table-bordered  table-hover table-sm " >
                             <thead class="thead-dark">
                                 <tr>
@@ -24,7 +40,7 @@
                                     <th> Contact person phone</th>
                                    
                                    
-                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i></a></button></th>
+                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,7 +77,8 @@
                     {% endif %}
                 
                 </div>
+                  <hr class="my-4">
               </div>
-        </div>
-   
+
+   </div>
     {%endblock%} 

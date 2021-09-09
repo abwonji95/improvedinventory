@@ -16,11 +16,11 @@ class Vendor(models.Model):
     name=models.CharField(max_length=200,null=True)
     primary_contact_person=models.CharField(max_length=200,null=True)
     website=models.CharField(max_length=200,null=True)
-    primary_contact_person=models.CharField(max_length=200,null=True)
+
     phone = PhoneNumberField(null=True, blank=False, unique=True)
     email=models.EmailField(max_length=200,null=True)
-    shipping_address=models.CharField(max_length=200,null=True)
-    billing_address=models.CharField(max_length=200,null=True)
+    shipping_address=models.TextField(max_length=200,null=True)
+    billing_address=models.TextField(max_length=200,null=True)
     other_details=models.TextField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
@@ -66,8 +66,7 @@ class Engineer(models.Model):
     def __str__(self) :
         return "{} {}".format(self.first_name,self.last_name)
     
-    def teamleaders(self):
-        return Engineer.objects.all().filter()
+ 
    
 class Store(models.Model):
     name=models.CharField(max_length=200,null=True,unique=True)
@@ -77,6 +76,9 @@ class Store(models.Model):
     history = HistoricalRecords()
     def __str__(self) :
         return self.name
+
+    def teamleaders(self):
+        return Engineer.objects.all().filter(role='Team leader')
 
 class Issuance(models.Model):
     STATUS=(
@@ -158,12 +160,13 @@ class Stock(models.Model):
     #def current_qty(self):
         #return self.purchased_qty + self.current_qty
     
-
+"""
     def purchasestock(sender,instance,**kwargs):
-            stock=Stock()
-            stock.item=instance.item
-            stock.purchased_qty=instance.purchased_qty
-            stock.save()
+            #stock=Stock()
+            #stock.item=instance.item
+            #stock.purchased_qty=instance.purchased_qty
+            #stock.save()
+            print(instance.item)
     
     
     post_save.connect(purchasestock,sender=Purchase)
@@ -177,3 +180,4 @@ class Stock(models.Model):
     
     
     post_save.connect(returnedstock,sender=Returneditems)
+"""

@@ -1,6 +1,22 @@
 {%extends 'inv/sidebar.html'%}
-
+{%load bootstrap%}
 {%block content%}  
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{%url 'issuance_list'%}"> Issuance</a></li>
+         <li class="breadcrumb-item active" aria-current="page">Add New Issuance</li>
+        
+       
+  </ol>
+</nav>
+   <hr class="my-4">
 <div class="card">
 <div class="row">
 
@@ -11,17 +27,17 @@
                   {%csrf_token%}
                   <hr class="my-4">
                       <div class="row">
-                        <label for="item">Item</label>
-                        {{form.item}}
+        
+                        {{form.item|bootstrap}}
                       </div>
                       
                         <div class="row">
-                          <label for="quantity">Quantity</label>
-                          {{form.issuedqty}}
+                        
+                          {{form.issued_qty|bootstrap}}
                         </div>
                         <div class="row">
-                            <label for="issuedto">Issued to</label>
-                            {{form.store}}
+       
+                            {{form.store|bootstrap}}
                           </div>
                           <hr class="my-4">
                         <div class="row">
@@ -36,6 +52,9 @@
                           
                     </form>
               </div>
+              
         </div>
-   
+     <hr class="my-4">
+     </div>
+     </div>
 {%endblock%}

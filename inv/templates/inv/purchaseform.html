@@ -2,7 +2,23 @@
 {%load bootstrap%}
 
 {%block content%} 
-<div class="col-8">
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{%url 'purchase_list'%}">Purchases</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add New Purchase </li>
+        
+       
+ 
+  </ol>
+</nav>
+ <hr class="my-4">
   <div class="card">
           <h1 class="display-4">Purchase Form </h1>
             <p class="lead font-italic">Add New Purchases</p>
@@ -11,11 +27,27 @@
                   {%csrf_token%}
                   <hr>
                 
-                    {{form|bootstrap}}
+                    <div class="form-group col-md-6">
+                    {{form.po|bootstrap}}
+                    </div>
+                    <div class="form-group col-md-6">
+                    {{form.vendor|bootstrap}}
+                    </div>
+                   
+                      <div class="form-group col-md-6">
+                      {{form.item|bootstrap}}
+                        </div>
+                          <div class="form-group col-md-6">
+                       {{form.purchased_qty|bootstrap}}
+                        </div>
+                         <div class="form-group col-md-6 justify-content-center">
+                        {{form.price|bootstrap}}
+                           </div>
+                       
                  
                   <hr>
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 ">
                       <a href="{%url 'purchase_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
                   </div>
                   <div class="col-md-8">
@@ -28,7 +60,7 @@
               <h3>{{message}}</h3>
             {%endfor%}
           </div>
-     
+      <hr class="my-4">
         </div>
   
 {%endblock%}
