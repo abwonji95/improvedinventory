@@ -113,9 +113,9 @@ class Requestitem(models.Model):
 class Purchase(models.Model):
     po=models.CharField(max_length=200,null=True)
     vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
-    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
+    item=models.ManyToManyField(Item,through='Purchasedetails')
+    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
-    purchased_qty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     total_price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_updated=models.DateTimeField(auto_now=True)
@@ -126,9 +126,18 @@ class Purchase(models.Model):
         return self.purchased_qty * self.price
     
     def __str__(self) :
-        return "{} {}".format(self.po,self.item)
+        return "{}".format(self.po)
    
 
+class Purchasedetails(models.Model):
+    po=models.ForeignKey(Purchase,null=True,on_delete=models.CASCADE)
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    date_created=models.DateTimeField(auto_now_add=True)
+    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
+    def __str__(self) :
+        return "{}".format(self.po)
+        
 class Returneditems(models.Model):
     returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)

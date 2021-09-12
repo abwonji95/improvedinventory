@@ -510,22 +510,31 @@ def purchaseform(request,id=0):
            purchase=Purchase.objects.get(pk=id)
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
-            purchase=Purchase()
-            if purchase.item is not None:
-                p=Stock.objects.get(item=purchase.item)
-                print('jjjj')
-                stock=Stock()
-                stock.item=purchase.item
-                stock.purchased_qty=purchase.purchased_qty
-                form.save()
-            else:
-                purchase=Purchase()
-                stock=Stock()
-                print('cccc')
-                purchased_qty=purchase.purchased_qty
+            form.save()
+            stock=Stock()
+            list=Stock.objects.all()
+            p=form.instance
+            if p in list:
+                print(p.item)
+                stock.item=p.item
+                stock.purchased_qty=p.purchased_qty
+                stock.current_qty+=p.purchased_qty
+                print(stock.purchased_qty)
+                print(stock.current_qty)
                 stock.save()
-                form.save()
+            else:
+                stock.item=p.item
+                item=p.item
+                if item  in list:
+                    k=Stock.objects.get(item=item)
+                    k.current_qty+=p.purchased_qty
+                    print( k.current_qty)
+                    stock.save()
+                else:
+                    print('ot here')
+                    stock.save()
 
+            
             messages.success(request,'Purchase  Created Successfully')
             return redirect('/purchaseslist')
         else:
@@ -593,8 +602,10 @@ def issuanceform(request,id=0):
 
 def issuancedelete(request,id):
     issuance=Issuance.objects.get(pk=id)
-    issuance.delete()
-    return redirect('/issuancelist')
+    if request.method=='POST':
+        issuance.delete()
+        return redirect('/issuancelist')
+    return render(request,'inv/issuance_delete.html')
 
 
 
@@ -623,7 +634,12 @@ def viewreturneditems(request,id=0):
         }
         return render(request,'inv/viewreturneditemsform.html',context)
 
-
+def returneditemsdelete(request,id):
+    if request.method=='POST':
+        returneditems=Returneditems.objects.get(pk=id)
+        returneditems.delete()
+        return redirect('/returneditems_list')
+    return render(request,'inv/returneditems_delete.html')
 
 def returneditemsform(request,id=0):
     if request.method=="GET":
@@ -643,7 +659,6 @@ def returneditemsform(request,id=0):
             form.save()
         return redirect('/returneditemslist')
 
-def returneditemsdelete(request,id):
-    returneditems=Returneditems.objects.get(pk=id)
-    returneditems.delete()
-    return redirect('/returneditemslist')
+
+         
+

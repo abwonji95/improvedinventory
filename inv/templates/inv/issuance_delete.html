@@ -1,0 +1,12 @@
+{%extends 'inv/sidebar.html'%}
+{%block content%}
+<div class="jumbotron">
+
+<form method="POST" action="">
+    {%csrf_token%}
+<p>Confirm delete ?</p>
+<input class="btn btn-danger" type ="submit" value="Confirm"/>
+<a href="/purchaseslist"><div class="btn btn-primary">Cancel</div></a>
+</form>
+</div>
+{% endblock %}

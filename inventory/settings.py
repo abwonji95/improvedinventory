@@ -91,7 +91,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'inventoryDB',
+        'NAME': 'multiDB',
 
         'USER': 'postgres',
 

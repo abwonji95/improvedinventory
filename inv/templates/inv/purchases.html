@@ -45,7 +45,7 @@
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{instance.po}}</td>
-                            <td>{{instance.item}}</a></td>
+                            <td>{{instance.item.all.item}}</a></td>
                             <td>{{instance.vendor}}</a></td>
                             <td>{{instance.purchased_qty}}</td>
                             <td>{{instance.price}}</td>
@@ -68,9 +68,15 @@
                 {% endif %}
     </div>
      <hr class="my-4">
+     <button><i class="fa fa-filter" aria-hidden="true"></i>hide</button>
     </div>
     
-    <div class="col-2">
+   
+         <hr class="my-4">
+    </div>
+    
+  </div>
+  <div> <div class="col-2">
     <button>filter</button>
     <div>
     <p class="lead font-italic">Filter</p>
@@ -81,11 +87,22 @@
                 <button type="submit" class="btn btn-primary" value="Search">Filter</button>
               
                 
-        </form>
-         <hr class="my-4">
-    </div>
-    
-  </div>
+        </form></div>
+ 
+ <script >
+let btn = document.querySelector('button');
+let div = document.querySelector('div');
+
+btn.addEventListener('click', () => {
+    if (div.style.display == 'none') {
+        div.style.display = 'block';
+    } else {
+        div.style.display = 'none';
+    }
+})
+ </script>
 </div>
+
+
 {%endblock%}
 

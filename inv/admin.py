@@ -13,10 +13,19 @@ class VendorCreateAdmin(admin.ModelAdmin):
 class StockCreateAdmin(admin.ModelAdmin):
     list_display=['item','purchased_qty','issued_qty','returned_qty','current_qty']
 
+class ItemCreateAdmin(admin.ModelAdmin):
+    list_display=['name','item_description','item_type','sku','date_created','date_updated']
+
+    
+class PurchasedetailsCreateAdmin(admin.ModelAdmin):
+    list_display=['po','item','purchased_qty']
+
 admin.site.register(Vendor,VendorCreateAdmin)
 admin.site.register(Purchase,SimpleHistoryAdmin)
 admin.site.register(Engineer)
 admin.site.register(Issuance)
 admin.site.register(Store)
+admin.site.register(Purchasedetails,PurchasedetailsCreateAdmin)
+admin.site.register(Item,ItemCreateAdmin)
 admin.site.register(Stock,StockCreateAdmin)
 admin.site.register(Returneditems)
