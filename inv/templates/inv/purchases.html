@@ -17,6 +17,10 @@
  
   </ol>
 </nav>
+  {%for message in messages%}
+              <h3>{{message}}</h3>
+            {%endfor%}
+
  <hr class="my-4">
      <h1 class="display-4">Purchases </h1>
                 <p class="lead font-italic">List of purchases</p>
@@ -44,8 +48,8 @@
                             {% for instance in list %}
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
-                            <td>{{instance.po}}</td>
-                            <td>{{instance.item.all.item}}</a></td>
+                            <td><a href="{%url 'purchase_view' instance.id %}">{{instance.po}}</a></td>
+                            <td>{{instance.item}}</a></td>
                             <td>{{instance.vendor}}</a></td>
                             <td>{{instance.purchased_qty}}</td>
                             <td>{{instance.price}}</td>
@@ -56,7 +60,14 @@
        
                             <td><a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                 <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                <a href="{% url 'purchase_delete' instance.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
+                                autocomplete="off" autocapitalize="characters">
+                                  
+                                   {%csrf_token%}
+                               <button type="submit" class="btn">
+                               <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                               </button></form>
+
                             </td>
                             </tr>
                             {% endfor %}
@@ -65,6 +76,9 @@
                 </div>
                 {% else %}
                         <p>No details are available.</p>
+                        <div>
+                        <button><a  href=" {%url 'purchase_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button>
+                         </div>
                 {% endif %}
     </div>
      <hr class="my-4">

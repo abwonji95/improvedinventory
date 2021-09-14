@@ -8,7 +8,7 @@ urlpatterns=[
 
 #home
     path('',views.home,name='home'),
-    path('proof',views.proof,name='proof'),
+ 
 
 #stock
     path('stock/',views.stock,name='stock'),
@@ -92,5 +92,6 @@ urlpatterns=[
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('password_change_done/',auth_views.PasswordChangeDoneView.as_view()),
-    path('sidebar/',views.sidebar,name='sidebar')
+    path('sidebar/',views.sidebar,name='sidebar'),
+    path('base/',views.base,name='base')
 ]

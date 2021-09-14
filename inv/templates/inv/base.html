@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -50,8 +51,7 @@
               </option>  
               <hr>
               <option >
-             
-               
+                 
               </option>  
             </select>
 
@@ -72,16 +72,10 @@
                     <li> <a href="{% url 'admin_dashboard'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a></li>
                     <li> <a href="{% url 'stock'%}"><i class="fa fa-diamond"></i> <span class="nav-label">Stock</span></a> </li>
                     <li> <a href="{% url 'reports'%}" data-toggle="collapse"  class="collapsed active" > <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span></a></li>
-                    <li> <a href="{% url 'item_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-cubes"></i> <span class="nav-label">Items</span></a></li>
-                    <li> <a href="{% url 'purchase_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">Purchases</span></a>
+  
                     <li> <a href="{% url 'issuance_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-handshake-o"></i> <span class="nav-label">Issuance</span></a>
                     <li> <a href="{% url 'returneditems_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-undo"></i></i> <span class="nav-label">Returned Items</span></a>
-                    <li> <a href="{% url 'storeslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-university" aria-hidden="true"></i> <span class="nav-label">Stores</span></a>
-                    <li> <a href="{% url 'engineer_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-gavel" aria-hidden="true"></i> <span class="nav-label">Engineers</span></a>
-                    <li> <a href="{% url 'vendor_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-balance-scale" aria-hidden="true"></i><span class="nav-label">Vendors</span></a>
-                    <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
-                    <li> 
-                     <button type='POST' class="btn btn-success btn-block btn-dark" ><a  href=" {%url 'logoutpage'%}" >Log out</a></button></li>
+                    <li><button><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></button> </li>
             </ul>
           </div>          
         </div>

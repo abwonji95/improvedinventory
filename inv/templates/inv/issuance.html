@@ -50,7 +50,7 @@
                             
                             {%csrf_token%}
                         <button type="submit" class="btn">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.item}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </button></form>
                     </td>
                 </tr>

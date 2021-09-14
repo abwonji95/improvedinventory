@@ -70,7 +70,7 @@ class Engineer(models.Model):
    
 class Store(models.Model):
     name=models.CharField(max_length=200,null=True,unique=True)
-    engineer=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    engineer=models.ForeignKey(Engineer,null=True,on_delete=models.CASCADE)
     date_updated=models.DateTimeField(auto_now=True)
     date_created=models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
@@ -85,11 +85,11 @@ class Issuance(models.Model):
             ('Issued','Issued'),('Available','Availabe'),
             )
             
-    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
-    issued_to=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    issued_to=models.ForeignKey(Engineer,null=True,on_delete=models.CASCADE)
     issued_qty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
+    store=models.ForeignKey(Store,null=True,on_delete=models.CASCADE)
     status=models.CharField(max_length=200,null=True,choices=STATUS)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -100,7 +100,7 @@ class Requestitem(models.Model):
             ('installation','installation'),('support','support'),('survey','survey'),
             )
     sitename=models.CharField(max_length=200,null=True)
-    item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -112,8 +112,8 @@ class Requestitem(models.Model):
 
 class Purchase(models.Model):
     po=models.CharField(max_length=200,null=True)
-    vendor=models.ForeignKey(Vendor,null=True,on_delete=models.SET_NULL)
-    item=models.ManyToManyField(Item,through='Purchasedetails')
+    vendor=models.ForeignKey(Vendor,null=True,on_delete=models.CASCADE)
+    item=models.ForeignKey(Item,on_delete=models.CASCADE)
     purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -152,7 +152,7 @@ class Returneditems(models.Model):
 
 
 class Stock(models.Model):
-    item=models.CharField(max_length=200,null=True)
+    item=models.CharField(max_length=200,null=True,unique=True)
     current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_by=models.CharField(max_length=200,null=True)
@@ -165,6 +165,10 @@ class Stock(models.Model):
     reorder_level=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+    def __str__(self) :
+            return self.item
+
+
    # @property
     #def current_qty(self):
         #return self.purchased_qty + self.current_qty

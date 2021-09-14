@@ -152,3 +152,7 @@ EMAIL_PORT= 587
 EMAIL_USE_TLS=True
 EMAIL_HOST_USER='jackonyi90@gmail.com'
 EMAIL_HOST_PASSWORD='TALL7777'
+
+
+#logout 
+LOGOUT_REDIRECT_URL = '/loginpage'

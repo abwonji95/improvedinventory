@@ -1,3 +1,4 @@
+from inv.decorators import *
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
@@ -16,24 +17,19 @@ from django.urls import reverse_lazy
 import csv
 
 
-
-def proof(request):
-    return render(request,'inv/proof.html')
-
+@login_required(login_url='loginpage')
 def stock(request):
     list=Stock.objects.all()
     context={
         'list':list
     }
     return render(request,'inv/stock.html',context)
-def main(request):
-    return render(request,'inv/main.html')
-def main2(request):
-    return render(request,'inv/main2.html')
-def main3(request):
-    return render(request,'inv/main3.html')
+
+@login_required(login_url='loginpage')
 def home(request):
-    return render(request,'inv/main.html')
+    return render(request,'inv/admin_dashboard.html')
+
+@login_required(login_url='loginpage')
 def reports(request):
     return render(request,'inv/reports.html')
 
@@ -77,25 +73,28 @@ def stores(request):
     stores = Store.objects.all()
     return render(request,'inv/stores.html',{'stores':stores})
 
+@unauthenticated_user
 def logoutpage(request):
-    user=authenticate(request)
-    if request.method=='POST':
-        logout(request)
-        messages.info(request,'you have been logged out successfully')
+    logout(request)
+    messages.info(request,'you have been logged out successfully')
     return redirect('loginpage')
 
-
+@login_required(login_url='loginpage')
 def purchases_card(request):
     purchases_recent=Purchase.objects.all()[:5]
     return render(request,'inv/purchases_card.html',{'purchases_recent':purchases_recent})
 
+@login_required(login_url='loginpage')
 def engineer_cards(request):
     return render(request,'inv/engineer_cards.html')
+
+@login_required(login_url='loginpage')
 def teamleader_cards(request):
     return render(request,'inv/teamleader_cards.html')
 
 
 @login_required(login_url='loginpage')
+@admin_only
 def admin_dashboard(request):
     
     engineerscount=Engineer.objects.all().count()
@@ -118,6 +117,7 @@ def admin_dashboard(request):
     }
     return render(request,'inv/admin_dashboard.html',context=mydict)
 
+@login_required(login_url='loginpage')
 def home(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -143,48 +143,33 @@ def engineers(request):
     return render(request,'inv/engineers.html',{'engineers':engineers,
     'engineercount':engineercount,'engineer_tm':engineer_tm,'engineer_en':engineer_en})
 
-def admin_dashboard(request):
-    
-    users=User.objects.all().count()
-    stores=Store.objects.all().count()
-    purchases_recent=Purchase.objects.all()[:5]
-    itemscount=Item.objects.all().count()
-    vendorscount = Vendor.objects.all().count()
-    purchasescount=Purchase.objects.all().count()
-    engineercount = Engineer.objects.all().count()
-    context={'itemscount':itemscount,'vendorscount':vendorscount,  'purchases_recent' : purchases_recent,
-    'purchasescount':purchasescount,'users':users,'engineercount':engineercount, 'stores':stores}
-    return render(request,'inv/admin_dashboard.html',context)
 
 
+
+
+@unauthenticated_user
 def loginpage(request):
-    if request.method=='POST':
-        username=request.POST.get('username')
-        password=request.POST.get('password')
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        if request.method=='POST':
+            username=request.POST.get('username')
+            password=request.POST.get('password')
 
-        user=authenticate(request,username=username, password=password)
-        if user is not None:
-            login(request,user)
-            return redirect('admin_dashboard')
-        else:
-            messages.info(request,'username or password incorect')
-            return render(request,'inv/loginpage.html')
-    
+            user=authenticate(request,username=username, password=password)
+            if user is not None:
+                login(request,user)
+                return redirect('admin_dashboard')
+            else:
+                messages.info(request,'username or password incorect')
+                return render(request,'inv/loginpage.html')
+        
     context={}
     return render(request,'inv/loginpage.html',context)
 
-# Create your views here.
 
-def delete_all(request):
-    queryset = Engineer.objects.all()
-    if request.method=='POST':
-        queryset.delete()
-        return redirect('engineers')
-    return render(request,'inv/delete_all.html')
-
-#new
-
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def engineerlist(request):
     list=Engineer.objects.all()
     context={
@@ -192,7 +177,8 @@ def engineerlist(request):
     }
     return render(request,'inv/engineers.html',context)
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewengineer(request,id=0):
     if request.method=="GET":
         engineer=Engineer.objects.get(pk=id)
@@ -220,7 +206,8 @@ def viewengineer(request,id=0):
 
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def engineerform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -239,18 +226,21 @@ def engineerform(request,id=0):
             form.save()
         return redirect('/engineerlist')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def engineerdelete(request,id):
-    employee=Engineer.objects.get(pk=id)
-    employee.delete()
+    eng=Engineer.objects.get(pk=id)
+    eng.delete()
     return redirect('/engineerlist')
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def vendorlist(request):
     list=Vendor.objects.all()
     return render(request,'inv/vendors.html',{'list':list})
 
-
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewvendor(request,id=0):
     if request.method=="GET":
         vendor=Vendor.objects.get(pk=id)
@@ -282,6 +272,8 @@ def viewvendor(request,id=0):
         }
         return render(request,'inv/viewvendorform.html',context)
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def vendorform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -305,29 +297,21 @@ def vendorform(request,id=0):
 
 
 
-
-
-#def vendormultiple(request):
-    ##form=VendorForm()
-        #if form.is_valid:
-           # form.save()
-        #return redirect('/vendors',{'form':form})
-  
-    #return render(request,'inv/vendorform.html')
-
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def vendordelete(request,id):
     vendor=Vendor.objects.get(pk=id)
     vendor.delete()
     return redirect('/vendorslist')
 
-
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def userslist(request):
     list=User.objects.all()
     return render(request,'inv/accounts.html',{'list':list})
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def register(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -350,18 +334,23 @@ def register(request,id=0):
             return redirect('/register')
         return redirect('/')
 
+
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def userdelete(request,id):
     user=User.objects.get(pk=id)
     user.delete()
     return redirect('/')
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def storeslist(request):
     list=Store.objects.all()
     return render(request,'inv/stores.html',{'list':list})
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewstore(request,id=0):
     if request.method=="GET":
         store=Store.objects.get(pk=id)
@@ -380,7 +369,8 @@ def viewstore(request,id=0):
         return render(request,'inv/viewstoreform.html',context)
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def storeform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -399,17 +389,22 @@ def storeform(request,id=0):
             form.save()
         return redirect('/storeslist')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def storedelete(request,id):
     store=Store.objects.get(pk=id)
     store.delete()
     return redirect('/storeslist')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 
 def itemslist(request):
     list=Item.objects.all()
     return render(request,'inv/items.html',{'list':list})
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewitems(request,id=0):
     if request.method=="GET":
         item=Item.objects.get(pk=id)
@@ -430,7 +425,8 @@ def viewitems(request,id=0):
         return render(request,'inv/viewitemsform.html',context)
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def itemform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -449,15 +445,23 @@ def itemform(request,id=0):
             form.save()
         return redirect('/itemslist')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def itemdelete(request,id):
     item=Item.objects.get(pk=id)
     item.delete()
     return redirect('/itemslist')
 
+@login_required(login_url='loginpage')
 def sidebar(request):
     return render(request,'inv/sidebar.html')
 
+@login_required(login_url='loginpage')
+def base(request):
+    return render(request,'inv/base.html')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def purchaseslist(request):
     list=Purchase.objects.all()
 
@@ -467,6 +471,8 @@ def purchaseslist(request):
 
     return render(request,'inv/purchases.html',context)
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin','superadmin'])
 def viewpurchase(request,id=0):
     if request.method=="GET":
         purchase=Purchase.objects.get(pk=id)
@@ -494,7 +500,8 @@ def viewpurchase(request,id=0):
         }
         return render(request,'inv/viewpurchaseform.html',context)
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def purchaseform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -510,33 +517,12 @@ def purchaseform(request,id=0):
            purchase=Purchase.objects.get(pk=id)
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
+        
             form.save()
-            stock=Stock()
-            list=Stock.objects.all()
-            p=form.instance
-            if p in list:
-                print(p.item)
-                stock.item=p.item
-                stock.purchased_qty=p.purchased_qty
-                stock.current_qty+=p.purchased_qty
-                print(stock.purchased_qty)
-                print(stock.current_qty)
-                stock.save()
-            else:
-                stock.item=p.item
-                item=p.item
-                if item  in list:
-                    k=Stock.objects.get(item=item)
-                    k.current_qty+=p.purchased_qty
-                    print( k.current_qty)
-                    stock.save()
-                else:
-                    print('ot here')
-                    stock.save()
 
-            
             messages.success(request,'Purchase  Created Successfully')
             return redirect('/purchaseslist')
+
         else:
             messages.warning(request,'Error check the details and try again')
             return redirect('/purchases')
@@ -545,7 +531,8 @@ def purchaseform(request,id=0):
 
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def purchasedelete(request,id):
     purchase=Purchase.objects.get(pk=id)
     if request.method=='POST':
@@ -553,12 +540,14 @@ def purchasedelete(request,id):
         return redirect('/purchaseslist')
     return render(request,'inv/purchase_delete.html')
 
-    
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def issuancelist(request):
     list=Issuance.objects.all()
     return render(request,'inv/issuance.html',{'list':list})
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewissuance(request,id=0):
     if request.method=="GET":
         issuance=Issuance.objects.get(pk=id)
@@ -581,7 +570,8 @@ def viewissuance(request,id=0):
         }
         return render(request,'inv/viewissuanceform.html',context)
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def issuanceform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -600,6 +590,8 @@ def issuanceform(request,id=0):
             form.save()
         return redirect('/issuancelist')
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def issuancedelete(request,id):
     issuance=Issuance.objects.get(pk=id)
     if request.method=='POST':
@@ -608,11 +600,14 @@ def issuancedelete(request,id):
     return render(request,'inv/issuance_delete.html')
 
 
-
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def returneditemslist(request):
     list=Returneditems.objects.all()
     return render(request,'inv/returneditems.html',{'list':list})
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def viewreturneditems(request,id=0):
     if request.method=="GET":
         returneditem=Returneditems.objects.get(pk=id)
@@ -634,6 +629,8 @@ def viewreturneditems(request,id=0):
         }
         return render(request,'inv/viewreturneditemsform.html',context)
 
+@login_required(login_url='loginpage')
+@allowed_users(allowed_roles=['admin'])
 def returneditemsdelete(request,id):
     if request.method=='POST':
         returneditems=Returneditems.objects.get(pk=id)
@@ -641,6 +638,7 @@ def returneditemsdelete(request,id):
         return redirect('/returneditems_list')
     return render(request,'inv/returneditems_delete.html')
 
+@login_required(login_url='loginpage')
 def returneditemsform(request,id=0):
     if request.method=="GET":
         if id==0:
