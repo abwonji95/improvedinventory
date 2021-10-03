@@ -1,11 +1,11 @@
 
-<div class="card">
+<div class="card mb-4">
 <div class="card-body text-center" >
   <h2><a href="{% url 'purchases_card'%}"><span class="hidden-xs hidden-sm"> Recent Purchases</span></a></h2>
   <hr>
             <div class="table-responsive-sm">
-            <table id="example" class="table table-bordered  table-hover table-sm ">
-            <thead class="thead-dark">
+            <table id="table_id" class="table table-bordered  table-hover table-sm ">
+            <thead>
                 <tr>
                     <th></th>
                     <th>PO number</th>
@@ -34,14 +34,14 @@
           <td>{{instance.total_price}}</td>
          
           <td>
-            <a href="{%url 'purchase_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-            <a href="{% url 'purchase_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-            <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline"
-              autocomplete="off" autocapitalize="characters">
+          <button class="btn"><a href="{%url 'purchase_view' instance.id %}"><i class="material-icons">remove_red_eye</i></a></button>
+          <button class="btn"><a href="{% url 'purchase_update' instance.id %}"><i class="material-icons">create</i></i></a></button>
+            
+          <form action="{% url 'purchase_delete' instance.id %}" method="POST" class="d-inline">
                 
                 {%csrf_token%}
             <button type="submit" class="btn">
-                <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.po}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.po}} ?');"><i class="material-icons">delete</i></a>
             </button></form>
           </td>
           </tr>

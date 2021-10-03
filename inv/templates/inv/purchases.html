@@ -26,9 +26,11 @@
                 <p class="lead font-italic">List of purchases</p>
                 <hr>
 
-      <div class="card" >
+      <div class="card mb-4" >
 
+ <div class="card-body me-4" >
         {% if list %}
+
             <div class="table-responsive-sm">
             <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
@@ -73,6 +75,7 @@
                             {% endfor %}
                     </tbody>
                 </table>
+                </div>
                 </div>
                 {% else %}
                         <p>No details are available.</p>

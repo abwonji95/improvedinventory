@@ -6,22 +6,14 @@
     <div class="col-10">
 
       <hr class="my-4">
-<nav>
 
-  <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
-         <li class="breadcrumb-item active" aria-current="page">Stores</li>
-          <li class="breadcrumb-item"><a href="{%url 'store_insert'%}">Add New Store</a></li>
-       
-       
-  </ol>
-</nav>
    <hr class="my-4">
     <h1 class="display-4">Stores </h1>
     <br>
     <p class="lead font-italic">List of stores</p>
     <hr class="my-4">
-    <div class="card">
+    <div class="card mb-4">
+    <div class="card-body">
             {% if list %}
             <div class="table-responsive-sm">
             <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
@@ -56,6 +48,8 @@
             
             </table>
             </div>
+             </div>
+              </div>
             {% else %}
                     <p>No details are available.</p>
             {% endif %}

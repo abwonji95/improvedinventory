@@ -1,5 +1,5 @@
 from collections import namedtuple
-from django.urls import path
+from django.urls import path,include
 from  . import views
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
@@ -83,15 +83,33 @@ urlpatterns=[
     path('returneditemslist/',views.returneditemslist,name='returneditems_list'),
 
 
-
+    path('accounts/', include('django.contrib.auth.urls')),
    #common actions
     path('loginpage/',views.loginpage,name='loginpage'),
-    path('logoutpage/',views.logoutpage,name='logoutpage'),
+    path('logoutpage/',views.logout_view,name='logout_view'),
     path('reset_password/',auth_views.PasswordResetView.as_view(),name='reset_password'),
     path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('password_change_done/',auth_views.PasswordChangeDoneView.as_view()),
     path('sidebar/',views.sidebar,name='sidebar'),
-    path('base/',views.base,name='base')
+    path('base/',views.base,name='base'),
+
+    #new
+    path('price_list/',views.price_list,name='price_list'),
+    path('admin_approval/',views.admin_approval,name='admin_approval'),
+    path('admin_return/',views.admin_return,name='admin_return'),
+    path('admin_stock/',views.admin_stock,name='admin_stock'),
+    path('admin_report/',views.admin_report,name='admin_report'),
+    path('teamleader_request/',views.teamleader_request,name='teamleader_request'),
+    path('teamleader_stock/',views.teamleader_stock,name='teamleader_stock'),
+    path('teamleader_approval/',views.teamleader_approval,name='teamleader_approval'),
+    path('teamleader_return/',views.teamleader_return,name='teamleader_return'),
+    path('teamleader_make_return/',views.teamleader_make_return,name='teamleader_make_return'),
+    path('engineer_stock/',views.engineer_stock,name='engineer_stock'),
+    path('engineer_request/',views.engineer_request,name='engineer_request'),
+    path('engineer_make_return/',views.engineer_make_return,name='engineer_make_return'),
+    path('restricted/',views.restricted,name='restricted'),
+    path('error_404/',views.error_404,name='error_404'),
+
 ]

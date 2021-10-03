@@ -15,7 +15,7 @@
       <input type="text" id="login" class="fadeIn second" name="username" placeholder="Username">
       <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
       <input type="submit" class="fadeIn fourth" value="Log In">
-      <li><a href="{%url 'reset_password'%}">Forgot password?</a></li>
+      <li><a href="{% url 'password_reset' %}">Forgot password?</a></li>
   
     </form>
 

@@ -156,3 +156,6 @@ EMAIL_HOST_PASSWORD='TALL7777'
 
 #logout 
 LOGOUT_REDIRECT_URL = '/loginpage'
+
+#login
+LOGOUT_REDIRECT_URL = '/'

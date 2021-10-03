@@ -2,95 +2,486 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{%  static 'css/stylesheet.css'%}" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
-    <link href="{% static 'js/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet">
-    <link href="{% static 'js/jquery-ui-1.12.1/jquery-ui.structure.min.css' %}" rel="stylesheet">
-    <link href="{% static 'js/jquery-ui-1.12.1/jquery-ui.theme.min.css' %}" rel="stylesheet">
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui-1.12.1/jquery-ui.js' %}"></script>
-    <script src="{% static 'js/myjs.js' %}"></script>
- 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <title>Inventory</title>
+    <title>Dashboard</title>
+
+    <!-- CDN Links-->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <script> src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"</script>
+
+    <!-- Custom styles -->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
 </head>
-<body>
 
-<header class="header">
-  <nav class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
-    <div class="floatright">
-    <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">Home</a> </div>
-    <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
-    </div>
-    <div class="float-left">
-            <div class="float-left">
-                <i class="fa fa-address-book"></i>
-            </div>
-            <select class="myselect">
-              <option > 
-                <div class="float-right"> <a href="{%url 'admin_dashboard'%}" class="button-left">{{request.user}}</a></div>  
-              </option>  
-              <option>
-                <i class="fa  fa fa-refresh" aria-hidden="true"></i> Change Password
-              </option> 
-              <hr>
-              <option >
-                <i class="fa fa-eye" aria-hidden="true"></i> View Profile
-              </option>  
-              <hr>
-              <option >
-             
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Btn logo -->
+            
+               <div class="navbar-brand justify-content-center bg-light d-flex flex-column"  style="width:250px;margin:0px; height:70px;" >
+                <div class="container-fluid  bg-light"  style="width:200px;margin:0px;" >
+                  <a  href="{%url 'admin_dashboard'%}">
+                  <img class="bg-light" src="{% static 'img/BTNLogo.png'%}"   alt="btn logo" width="180" height="50" class="d-inline-block align-text-top">
+                  
+                  </a>
+                </div>
+                </div>
+            
                
-              </option>  
-            </select>
+       
+        <!--SUPERADMIN SIDEBAR-->
+         <h5>{{ user.groups.all.0 }}</h5>
+           {% if request.user.groups.all.0.name == 'superadmin'  %}
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
 
-    </div>
-  </nav>
-</header>
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'admin_dashboard'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Actions
+            </div>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'item_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Items
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'vendor_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Vendors
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'price_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Prices
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'purchase_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Purchases
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'storeslist'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stores
+                </a>
+            </li>
+              <li class="nav-item">
+               <a class="nav-link" href="{% url 'admin_approval'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Approvals
+                </a>
+            </li>
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'admin_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Returns
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'userslist'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Users
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Statistics
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_report'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
+                </a>
+            </li>
 
 
- <div class="container-fluid"style='padding:0px;'>
-  <div class="row" style='padding:0px 0px 0px 0px;'>
-  
-    <div class="col-2" style="background:#000;">
-  
-      <aside>
-        <div class="sidebar">
-          <div class="sidebar">
-            <ul >
-                    <li> <a href="{% url 'admin_dashboard'%}" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span></a></li>
-                    <li> <a href="{% url 'stock'%}"><i class="fa fa-diamond"></i> <span class="nav-label">Stock</span></a> </li>
-                    <li> <a href="{% url 'reports'%}" data-toggle="collapse"  class="collapsed active" > <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span></a></li>
-                    <li> <a href="{% url 'item_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-cubes"></i> <span class="nav-label">Items</span></a></li>
-                    <li> <a href="{% url 'purchase_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-shopping-cart"></i> <span class="nav-label">Purchases</span></a>
-                    <li> <a href="{% url 'issuance_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-handshake-o"></i> <span class="nav-label">Issuance</span></a>
-                    <li> <a href="{% url 'returneditems_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-undo"></i></i> <span class="nav-label">Returned Items</span></a>
-                    <li> <a href="{% url 'storeslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-university" aria-hidden="true"></i> <span class="nav-label">Stores</span></a>
-                    <li> <a href="{% url 'engineer_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-gavel" aria-hidden="true"></i> <span class="nav-label">Engineers</span></a>
-                    <li> <a href="{% url 'vendor_list'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-balance-scale" aria-hidden="true"></i><span class="nav-label">Vendors</span></a>
-                    <li> <a href="{% url 'userslist'%}" data-toggle="collapse"  class="collapsed active" ><i class="fa fa-user-circle-o"></i><span class="nav-label">Account Management</span></a></li>
-                    <li> 
-                     <button type='POST' class="btn btn-success btn-block btn-dark" ><a  href=" {%url 'logoutpage'%}" >Log out</a></button></li>
-            </ul>
-          </div>          
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            
+
+       
+        <!-- End of SuperAdmin  Sidebar -->
+
+
+
+        {% elif request.user.groups.all.0.name == 'admin'  %}
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'admin_dashboard'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Actions
+            </div>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'item_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Items
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'vendor_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Vendors
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'price_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Prices
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'purchase_list'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Purchases
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'storeslist'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stores
+                </a>
+            </li>
+              <li class="nav-item">
+               <a class="nav-link" href="{% url 'admin_approval'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Approvals
+                </a>
+            </li>
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'admin_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Returns
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'userslist'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Users
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Statistics
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_report'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
+                </a>
+            </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            
+
+       
+        <!-- End of Admin  Sidebar -->
+
+
+        <!--TEAMLEADER SIDEBAR-->
+       
+        {% elif request.user.groups.all.0.name == 'teamleader' %}
+         
+         <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'teamleader_dashboard'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+             </li>
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Actions
+            </div>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_request'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Request items
+                </a>
+            </li>
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_approval'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>Approvals
+                </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>Engineer Returned items
+                </a>
+            </li>
+             <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_make_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Return items
+                </a>
+            </li>
+               
+              <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+             
+              <!--END OF TEAMLEADER SIDEBAR-->
+                <!--ENGINEER SIDEBAR-->
+                 {% elif request.user.groups.all.0.name == 'engineer' %}
+                <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'engineer_dashboard'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+             </li>
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'engineer_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Actions
+            </div>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'engineer_request'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Request items
+                </a>
+            </li>
+           
+               <li class="nav-item">
+               <a class="nav-link" href="{% url 'engineer_make_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Return items
+                </a>
+            </li>
+              <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+            {%endif%}
+
+                 <!--END OF ENGINEER SIDEBAR-->
+
+                  </ul>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-gradient-dark topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+<div class="float-right">
+
+  <!-- Dropdown Trigger -->
+  <a class='dropdown-trigger ' href='#' data-target='dropdown1'><i class="material-icons">account_circle</i></a>
+
+  <!-- Dropdown Structure -->
+  <ul id='dropdown1' class='dropdown-content'>
+    
+    <li class="divider" tabindex="-1"></li>
+    <li><a href="#!">Profile</a></li>
+    <li class="divider" tabindex="-1"></li>
+    <li><a href="#!">Change Password</a></li>
+    <li class="divider" tabindex="-1"></li>
+    <li><a href="{% url 'logout_view'%}">Logout</a></li>
+    <li class="divider" tabindex="-1"></li>
+  </ul>
+</div>
+                    
+
+
+                  
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+{% block content %}
+
+
+{% endblock content %}
+                         
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-gradient-dark ">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
         </div>
-      </aside>
-    </div>
-    <div class="col-10">
-    {%block content%}
+        <!-- End of Content Wrapper -->
 
-     {%endblock%}
     </div>
-  </div> 
- 
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Core plugin JavaScript-->
+   
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
+    <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+    } );
+    </script>
+    <script>
+    let table = new DataTable('#example', {
+    // options
+    });
+    </script>
+    <script>
+    $('.dropdown-trigger').dropdown();
+ </script>
+</body>
+
+</html>

@@ -8,22 +8,13 @@
     <div class="col-10">
 
       <hr class="my-4">
-<nav>
 
-  <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
-         <li class="breadcrumb-item active" aria-current="page"> Vendors</li>
-        <li class="breadcrumb-item"><a href="{%url 'vendor_insert'%}">Add New Vendor</a></li>
-        
-        
-       
-  </ol>
-</nav>
    <hr class="my-4">
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
                 <hr>
-                <div class="card">
+                <div class="card mb-4">
+                      <div class="card-body">
                    
                     {% if list %}
         <div class="table-responsive-sm">
@@ -37,7 +28,7 @@
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Website</th>
-                                    <th> Contact person phone</th>
+                                    <th> Contact person</th>
                                    
                                    
                                     <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
@@ -72,6 +63,8 @@
                         
                     </table>
                     </div>
+                    </div>
+                    </div>
                     {% else %}
                             <p>No details are  available.</p>
                     {% endif %}
@@ -79,6 +72,6 @@
                 </div>
                   <hr class="my-4">
               </div>
-
+</div>
    </div>
     {%endblock%} 
