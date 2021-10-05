@@ -7,11 +7,9 @@
   <div class="row">
     <div class="col-10">
 
-      <hr class="my-4">
-
-   <hr class="my-4">
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
+                 <a href="{% url 'vendor_insert' %}" class="btn btn-secondary">Add New</a>
                 <hr>
                 <div class="card mb-4">
                       <div class="card-body">
@@ -23,8 +21,7 @@
                                 <tr>
                                     <th></th>
                                     <th>Name</th>
-                                
-                                    <th>Billing Address</th>
+                                    <th>Items</th>
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Website</th>
@@ -40,7 +37,13 @@
                                 <th>{{forloop.counter}}</th>
                                 <td>{{instance.name}}</td>
                                
-                                <td>{{instance.billing_address}}</td>
+                                <td>
+                                {% for item in instance.items.all %}
+                                        {{forloop.counter}}.{{ item.name }}
+                                        <br>
+                                    {% endfor %}
+                                
+                                </td>
                                 <td>{{instance.phone}}</td>
                                 <td>{{instance.email}}</td>
                                 <td>{{instance.website}}</td>
@@ -65,6 +68,7 @@
                     </div>
                     </div>
                     </div>
+                    <br>
                     {% else %}
                             <p>No details are  available.</p>
                     {% endif %}
@@ -72,6 +76,5 @@
                 </div>
                   <hr class="my-4">
               </div>
-</div>
-   </div>
+ </div>
     {%endblock%} 

@@ -7,10 +7,14 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from phonenumber_field.formfields import PhoneNumberField
+import datetime
+from bootstrap_modal_forms.forms import BSModalModelForm
+
 
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+
 
 class ItemForm(ModelForm):
     class Meta:
@@ -30,14 +34,26 @@ class PurchaseForm(ModelForm):
       
 
 
-
 class CreateUserForm(UserCreationForm):
+    password1 = forms.CharField(label='Enter password', 
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm password', 
+                                widget=forms.PasswordInput)
     class Meta:
         model= User
+        fields = ("username", "email", "password1", "password2")
+        help_texts = {
+           
+            'username': None,
+            'email': None,
+            
+        }
+
+class VendorPriceForm(ModelForm):
+    class Meta:
+        model=VendorPrice
         fields='__all__'
-
-
-        #new
+    
 class EngineerForm(forms.ModelForm):
     class Meta:
         model=Engineer
@@ -58,12 +74,22 @@ class VendorForm(ModelForm):
         model=Vendor
         fields='__all__'
 
-class ReturneditemsForm(ModelForm):
+class TeamleaderRequestForm(ModelForm):
     class Meta:
-        model =Returneditems
-        fields=['item','store','returned_qty']
+        model=TeamleaderRequest
+        fields='__all__'
 
-class IssuanceForm(ModelForm):
+class EngineerRequestForm(ModelForm):
     class Meta:
-        model=Issuance
-        fields=['item','store','issued_qty']
+        model=EngineerRequest
+        fields='__all__'
+
+class AdminReturnsForm(ModelForm):
+    class Meta:
+        model=AdminReturns
+        fields='__all__'
+
+class TeamleadReturnsForm(ModelForm):
+    class Meta:
+        model=TeamleadReturns
+        fields='__all__'

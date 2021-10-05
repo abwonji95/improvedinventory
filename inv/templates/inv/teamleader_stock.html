@@ -1,0 +1,61 @@
+
+{%extends 'inv/sidebar.html'%}
+{%load bootstrap%}
+
+{%block content%}
+
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+     <hr class="my-4">
+<nav>
+
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Stock </li>
+ 
+  </ol>
+</nav>
+ <hr class="my-4">
+      <h1 class="display-4">Stock </h1>
+                <p class="lead font-italic">List of Items in Stock</p>
+                <hr class="my-4">
+
+      <div class="card" >
+
+       {% if list %}
+          <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm ">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Issued Quantity</th>
+                                    <th>Status</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{instance.item}}</td>
+                                <td>{{instance.qty}}</td>
+                                <td>{{instance.issued_qty}}</td>
+                                <td>{{instance.status}}</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                            <p>No details are available.</p>
+                    {% endif %}
+    </div>
+    </div>
+    <div class="col-2">
+   
+  </div>
+
+{%endblock%}
+

@@ -1,27 +1,17 @@
 {%extends 'inv/sidebar.html'%}
 {%load bootstrap%}
 
+
 {%block content%} 
+
    <div class="container">
-  <div class="row">
-    <div class="col-10">
+  
 
-      <hr class="my-4">
-<nav>
 
-  <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
-         <li class="breadcrumb-item"><a href="{%url 'userslist'%}">Users</a></li>
-         <li class="breadcrumb-item active" aria-current="page">Register </li>
-       
-        
-        
-       
-  </ol>
-</nav>
-   <hr class="my-4">
-<div class="card"> 
-<div class="row">
+
+
+<div class="card mb-4"> 
+<div class="card-body">
 
                 <h1 class="display-4">Users </h1>
                 <p class="lead font-italic">Register New User</p>
@@ -34,8 +24,12 @@
                         {{form.username|bootstrap}}
                       </div>
                         <div class="row">
+                     
+                        {{form.email|bootstrap}}
+                      </div>
+                        <div class="row">
                          
-                            {{form.password1|bootstrap}}
+                            {{form.password1|bootstrap }}
                           </div>
                           <div class="row">
                       
@@ -59,5 +53,5 @@
                     </form>
               </div>
         </div>
-   
+   </div>
 {%endblock%}

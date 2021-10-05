@@ -9,24 +9,11 @@ from phone_field import PhoneField
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from django.db.models.signals import post_delete, pre_save,post_save
-
-
+import datetime
+#from postgres.fields import JSONField
 # Create your models here.
-class Vendor(models.Model):
-    name=models.CharField(max_length=200,null=True)
-    primary_contact_person=models.CharField(max_length=200,null=True)
-    website=models.CharField(max_length=200,null=True)
 
-    phone = PhoneNumberField(null=True, blank=False, unique=True)
-    email=models.EmailField(max_length=200,null=True)
-    shipping_address=models.TextField(max_length=200,null=True)
-    billing_address=models.TextField(max_length=200,null=True)
-    other_details=models.TextField(max_length=200,null=True)
-    date_created=models.DateTimeField(auto_now_add=True)
-    date_updated=models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-    def __str__(self) :
-        return self.name
+
 
 
 class Item(models.Model):
@@ -37,8 +24,8 @@ class Item(models.Model):
     name=models.CharField(max_length=200,null=True,unique=True)
     item_type=models.CharField(max_length=200,null=True,choices=ITEMTYPE)
     sku=models.CharField(max_length=200,null=True,unique=True)
-    units=models.CharField(max_length=200,null=True,choices=UNITS)
-    item_description=models.TextField(max_length=200,null=True)
+    units=models.CharField(max_length=200,choices=UNITS,blank=True)
+    item_description=models.TextField(max_length=200,blank=True,default=0)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -46,8 +33,35 @@ class Item(models.Model):
         return self.name
 
 
+class Vendor(models.Model):
+    name=models.CharField(max_length=200,unique=True)
+    primary_contact_person=models.CharField(max_length=200,blank=True)
+    website=models.CharField(max_length=200,blank=True)
+    items=models.ManyToManyField(Item,through='VendorPrice')
+    phone = PhoneNumberField( null=True,blank=True, unique=True)
+    email=models.EmailField(max_length=200,blank=True)
+    shipping_address=models.TextField(max_length=200,blank=True)
+    billing_address=models.TextField(max_length=200,blank=True)
+    other_details=models.TextField(max_length=200,blank=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    def __str__(self) :
+        return self.name
+    
 
 
+
+class VendorPrice(models.Model):
+    item=models.ForeignKey(Item,blank=False,on_delete=models.CASCADE)
+    vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
+    price= models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        unique_together=[('item','vendor','price')]
    
 class Engineer(models.Model):
     ROLE=(
@@ -69,55 +83,75 @@ class Engineer(models.Model):
  
    
 class Store(models.Model):
-    name=models.CharField(max_length=200,null=True,unique=True)
-    engineer=models.ForeignKey(Engineer,null=True,on_delete=models.CASCADE)
+    name=models.CharField(max_length=200,blank=False,unique=True)
+    teamleader=models.ForeignKey(Engineer,blank=False,on_delete=models.CASCADE)
     date_updated=models.DateTimeField(auto_now=True)
     date_created=models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
     def __str__(self) :
         return self.name
 
-    def teamleaders(self):
+    def teamleader(self):
         return Engineer.objects.all().filter(role='Team leader')
 
-class Issuance(models.Model):
-    STATUS=(
-            ('Issued','Issued'),('Available','Availabe'),
-            )
-            
+class EngineerStock(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
-    issued_to=models.ForeignKey(Engineer,null=True,on_delete=models.CASCADE)
-    issued_qty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    store=models.ForeignKey(Store,null=True,on_delete=models.CASCADE)
-    status=models.CharField(max_length=200,null=True,choices=STATUS)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
+class TeamleaderStock(models.Model):
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
-class Requestitem(models.Model):
+#request made by engineers to Teamleaders
+class EngineerRequest(models.Model):
+    STATUS=(
+            ('Approve','Approve'),('Disapprove','Disapprove'),('Pending','Pending'),
+            )
     SERVICE=(
-            ('installation','installation'),('support','support'),('survey','survey'),
+            ('Installation','Installation'),('Support','Support'),('Survey','Survey'),
             )
     sitename=models.CharField(max_length=200,null=True)
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
-    date_created=models.DateTimeField(auto_now_add=True)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     service=models.CharField(max_length=200,null=True,choices=SERVICE)
+    approval=models.CharField(max_length=200,null=True,choices=STATUS)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+#request made by  Teamleaders to Admin
+class TeamleaderRequest(models.Model):
+    STATUS=(
+            ('Approve','Approve'),('Disapprove','Disapprove'),('Pending','Pending'),
+            )
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    approval=models.CharField(max_length=200,null=True,choices=STATUS)
+    date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
 
-
 class Purchase(models.Model):
-    po=models.CharField(max_length=200,null=True)
-    vendor=models.ForeignKey(Vendor,null=True,on_delete=models.CASCADE)
+    STATUS=(
+            ('Approve','Approve'),('Disapprove','Disapprove'),('Pending','Pending'),
+            )
+
+    po=models.CharField(max_length=200,blank=False)
+    vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
     item=models.ForeignKey(Item,on_delete=models.CASCADE)
-    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    purchased_qty=models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
+    price= models.ForeignKey("inv.VendorPrice",blank=False,on_delete=models.CASCADE)
+    approval=models.CharField(max_length=200,null=True,choices=STATUS)
+    total_price=models.FloatField(default=0,blank=False,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
-    price= models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
-    total_price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -128,7 +162,7 @@ class Purchase(models.Model):
     def __str__(self) :
         return "{}".format(self.po)
    
-
+'''
 class Purchasedetails(models.Model):
     po=models.ForeignKey(Purchase,null=True,on_delete=models.CASCADE)
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
@@ -137,11 +171,24 @@ class Purchasedetails(models.Model):
     price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
     def __str__(self) :
         return "{}".format(self.po)
-        
-class Returneditems(models.Model):
-    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+ ''' 
+
+ #items returned by engineer recieved by Teamlead     
+class TeamleadReturns(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     returned_by=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self) :
+            return "{} {}".format(self.item,self.returned_by)
+
+#items returned by teamlead recieved by Admin
+class AdminReturns(models.Model):
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
@@ -156,6 +203,7 @@ class Stock(models.Model):
     current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     purchased_by=models.CharField(max_length=200,null=True)
+    approved_by=models.CharField(max_length=200,null=True)
     issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     issued_by=models.CharField(max_length=200,null=True)
     issued_to=models.CharField(max_length=200,null=True)

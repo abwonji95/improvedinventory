@@ -1,0 +1,78 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}
+
+
+    <div class="container">
+  <div class="row">
+    <div class="col-10">
+
+      <hr class="my-4">
+
+   <hr class="my-4">
+                <h1 class="display-4">Requests </h1>
+                <p class="lead font-italic">List of Engineer Requests</p>
+                <hr>
+                <div class="card mb-4">
+                      <div class="card-body">
+                   
+                    {% if list %}
+        <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Items</th>
+                                    <th>Quantity</th>
+                                    <th>Site name</th>
+                                    <th>Ci_No</th>
+                                    <th>Service</th>
+                                    <th> Status</th>
+                                   
+                                   
+                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.item}}</td>
+                               
+                                <td>{{instance.quantity}}</td>
+                                <td>{{instance.sitename}}</td>
+                                <td>{{instance.ci_no}}</td>
+                                <td>{{instance.service}}</td>
+                                <td>{{instance.status}}</td>
+                               
+            
+
+                                <td><a href="{%url 'vendor_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
+                                     autocomplete="off" autocapitalize="characters">
+                                       
+                                        {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                      <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </button></form>
+                                </td>
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <br>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
+                
+                </div>
+                  <hr class="my-4">
+              </div>
+              </div>
+
+    {%endblock%} 

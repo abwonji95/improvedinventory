@@ -4,6 +4,7 @@ import django_filters
 from .models import *
 from django_filters import DateFilter,CharFilter
 from django import forms
+import datetime
 
 class PurchaseFilter(django_filters.FilterSet):
     start_date= DateFilter(field_name='date_created',lookup_expr='gte')
@@ -16,25 +17,6 @@ class PurchaseFilter(django_filters.FilterSet):
         exclude=['purchased_qty','price','date_created']
 
 
-class IssuanceFilter(django_filters.FilterSet):
-    #start_date= DateFilter(field_name='date_created',lookup_expr='gte')
-    #end_date= DateFilter(field_name='date_created',lookup_expr='lte')
-    #item= CharFilter(field_name='item',lookup_expr='icontains')
-    #export_to_CSV=forms.BooleanField()
-    class Meta:
-        model=Issuance
-        fields='__all__'
-       
-
-class ReturneditemsFilter(django_filters.FilterSet):
-    #start_date= DateFilter(field_name='date_created',lookup_expr='gte')
-    #end_date= DateFilter(field_name='date_created',lookup_expr='lte')
-    #item= CharFilter(field_name='item',lookup_expr='icontains')
-    #export_to_CSV=forms.BooleanField()
-    class Meta:
-        model=Purchase
-        fields='__all__'
-        
 
 class StockFilter(django_filters.FilterSet):
     #start_date= DateFilter(field_name='date_created',lookup_expr='gte')

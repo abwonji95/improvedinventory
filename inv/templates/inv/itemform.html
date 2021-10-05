@@ -1,23 +1,13 @@
-
+{%extends 'inv/sidebar.html'%}
 {%load bootstrap%}
 
 {%block content%} 
 <div class="col-10">
-<hr class="my-4">
-<nav>
 
-  <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{%url 'admin_dashboard'%}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{%url 'item_list'%}">Items</a></li>
-       <li class="breadcrumb-item active" aria-current="page">Add New Items </li>
- 
-  </ol>
-</nav>
- <hr class="my-4">
 
-<div class="card"> 
-<div class="row">
+<div class="card mb-5"> 
 
+<div class="card-body"> 
 
                 <h1 class="display-4">Items </h1>
                 <p class="lead font-italic">Add New Items</p>
@@ -61,9 +51,9 @@
                           </div>
                     </form>
               </div>
-        </div>
-        <hr class="my-4">
-    </div>
+              
+       
+   
     
-     </div>
+
 {%endblock%}

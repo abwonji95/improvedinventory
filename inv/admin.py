@@ -19,9 +19,8 @@ class ItemCreateAdmin(admin.ModelAdmin):
 
 admin.site.register(Vendor,VendorCreateAdmin)
 admin.site.register(Purchase,SimpleHistoryAdmin)
-admin.site.register(Engineer)
-admin.site.register(Issuance)
-admin.site.register(Store)
+admin.site.register(Engineer,SimpleHistoryAdmin)
+admin.site.register(Store,SimpleHistoryAdmin)
 admin.site.register(Item,ItemCreateAdmin)
-admin.site.register(Stock)
-admin.site.register(Returneditems)
+admin.site.register(Stock,SimpleHistoryAdmin)
+

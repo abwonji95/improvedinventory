@@ -49,7 +49,7 @@
                         <tbody>
                             {% for instance in list %}
                             <tr>
-                            <th scope="row">{{forloop.counter}}</th>
+                            <td scope="row">{{forloop.counter}}</td>
                             <td><a href="{%url 'purchase_view' instance.id %}">{{instance.po}}</a></td>
                             <td>{{instance.item}}</a></td>
                             <td>{{instance.vendor}}</a></td>
@@ -85,39 +85,11 @@
                 {% endif %}
     </div>
      <hr class="my-4">
-     <button><i class="fa fa-filter" aria-hidden="true"></i>hide</button>
-    </div>
-    
-   
-         <hr class="my-4">
-    </div>
-    
   </div>
-  <div> <div class="col-2">
-    <button>filter</button>
-    <div>
-    <p class="lead font-italic">Filter</p>
-    </div>
-         <form action="" method="GET" class="d-inline" autocomplete="off" autocapitalize="characters">
-                
-                   {{myFilter.form|bootstrap}}
-                <button type="submit" class="btn btn-primary" value="Search">Filter</button>
-              
-                
-        </form></div>
- 
- <script >
-let btn = document.querySelector('button');
-let div = document.querySelector('div');
+  </div>
+    
+  </div>  
 
-btn.addEventListener('click', () => {
-    if (div.style.display == 'none') {
-        div.style.display = 'block';
-    } else {
-        div.style.display = 'none';
-    }
-})
- </script>
 </div>
 
 

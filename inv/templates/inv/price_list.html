@@ -1,0 +1,75 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}
+
+
+    <div class="container">
+  <div class="row">
+    <div class="col-10">
+
+                <h1 class="display-4">Vendors Price List </h1>
+                <p class="lead font-italic">List of Vendors Prices</p>
+                 <a href="{% url 'vendorpriceform' %}" class="btn btn-secondary">Add New</a>
+                <hr>
+                <div class="card mb-4">
+                      <div class="card-body">
+                   
+        {% if list %}
+        <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Vendor</th>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                  
+                                   
+                                   
+                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.vendor}}</td>
+                               
+                                <td>
+                                {% for item in instance.items.all %}
+                                        {{forloop.counter}}.{{ item.name }}
+                                        <br>
+                                    {% endfor %}
+                                
+                                </td>
+                                    <td></td>
+            
+
+                                <td><a href="{%url 'vendor_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
+                                     autocomplete="off" autocapitalize="characters">
+                                       
+                                        {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                      <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </button></form>
+                                </td>
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <br>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
+                
+                </div>
+                  <hr class="my-4">
+              </div>
+ </div>
+    {%endblock%} 

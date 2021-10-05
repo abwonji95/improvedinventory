@@ -1,6 +1,7 @@
 from inv.decorators import *
+from django.core import serializers
 from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
 from django.contrib.auth.views import *
 from django.contrib import messages
@@ -15,10 +16,64 @@ from django.utils.translation import gettext_lazy as _
 from .filters import *
 from django.urls import reverse_lazy
 import csv
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+
+
+def account_created(request):
+    template=render_to_string('inv/account_created_email.html',{'name':request.user})
+    email=EmailMessage(
+        'Account Created ',
+        template,
+        settings.EMAIL_HOST_USER,
+        ['']
+    )
+    email.fail_silently=False;
+    email.send()
+    
+    return render(request,'inv/account_created_email.html')
+
+def request_created(request):
+    template=render_to_string('inv/request_created_email.html',{'name':request.user})
+    email=EmailMessage(
+        'Request Created ',
+        template,
+        settings.EMAIL_HOST_USER,
+        ['']
+    )
+    email.fail_silently=False;
+    email.send()
+    
+    return render(request,'inv/account_created_email.html')
 
 @login_required(login_url='loginpage')
 def price_list(request):
-    return render(request,'inv/price_list.html')
+    list=VendorPrice.objects.all()
+    return render(request,'inv/price_list.html',{'list':list})
+
+@login_required(login_url='loginpage')
+def vendorpriceform(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=VendorPriceForm()
+        else:
+            vendorprice=VendorPrice.objects.get(pk=id)
+            form=VendorPriceForm(instance=vendorprice)
+        return render(request,'inv/vendorpriceform.html',{'form':form})
+    else:
+        if id==0:
+            form=VendorPriceForm(request.POST)
+        else:
+           vendorprice=VendorPrice.objects.get(pk=id)
+           form=VendorPriceForm(request.POST,instance=vendorprice)
+        if form.is_valid():
+            form.save()
+    return render(request,'inv/vendorpriceform.html')
+
+
+
+
 
 @login_required(login_url='loginpage')
 def admin_approval(request):
@@ -40,9 +95,29 @@ def admin_report(request):
 
 
 @login_required(login_url='loginpage')
-def teamleader_request(request):
-    return render(request,'inv/teamleader_request.html')
+def teamleader_request(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=TeamleaderRequestForm()
+        else:
+            myrequest=TeamleaderRequest.objects.get(pk=id)
+            form=TeamleaderRequest(instance=myrequest)
+        return render(request,'inv/teamleader_request.html',{'form':form})
+    else:
+        if id==0:
+            form=TeamleaderRequest(request.POST)
+        else:
+           myrequest=TeamleaderRequest.objects.get(pk=id)
+           form=TeamleaderRequestForm(request.POST,instance=myrequest)
+        if form.is_valid():
+            form.save()
+       
+    return render(request,'inv/teamleader_request_form.html')
 
+@login_required(login_url='loginpage')
+def teamleader_request_list(request):
+    list=TeamleaderRequest.objects.all()
+    return render(request,'inv/teamleader_request.html',{'list':list})
 
 
 @login_required(login_url='loginpage')
@@ -60,6 +135,22 @@ def teamleader_return(request):
 
 @login_required(login_url='loginpage')
 def teamleader_make_return(request):
+    if request.method=="GET":
+        if id==0:
+            form=AdminReturnsForm()
+        else:
+            myreturn=AdminReturns.objects.get(pk=id)
+            form=AdminReturnsForm(instance=myreturn)
+        return render(request,'inv/teamleader_request.html',{'form':form})
+    else:
+        if id==0:
+            form=AdminReturnsForm(request.POST)
+        else:
+           myrequest=AdminReturns.objects.get(pk=id)
+           form=AdminReturnsForm(request.POST,instance=myreturn)
+        if form.is_valid():
+            form.save()
+       
     return render(request,'inv/.html')
 
 @login_required(login_url='loginpage')
@@ -68,12 +159,45 @@ def engineer_stock(request):
 
 @login_required(login_url='loginpage')
 def engineer_request(request):
+    if request.method=="GET":
+        if id==0:
+            form=EngineerRequestForm()
+        else:
+            myrequest=EngineerRequest.objects.get(pk=id)
+            form=EngineerRequest(instance=myrequest)
+        return render(request,'inv/engineer_request.html',{'form':form})
+    else:
+        if id==0:
+            form=EngineerRequest(request.POST)
+        else:
+           myrequest=EngineerRequest.objects.get(pk=id)
+           form=EngineerRequestForm(request.POST,instance=myrequest)
+        if form.is_valid():
+            form.save()
+       
+
     return render(request,'inv/engineer_request.html')
 
 
 @login_required(login_url='loginpage')
-def engineer_make_return(request):
-    return render(request,'inv/teamleader_make_return.html')
+def engineer_make_return(request,id=0):
+    if request.method=="GET":
+        if id==0:
+            form=TeamleadReturnsForm()
+        else:
+            myreturn=TeamleadReturns.objects.get(pk=id)
+            form=TeamleadReturnsForm(instance=myreturn)
+        return render(request,'inv/engineer_make_return.html',{'form':form})
+    else:
+        if id==0:
+            form=TeamleadReturnsForm(request.POST)
+        else:
+           myreturn=TeamleadReturns.objects.get(pk=id)
+           form=TeamleadReturnsForm(request.POST,instance=myreturn)
+        if form.is_valid():
+            form.save()
+       
+    return render(request,'inv/engineer_make_return.html')
 
 
 @login_required(login_url='loginpage')
@@ -291,7 +415,7 @@ def engineerform(request,id=0):
            form=EngineerForm(request.POST,instance=engineer)
         if form.is_valid():
             form.save()
-        return redirect('/engineerlist')
+        return redirect('/engineer_list')
 
 @login_required(login_url='loginpage')
 
@@ -301,6 +425,8 @@ def engineerdelete(request,id):
     return redirect('/engineerlist')
 
 @login_required(login_url='loginpage')
+
+
 
 def vendorlist(request):
     list=Vendor.objects.all()
@@ -357,9 +483,10 @@ def vendorform(request,id=0):
            form=VendorForm(request.POST,instance=vendor)
         if form.is_valid():
             form.save()
+            print("valid")
         else:
-            messages.danger(request,'Invalid form details')
-            return redirect('/vendor_insert')
+            print("invalid")
+        
         return redirect('/vendorslist')
 
 
@@ -382,21 +509,24 @@ def userslist(request):
 def register(request,id=0):
     if request.method=="GET":
         if id==0:
-            form=UserCreationForm()
+            form=CreateUserForm()
         else:
             user=User.objects.get(pk=id)
-            form=UserCreationForm(instance=user)
+            form=CreateUserForm(instance=user)
         return render(request,'inv/register.html',{'form':form})
     else:
         if id==0:
-            form=UserCreationForm(request.POST)
+            form=CreateUserForm(request.POST)
         else:
            user=User.objects.get(pk=id)
-           form=UserCreationForm(request.POST,instance=user)
+           form=CreateUserForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
+            account_created(request)
+            print('email sent')
             messages.info(request,'User was Created Successfully')
         else:
+            print('email NOT sent')
             messages.info(request,'Error check the details and try again')
             return redirect('/register')
         return redirect('/')

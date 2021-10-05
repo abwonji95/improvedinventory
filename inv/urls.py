@@ -97,11 +97,13 @@ urlpatterns=[
 
     #new
     path('price_list/',views.price_list,name='price_list'),
+    path('vendorpriceform/',views.vendorpriceform,name='vendorpriceform'),
     path('admin_approval/',views.admin_approval,name='admin_approval'),
     path('admin_return/',views.admin_return,name='admin_return'),
     path('admin_stock/',views.admin_stock,name='admin_stock'),
     path('admin_report/',views.admin_report,name='admin_report'),
     path('teamleader_request/',views.teamleader_request,name='teamleader_request'),
+    path('teamleader_request_list/',views.teamleader_request_list,name='teamleader_request_list'),
     path('teamleader_stock/',views.teamleader_stock,name='teamleader_stock'),
     path('teamleader_approval/',views.teamleader_approval,name='teamleader_approval'),
     path('teamleader_return/',views.teamleader_return,name='teamleader_return'),

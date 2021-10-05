@@ -37,14 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'crispy_forms',
-    'inv',
+    'inv.apps.InvConfig',
+    'river',
     'phonenumber_field',
     'phone_field',
     'django_filters',
     'bootstrapform',
     'simple_history',
     'multiselectfield',
+    'bootstrap_modal_forms',
+
     
     
 ]
@@ -91,7 +95,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'multiDB',
+        'NAME': 'invapproved',
 
         'USER': 'postgres',
 
@@ -150,8 +154,8 @@ EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT= 587
 EMAIL_USE_TLS=True
-EMAIL_HOST_USER='jackonyi90@gmail.com'
-EMAIL_HOST_PASSWORD='TALL7777'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
 
 
 #logout 
