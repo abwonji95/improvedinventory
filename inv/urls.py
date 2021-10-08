@@ -96,12 +96,25 @@ urlpatterns=[
     path('base/',views.base,name='base'),
 
     #new
-    path('price_list/',views.price_list,name='price_list'),
-    path('vendorpriceform/',views.vendorpriceform,name='vendorpriceform'),
+    #vendorprice
+    path('vendorpriceform/',views.vendorpriceform,name='vendorprice_insert'),
+    path('vendorprice/view/<int:id>/',views.viewvendorpriceform,name='vendorprice_view'),
+    path('vendorprice_list/',views.vendorprice_list,name='vendorprice_list'),
+    path('vendorprice/<int:id>/',views.vendorpriceform,name='vendorprice_update'),
+    path('vendorprice/delete/<int:id>',views.vendorpricedelete,name='vendorprice_delete'),
+   
+   #
+
+
+
+   
+   
     path('admin_approval/',views.admin_approval,name='admin_approval'),
     path('admin_return/',views.admin_return,name='admin_return'),
     path('admin_stock/',views.admin_stock,name='admin_stock'),
     path('admin_report/',views.admin_report,name='admin_report'),
+    path('engineer_report/',views.engineer_report,name='engineer_report'),
+    path('teamleader_report/',views.teamleader_report,name='teamleader_report'),
     path('teamleader_request/',views.teamleader_request,name='teamleader_request'),
     path('teamleader_request_list/',views.teamleader_request_list,name='teamleader_request_list'),
     path('teamleader_stock/',views.teamleader_stock,name='teamleader_stock'),
@@ -111,6 +124,7 @@ urlpatterns=[
     path('engineer_stock/',views.engineer_stock,name='engineer_stock'),
     path('engineer_request/',views.engineer_request,name='engineer_request'),
     path('engineer_make_return/',views.engineer_make_return,name='engineer_make_return'),
+
     path('restricted/',views.restricted,name='restricted'),
     path('error_404/',views.error_404,name='error_404'),
 

@@ -53,15 +53,35 @@ class Vendor(models.Model):
 
 
 class VendorPrice(models.Model):
-    item=models.ForeignKey(Item,blank=False,on_delete=models.CASCADE)
-    vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
-    price= models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    vendor=models.ForeignKey(Vendor,on_delete=models.CASCADE)
+    price=models.IntegerField(default=0,null=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
     class Meta:
-        unique_together=[('item','vendor','price')]
+        unique_together=[('item','vendor')]
+
+    def __str__(self) :
+            return "{} {}".format(self.vendor,self.item,)
+
+class Purchase(models.Model):
+  
+    po=models.CharField(max_length=200,blank=False)
+    vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
+    items=models.ForeignKey(VendorPrice, on_delete=models.CASCADE)
+    purchased_qty=models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self) :
+        return "{}".format(self.po)
+    def items(self):
+        vendor=Vendor.objects.all().get(pk=id)
+        return VendorPrice.objects.all().filter(instance=vendor)
+
    
 class Engineer(models.Model):
     ROLE=(
@@ -139,29 +159,7 @@ class TeamleaderRequest(models.Model):
     history = HistoricalRecords()
 
 
-class Purchase(models.Model):
-    STATUS=(
-            ('Approve','Approve'),('Disapprove','Disapprove'),('Pending','Pending'),
-            )
 
-    po=models.CharField(max_length=200,blank=False)
-    vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
-    item=models.ForeignKey(Item,on_delete=models.CASCADE)
-    purchased_qty=models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
-    price= models.ForeignKey("inv.VendorPrice",blank=False,on_delete=models.CASCADE)
-    approval=models.CharField(max_length=200,null=True,choices=STATUS)
-    total_price=models.FloatField(default=0,blank=False,validators=[MinValueValidator(0)])
-    date_created=models.DateTimeField(auto_now_add=True)
-    date_updated=models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    @property
-    def total_price(self):
-        return self.purchased_qty * self.price
-    
-    def __str__(self) :
-        return "{}".format(self.po)
-   
 '''
 class Purchasedetails(models.Model):
     po=models.ForeignKey(Purchase,null=True,on_delete=models.CASCADE)

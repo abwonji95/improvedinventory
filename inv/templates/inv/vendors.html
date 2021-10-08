@@ -5,7 +5,7 @@
 
     <div class="container">
   <div class="row">
-    <div class="col-10">
+    <div class="col-11">
 
                 <h1 class="display-4">Vendors </h1>
                 <p class="lead font-italic">List of vendors</p>
@@ -28,7 +28,7 @@
                                     <th> Contact person</th>
                                    
                                    
-                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                                    <th><a class="btn btn-light" href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,18 +48,21 @@
                                 <td>{{instance.email}}</td>
                                 <td>{{instance.website}}</td>
                                 <td>{{instance.primary_contact_person}}</td>
-            
 
-                                <td><a href="{%url 'vendor_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                <a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+
+              <td>  
+                                    <button class="btn"><a href="{%url 'vendor_view' instance.id %}"><i class="material-icons">remove_red_eye</i></a></button>
+                                    <button class="btn"><a href="{% url 'vendor_update' instance.id %}"><i class="material-icons">create</i></a></button>
                                     <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
-                                     autocomplete="off" autocapitalize="characters">
-                                       
-                                        {%csrf_token%}
+                                    autocomplete="off" autocapitalize="characters">
+
+                                    {%csrf_token%}
                                     <button type="submit" class="btn">
-                                      <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                    </button></form>
-                                </td>
+                                    <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="material-icons">delete</i></a></button>
+                                    </form>
+                </td>
+
                                 </tr>
                                   {% endfor %}
                         </tbody>

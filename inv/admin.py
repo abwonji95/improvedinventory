@@ -14,12 +14,17 @@ class VendorCreateAdmin(admin.ModelAdmin):
 
 class ItemCreateAdmin(admin.ModelAdmin):
     list_display=['name','item_description','item_type','sku','date_created','date_updated']
+    form =ItemForm
 
+class VendorPriceCreateAdmin(admin.ModelAdmin):
+    list_display=['item','vendor','price','date_created','date_updated']
+    form =VendorForm
 
 
 admin.site.register(Vendor,VendorCreateAdmin)
 admin.site.register(Purchase,SimpleHistoryAdmin)
 admin.site.register(Engineer,SimpleHistoryAdmin)
+admin.site.register(VendorPrice,VendorPriceCreateAdmin)
 admin.site.register(Store,SimpleHistoryAdmin)
 admin.site.register(Item,ItemCreateAdmin)
 admin.site.register(Stock,SimpleHistoryAdmin)

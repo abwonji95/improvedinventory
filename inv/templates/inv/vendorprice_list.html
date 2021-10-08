@@ -9,7 +9,7 @@
 
                 <h1 class="display-4">Vendors Price List </h1>
                 <p class="lead font-italic">List of Vendors Prices</p>
-                 <a href="{% url 'vendorpriceform' %}" class="btn btn-secondary">Add New</a>
+                 <a href="{% url 'vendorprice_insert' %}" class="btn btn-secondary">Add New</a>
                 <hr>
                 <div class="card mb-4">
                       <div class="card-body">
@@ -26,28 +26,23 @@
                                   
                                    
                                    
-                                    <th><button><a  href=" {%url 'vendor_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                                    <th><button><a  href=" {%url 'vendorprice_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for instance in list %}
-                                <tr>
-                                <th>{{forloop.counter}}</th>
-                                <td>{{instance.vendor}}</td>
-                               
-                                <td>
-                                {% for item in instance.items.all %}
-                                        {{forloop.counter}}.{{ item.name }}
-                                        <br>
-                                    {% endfor %}
                                 
-                                </td>
-                                    <td></td>
+     <tr>
+                          
+                            <td scope="row">{{forloop.counter}}</td>
+                            <td>{{instance.vendor}}</td>
+                             <td>{{instance.item}}</td>
+                              <td>{{instance.price}}</td>
             
 
-                                <td><a href="{%url 'vendor_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                <a href="{% url 'vendor_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
+                                <td><a href="{%url 'vendorprice_view' instance.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url 'vendorprice_update' instance.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <form action="{% url 'vendorprice_delete' instance.id %}" method="POST" class="d-inline"
                                      autocomplete="off" autocapitalize="characters">
                                        
                                         {%csrf_token%}
@@ -71,5 +66,6 @@
                 </div>
                   <hr class="my-4">
               </div>
- </div>
+    </div>
+
     {%endblock%} 

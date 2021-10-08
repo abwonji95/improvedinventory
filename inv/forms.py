@@ -1,32 +1,36 @@
-from django.db.models import fields
-from django.db.models.expressions import Exists
-from django.forms import ModelForm,fields, widgets
-from inv.myvalidators import *
-from .models import *
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from phonenumber_field.formfields import PhoneNumberField
+from django.contrib.auth.forms import UserCreationForm
+from django.forms import ModelForm,fields, widgets
+from django.db.models.expressions import Exists
+from django.contrib.auth.models import User
+from django.db.models import fields
+from inv.myvalidators import *
+from django import forms
+from .models import *
 import datetime
-from bootstrap_modal_forms.forms import BSModalModelForm
 
-
-
-class DateForm(forms.Form):
-    date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
-
-
-class ItemForm(ModelForm):
+class ItemForm(forms.ModelForm):
     class Meta:
         model=Item
         fields='__all__'
 
-class StoreForm(ModelForm):
+
+class VendorForm(forms.ModelForm):
+    class Meta:
+        model=Vendor
+        fields='__all__'
+
+class VendorPriceForm(forms.ModelForm):
+    class Meta:
+        model=VendorPrice
+        fields='__all__'
+
+class StoreForm(forms.ModelForm):
     class Meta:
         model=Store
         fields='__all__'
 
-class PurchaseForm(ModelForm):
+class PurchaseForm(forms.ModelForm):
     class Meta:
        
         model=Purchase
@@ -43,16 +47,12 @@ class CreateUserForm(UserCreationForm):
         model= User
         fields = ("username", "email", "password1", "password2")
         help_texts = {
-           
             'username': None,
             'email': None,
             
         }
 
-class VendorPriceForm(ModelForm):
-    class Meta:
-        model=VendorPrice
-        fields='__all__'
+
     
 class EngineerForm(forms.ModelForm):
     class Meta:
@@ -69,27 +69,23 @@ class EngineerForm(forms.ModelForm):
         self.fields['role'].empty_label="Select"
         self.fields['phone'].required=False
 
-class VendorForm(ModelForm):
-    class Meta:
-        model=Vendor
-        fields='__all__'
 
-class TeamleaderRequestForm(ModelForm):
+class TeamleaderRequestForm(forms.ModelForm):
     class Meta:
         model=TeamleaderRequest
         fields='__all__'
 
-class EngineerRequestForm(ModelForm):
+class EngineerRequestForm(forms.ModelForm):
     class Meta:
         model=EngineerRequest
         fields='__all__'
 
-class AdminReturnsForm(ModelForm):
+class AdminReturnsForm(forms.ModelForm):
     class Meta:
         model=AdminReturns
         fields='__all__'
 
-class TeamleadReturnsForm(ModelForm):
+class TeamleadReturnsForm(forms.ModelForm):
     class Meta:
         model=TeamleadReturns
         fields='__all__'

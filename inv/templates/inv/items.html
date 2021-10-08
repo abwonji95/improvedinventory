@@ -14,13 +14,13 @@
                 <div class="card">
 
                 {% if list %}
-                  <div class="card-body mb-4">
+                  <div class="card-body mb-4 ">
                 <div class="table-responsive-sm">
                 <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
                                         
-                                        <th></th>
+                                        <th><input type="checkbox" id="checkboxNoLabel" value=""></th>
                                         <th>NO.</th>
                                         <th>Name</th>
                                         <th>SKU</th>
@@ -33,7 +33,11 @@
                         <tbody>
                             {% for instance in list %}
                             <tr>
-                                 <td></td>
+                                 <td>
+                                
+  <input type="checkbox" id="checkboxNoLabel" value="">
+
+                                 </td>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{instance.name}}</td>
                                 <td>{{instance.sku}}</td>
@@ -66,5 +70,7 @@
  
     </div>
     </div>
+      </div>
+        </div>
    
 {%endblock%}

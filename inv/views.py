@@ -27,7 +27,7 @@ def account_created(request):
         'Account Created ',
         template,
         settings.EMAIL_HOST_USER,
-        ['']
+        ['ABWONJI95@OUTLOOK.COM']
     )
     email.fail_silently=False;
     email.send()
@@ -40,7 +40,7 @@ def request_created(request):
         'Request Created ',
         template,
         settings.EMAIL_HOST_USER,
-        ['']
+        ['ABWONJI95@OUTLOOK.COM']
     )
     email.fail_silently=False;
     email.send()
@@ -48,9 +48,9 @@ def request_created(request):
     return render(request,'inv/account_created_email.html')
 
 @login_required(login_url='loginpage')
-def price_list(request):
+def vendorprice_list(request):
     list=VendorPrice.objects.all()
-    return render(request,'inv/price_list.html',{'list':list})
+    return render(request,'inv/vendorprice_list.html',{'list':list})
 
 @login_required(login_url='loginpage')
 def vendorpriceform(request,id=0):
@@ -60,7 +60,10 @@ def vendorpriceform(request,id=0):
         else:
             vendorprice=VendorPrice.objects.get(pk=id)
             form=VendorPriceForm(instance=vendorprice)
-        return render(request,'inv/vendorpriceform.html',{'form':form})
+        context={
+                'form':form,
+            }
+        return render(request,'inv/vendorpriceform.html',context)
     else:
         if id==0:
             form=VendorPriceForm(request.POST)
@@ -69,11 +72,39 @@ def vendorpriceform(request,id=0):
            form=VendorPriceForm(request.POST,instance=vendorprice)
         if form.is_valid():
             form.save()
-    return render(request,'inv/vendorpriceform.html')
+        return redirect('/vendorprice_list')
 
+@login_required(login_url='loginpage')
+#@allowed_users(allowed_roles=['admin'])
+def viewvendorpriceform(request,id=0):
+    if request.method=="GET":
+        vendorprice=VendorPrice.objects.get(pk=id)
+        item =  vendorprice.item
+        price =  vendorprice.price
+        vendor =  vendorprice.vendor
+        date_created=vendorprice.date_created
+        date_updated=vendorprice.date_updated
+        list=VendorPrice.objects.all()
 
+        context={
+            
+           'item':item ,
+           'price':price,
+           'vendor':vendor,
+           'list':list,
+            'date_created':date_created,
+            'date_updated':date_updated,
+          
+            
+        }
+        return render(request,'inv/viewvendorpriceform.html',context)
 
-
+@login_required(login_url='loginpage')
+#@allowed_users(allowed_roles=['admin'])
+def vendorpricedelete(request,id):
+    vendorprice=VendorPrice.objects.get(pk=id)
+    vendorprice.delete()
+    return redirect('/vendorprice_list')
 
 @login_required(login_url='loginpage')
 def admin_approval(request):
@@ -92,6 +123,15 @@ def admin_stock(request):
 @login_required(login_url='loginpage')
 def admin_report(request):
     return render(request,'inv/admin_report.html')
+
+
+@login_required(login_url='loginpage')
+def engineer_report(request):
+    return render(request,'inv/engineer_report.html')
+
+@login_required(login_url='loginpage')
+def teamleader_report(request):
+    return render(request,'inv/teamleader_report.html')
 
 
 @login_required(login_url='loginpage')
@@ -415,7 +455,7 @@ def engineerform(request,id=0):
            form=EngineerForm(request.POST,instance=engineer)
         if form.is_valid():
             form.save()
-        return redirect('/engineer_list')
+        return redirect('/engineerlist')
 
 @login_required(login_url='loginpage')
 
@@ -438,6 +478,8 @@ def viewvendor(request,id=0):
     if request.method=="GET":
         vendor=Vendor.objects.get(pk=id)
         name =  vendor.name
+        items=vendor.items.all
+    
         shippingaddress =  vendor.shipping_address
         billingaddress=  vendor.billing_address
         phone=  vendor.phone
@@ -447,15 +489,17 @@ def viewvendor(request,id=0):
         otherdetails=vendor.other_details
         date_created=vendor.date_created
         date_updated=vendor.date_updated
-       
+        list=Vendor.objects.all()
 
         context={
             
            'name':name ,
+           'list':list,
            'shippingaddress': shippingaddress ,
            'billingaddress':billingaddress ,
            'phone':phone,
            'website': website,
+           'items':items,
            'email':email,
            'primarycontactperson': primarycontactperson,
            'otherdetails':otherdetails,
