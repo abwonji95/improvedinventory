@@ -1,9 +1,9 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-     <div class="container">
+     <div class="container-fluid">
   <div class="row">
-    <div class="col-10">
+    <div class="col">
 
       <hr class="my-4">
 
@@ -11,19 +11,19 @@
     <h1 class="display-4">Stores </h1>
     <br>
     <p class="lead font-italic">List of stores</p>
-     <a href="{% url 'store_insert' %}" class="btn btn-secondary">Add New</a>
+  
     <hr class="my-4">
     <div class="card mb-4">
     <div class="card-body">
             {% if list %}
             <div class="table-responsive-sm">
-            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+            <table id="example" class="table table-bordered  table-hover table-sm ">
                     <thead class="thead-dark">
                         <tr>
                             <th></th>
                             <th>Name</th>
                             <th>Engineer</th>
-                            <th><button><a  href=" {%url 'store_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                            <th>   <a href="{% url 'store_insert' %}" class="btn btn-light"><i class="fa fa-plus" ></i>Add New</a></th>
                             
                         </tr>
                     </thead>

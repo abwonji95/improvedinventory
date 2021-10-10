@@ -1,9 +1,9 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-    <div class="container">
+    <div class="container-fluid">
   <div class="row">
-    <div class="col-10">
+    <div class="col">
 
    <hr class="my-4">
 
@@ -14,12 +14,12 @@
                 {% if list %}
                   <div class="card-body">
                <div class="table-responsive-sm">
-            <table id="example" class="table table-bordered  table-hover table-sm " style="max-width:768px;">
+            <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
                                 <th></th>
                                 <th>username</th>
-                                <th>  <button><a  href=" {%url 'register'%}" >Register</a></button></th>
+                                <th><a class="btn btn-light"  href=" {%url 'register'%}" >Register</a></button></th>
                                  
                                 </tr>
                         </thead>

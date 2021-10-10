@@ -12,9 +12,9 @@ import datetime
 class ItemForm(forms.ModelForm):
     class Meta:
         model=Item
-        fields='__all__'
+        fields=("name","item_type","sku","units","reorder_level")
 
-
+   
 class VendorForm(forms.ModelForm):
     class Meta:
         model=Vendor
@@ -57,7 +57,7 @@ class CreateUserForm(UserCreationForm):
 class EngineerForm(forms.ModelForm):
     class Meta:
         model=Engineer
-        fields=['first_name','last_name','email','phone','employee_number','role']
+        fields=['first_name','last_name','email','phone','employee_number']
         labels={
             'first_name':'First Name',
             'last_name':'Last Name',
@@ -80,12 +80,12 @@ class EngineerRequestForm(forms.ModelForm):
         model=EngineerRequest
         fields='__all__'
 
-class AdminReturnsForm(forms.ModelForm):
-    class Meta:
-        model=AdminReturns
-        fields='__all__'
-
 class TeamleadReturnsForm(forms.ModelForm):
     class Meta:
         model=TeamleadReturns
+        fields='__all__'
+
+class EngineerReturnsForm(forms.ModelForm):
+    class Meta:
+        model=EngineerReturns
         fields='__all__'

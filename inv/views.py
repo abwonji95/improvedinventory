@@ -21,6 +21,13 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 
+    
+   
+    
+
+    
+
+
 def account_created(request):
     template=render_to_string('inv/account_created_email.html',{'name':request.user})
     email=EmailMessage(
@@ -117,7 +124,8 @@ def admin_return(request):
 
 @login_required(login_url='loginpage')
 def admin_stock(request):
-    return render(request,'inv/admin_stock.html')
+    list=Stock.objects.all()
+    return render(request,'inv/admin_stock.html',{'list':list})
 
 
 @login_required(login_url='loginpage')
@@ -765,7 +773,7 @@ def purchaseform(request,id=0):
            purchase=Purchase.objects.get(pk=id)
            form=PurchaseForm(request.POST,instance=purchase)
         if form.is_valid():
-        
+    
             form.save()
 
             messages.success(request,'Purchase  Created Successfully')

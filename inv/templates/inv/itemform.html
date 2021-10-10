@@ -2,7 +2,7 @@
 {%load bootstrap%}
 
 {%block content%} 
-<div class="col-10">
+<div class="container-fluid">
 
 
 <div class="card mb-5"> 
@@ -44,15 +44,17 @@
                           <div class="col-md-4">
                             <a href="{%url 'item_list'%}" class="btn btn-success btn-block btn-dark">Cancel</a>
                         </div>
-                          <div class="col-md-8">
-                              <button type="submit" class="btn btn-success btn-block btn-dark">Submit</button>
+                          <div class="col-md-4">
+                              <button type="submit" class="btn btn-success btn-block btn-dark">Save and Exit</button>
                           </div>
-                         
+                          <div class="col-md-4">
+                              <button type="submit" class="btn btn-success btn-block btn-dark">Save and Add Another</button>
+                          </div>
                           </div>
                     </form>
               </div>
               
-       
+         </div>
    
     
 

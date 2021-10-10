@@ -3,13 +3,13 @@
 {%block content%}
 
 
-    <div class="container">
+    <div class="container-flui">
   <div class="row">
-    <div class="col-10">
+    <div class="col">
 
                 <h1 class="display-4">Vendors Price List </h1>
                 <p class="lead font-italic">List of Vendors Prices</p>
-                 <a href="{% url 'vendorprice_insert' %}" class="btn btn-secondary">Add New</a>
+               
                 <hr>
                 <div class="card mb-4">
                       <div class="card-body">
@@ -19,6 +19,7 @@
             <table id="example" class="table table-bordered  table-hover table-sm " >
                             <thead class="thead-dark">
                                 <tr>
+                                  <th><input type="checkbox" id="checkboxNoLabel" value=""></th>
                                     <th></th>
                                     <th>Vendor</th>
                                     <th>Item</th>
@@ -26,14 +27,14 @@
                                   
                                    
                                    
-                                    <th><button><a  href=" {%url 'vendorprice_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
+                                    <th><a class="btn btn-light"  href=" {%url 'vendorprice_insert'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></button></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for instance in list %}
                                 
      <tr>
-                          
+                            <td><input type="checkbox" id="checkboxNoLabel" value=""></td>
                             <td scope="row">{{forloop.counter}}</td>
                             <td>{{instance.vendor}}</td>
                              <td>{{instance.item}}</td>

@@ -14,6 +14,45 @@ import datetime
 # Create your models here.
 
 
+class Engineer(models.Model):
+  
+    first_name=models.CharField(max_length=200,null=True)
+    last_name=models.CharField(max_length=200,null=True)
+    employee_number=models.CharField(max_length=200,null=True,unique=True)
+    phone = PhoneNumberField(null=False, blank=False, unique=True)
+    email=models.EmailField(max_length=200,null=True,unique=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    def __str__(self) :
+        return "{} {}".format(self.first_name,self.last_name)
+
+class Teamleader(models.Model):
+    
+    first_name=models.CharField(max_length=200,null=True)
+    last_name=models.CharField(max_length=200,null=True)
+    employee_number=models.CharField(max_length=200,null=True,unique=True)
+    phone = PhoneNumberField(null=False, blank=False, unique=True)
+    email=models.EmailField(max_length=200,null=True,unique=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    def __str__(self) :
+        return "{} {}".format(self.first_name,self.last_name)
+    
+class Staff(models.Model):
+    
+    first_name=models.CharField(max_length=200,null=True)
+    last_name=models.CharField(max_length=200,null=True)
+    employee_number=models.CharField(max_length=200,null=True,unique=True)
+    phone = PhoneNumberField(null=False, blank=False, unique=True)
+    email=models.EmailField(max_length=200,null=True,unique=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    def __str__(self) :
+        return "{} {}".format(self.first_name,self.last_name)
+    
 
 
 class Item(models.Model):
@@ -25,7 +64,12 @@ class Item(models.Model):
     item_type=models.CharField(max_length=200,null=True,choices=ITEMTYPE)
     sku=models.CharField(max_length=200,null=True,unique=True)
     units=models.CharField(max_length=200,choices=UNITS,blank=True)
-    item_description=models.TextField(max_length=200,blank=True,default=0)
+    item_description=models.TextField(max_length=200,blank=True,default="Item description")
+    reorder_level=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -70,7 +114,7 @@ class Purchase(models.Model):
   
     po=models.CharField(max_length=200,blank=False)
     vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
-    items=models.ForeignKey(VendorPrice, on_delete=models.CASCADE)
+    items=models.ForeignKey(Item, null=True,on_delete=models.CASCADE)
     purchased_qty=models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
@@ -78,45 +122,31 @@ class Purchase(models.Model):
 
     def __str__(self) :
         return "{}".format(self.po)
-    def items(self):
-        vendor=Vendor.objects.all().get(pk=id)
-        return VendorPrice.objects.all().filter(instance=vendor)
-
-   
-class Engineer(models.Model):
-    ROLE=(
-        ('Team leader','Team leader'),('Engineer','Engineer'),
-        )
-    date_created=models.DateTimeField(auto_now_add=True)
-    date_updated=models.DateTimeField(auto_now=True)
-    first_name=models.CharField(max_length=200,null=True)
-    last_name=models.CharField(max_length=200,null=True)
-    employee_number=models.CharField(max_length=200,null=True,unique=True)
-    phone = PhoneNumberField(null=False, blank=False, unique=True)
-    email=models.EmailField(max_length=200,null=True,unique=True)
-    role=models.CharField(max_length=200,null=True,choices=ROLE)
-    id=models.AutoField(primary_key=True)
-    history = HistoricalRecords()
-    def __str__(self) :
-        return "{} {}".format(self.first_name,self.last_name)
     
- 
-   
-class Store(models.Model):
-    name=models.CharField(max_length=200,blank=False,unique=True)
-    teamleader=models.ForeignKey(Engineer,blank=False,on_delete=models.CASCADE)
+class Stock(models.Model):
+    
+    
+    item=models.CharField(max_length=200,null=True,unique=True)
+    current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    purchased_by=models.CharField(max_length=200,null=True)
+    approved_by=models.CharField(max_length=200,null=True)
+    issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    issued_by=models.CharField(max_length=200,null=True)
+    issued_to=models.CharField(max_length=200,null=True)
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    returned_by=models.CharField(max_length=200,null=True)
+    recieved_by=models.CharField(max_length=200,null=True)
+    status=models.CharField(max_length=200,null=True)
     date_updated=models.DateTimeField(auto_now=True)
-    date_created=models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
-    def __str__(self) :
-        return self.name
-
-    def teamleader(self):
-        return Engineer.objects.all().filter(role='Team leader')
-
-class EngineerStock(models.Model):
+   
+#request made by  Teamleaders to Admin
+class TeamleaderRequest(models.Model):
+  
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
-    quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    requested_qty= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    approval=models.CharField(max_length=200,null=True,default='Pending')
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -127,6 +157,19 @@ class TeamleaderStock(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+
+#items returned by teamlead recieved by Admin
+class TeamleadReturns(models.Model):
+    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
+    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    date_created=models.DateTimeField(auto_now_add=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self) :
+            return "{} {}".format(self.item,self.returned_by)
+
+
 
 #request made by engineers to Teamleaders
 class EngineerRequest(models.Model):
@@ -141,38 +184,19 @@ class EngineerRequest(models.Model):
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     ci_no=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     service=models.CharField(max_length=200,null=True,choices=SERVICE)
-    approval=models.CharField(max_length=200,null=True,choices=STATUS)
+    approval=models.CharField(max_length=200,null=True,default='Pending')
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
-#request made by  Teamleaders to Admin
-class TeamleaderRequest(models.Model):
-    STATUS=(
-            ('Approve','Approve'),('Disapprove','Disapprove'),('Pending','Pending'),
-            )
+class EngineerStock(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    approval=models.CharField(max_length=200,null=True,choices=STATUS)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
-
-
-'''
-class Purchasedetails(models.Model):
-    po=models.ForeignKey(Purchase,null=True,on_delete=models.CASCADE)
-    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
-    date_created=models.DateTimeField(auto_now_add=True)
-    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    price=models.FloatField(default=0,blank=True,validators=[MinValueValidator(0)])
-    def __str__(self) :
-        return "{}".format(self.po)
- ''' 
-
- #items returned by engineer recieved by Teamlead     
-class TeamleadReturns(models.Model):
+class EngineerReturns(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     returned_by=models.ForeignKey(Engineer,null=True,on_delete=models.SET_NULL)
@@ -183,60 +207,17 @@ class TeamleadReturns(models.Model):
     def __str__(self) :
             return "{} {}".format(self.item,self.returned_by)
 
-#items returned by teamlead recieved by Admin
-class AdminReturns(models.Model):
-    item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
-    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+
+ 
+   
+class Store(models.Model):
+    name=models.CharField(max_length=200,blank=False,unique=True)
+    teamleader=models.ForeignKey(Teamleader,null=True,blank=False,on_delete=models.CASCADE)
+    date_updated=models.DateTimeField(auto_now=True)
     date_created=models.DateTimeField(auto_now_add=True)
-    date_updated=models.DateTimeField(auto_now=True)
-    store=models.ForeignKey(Store,null=True,on_delete=models.SET_NULL)
-    history = HistoricalRecords()
-
-    def __str__(self) :
-            return "{} {}".format(self.item,self.returned_by)
-
-
-class Stock(models.Model):
-    item=models.CharField(max_length=200,null=True,unique=True)
-    current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    purchased_by=models.CharField(max_length=200,null=True)
-    approved_by=models.CharField(max_length=200,null=True)
-    issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    issued_by=models.CharField(max_length=200,null=True)
-    issued_to=models.CharField(max_length=200,null=True)
-    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    returned_by=models.CharField(max_length=200,null=True)
-    recieved_by=models.CharField(max_length=200,null=True)
-    reorder_level=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
     def __str__(self) :
-            return self.item
+        return self.name
 
 
-   # @property
-    #def current_qty(self):
-        #return self.purchased_qty + self.current_qty
-    
-"""
-    def purchasestock(sender,instance,**kwargs):
-            #stock=Stock()
-            #stock.item=instance.item
-            #stock.purchased_qty=instance.purchased_qty
-            #stock.save()
-            print(instance.item)
-    
-    
-    post_save.connect(purchasestock,sender=Purchase)
 
-    def returnedstock(sender,instance,**kwargs):
-            stock=Stock()
-            stock.item=instance.item
-            stock.returned_qty=instance.returned_qty
-            print('returned success')
-            stock.save()
-    
-    
-    post_save.connect(returnedstock,sender=Returneditems)
-"""

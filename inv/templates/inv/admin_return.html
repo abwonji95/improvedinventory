@@ -1,0 +1,76 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}
+
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col">
+
+                <h1 class="display-4">Returned Items </h1>
+                <p class="lead font-italic">List of Returned Items</p>
+                
+                <hr>
+                <div class="card mb-4">
+                      <div class="card-body">
+                   
+                    {% if list %}
+        <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th><input type="checkbox" id="checkboxNoLabel" value=""></th>
+                                    <th></th>
+                                    <th>Id</th>
+                                    <th>Zone</th>
+                                    <th>Date</th>
+                                  
+                                   
+                                   
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <td><input type="checkbox" id="checkboxNoLabel" value=""></td>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.id}}</td>
+                               
+                                
+                                <td>{{instance.store}}</td>
+                                <td>{{instance.date_created}}</td>
+                
+
+              <td>  
+                                    <button class="btn"><a href="{%url 'vendor_view' instance.id %}"><i class="material-icons">remove_red_eye</i></a></button>
+                                    <button class="btn"><a href="{% url 'vendor_update' instance.id %}"><i class="material-icons">create</i></a></button>
+                                    <form action="{% url 'vendor_delete' instance.id %}" method="POST" class="d-inline"
+                                    autocomplete="off" autocapitalize="characters">
+
+                                    {%csrf_token%}
+                                    <button type="submit" class="btn">
+                                    <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="material-icons">delete</i></a></button>
+                                    </form>
+                </td>
+
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <br>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
+                
+                </div>
+                  <hr class="my-4">
+              </div>
+  </div>
+  </div>
+  </div>
+    {%endblock%} 

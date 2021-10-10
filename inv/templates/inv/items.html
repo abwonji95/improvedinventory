@@ -1,15 +1,15 @@
 {%extends 'inv/sidebar.html'%}
 
 {%block content%}
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-10">
+    <div class="col">
 
 
 
                 <h1 class="display-4">Items </h1>
                 <p class="lead font-italic">List of items</p>
- <a href="{% url 'item_insert' %}" class="btn btn-secondary">Add New</a>
+
                 <hr class="my-4">
                 <div class="card">
 
@@ -26,18 +26,14 @@
                                         <th>SKU</th>
                                         <th>Type</th>
                                         <th>Units</th>
-                                        <th>Actions</th>
+                                        <th><a href="{% url 'item_insert' %}" class="btn btn-light"><i class="fa fa-plus-circle" ></i>Add New</a></th>
                                          
                                 </tr>
                         </thead>
                         <tbody>
                             {% for instance in list %}
                             <tr>
-                                 <td>
-                                
-  <input type="checkbox" id="checkboxNoLabel" value="">
-
-                                 </td>
+                                <td><input type="checkbox" id="checkboxNoLabel" value=""></td>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{instance.name}}</td>
                                 <td>{{instance.sku}}</td>
