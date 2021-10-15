@@ -6,16 +6,27 @@ from django.db.models.fields import EmailField, IntegerField
 from django.db.models import Avg, Max, Min, Sum
 from django.core.validators import MinValueValidator,MinLengthValidator
 from phone_field import PhoneField
+from django.contrib.auth.models import User,Group
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from django.db.models.signals import post_delete, pre_save,post_save
 import datetime
+from river.models.fields.state import StateField
 #from postgres.fields import JSONField
 # Create your models here.
 
+class Store(models.Model):
+    name=models.CharField(max_length=200,blank=False,unique=True)
+    description=models.CharField(max_length=200,null=True,blank=False,unique=True)
+    date_updated=models.DateTimeField(auto_now=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
+ 
+    def __str__(self) :
+        return self.name
 
 class Engineer(models.Model):
-  
+    user = models.OneToOneField(User,null=True, on_delete=models.CASCADE)
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
     employee_number=models.CharField(max_length=200,null=True,unique=True)
@@ -24,24 +35,27 @@ class Engineer(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+  
     def __str__(self) :
         return "{} {}".format(self.first_name,self.last_name)
 
 class Teamleader(models.Model):
-    
+    user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
     employee_number=models.CharField(max_length=200,null=True,unique=True)
     phone = PhoneNumberField(null=False, blank=False, unique=True)
     email=models.EmailField(max_length=200,null=True,unique=True)
+    store=models.ForeignKey(Store,null=True,blank=False,on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+
     def __str__(self) :
         return "{} {}".format(self.first_name,self.last_name)
     
 class Staff(models.Model):
-    
+    user = models.OneToOneField(User,null=True, on_delete=models.CASCADE)
     first_name=models.CharField(max_length=200,null=True)
     last_name=models.CharField(max_length=200,null=True)
     employee_number=models.CharField(max_length=200,null=True,unique=True)
@@ -50,6 +64,7 @@ class Staff(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+
     def __str__(self) :
         return "{} {}".format(self.first_name,self.last_name)
     
@@ -64,15 +79,12 @@ class Item(models.Model):
     item_type=models.CharField(max_length=200,null=True,choices=ITEMTYPE)
     sku=models.CharField(max_length=200,null=True,unique=True)
     units=models.CharField(max_length=200,choices=UNITS,blank=True)
-    item_description=models.TextField(max_length=200,blank=True,default="Item description")
+    item_description=models.TextField(max_length=200,blank=True)
     reorder_level=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    purchased_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    issued_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
-    current_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+ 
     def __str__(self) :
         return self.name
 
@@ -90,6 +102,7 @@ class Vendor(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+  
     def __str__(self) :
         return self.name
     
@@ -103,25 +116,37 @@ class VendorPrice(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-
+    
     class Meta:
         unique_together=[('item','vendor')]
 
     def __str__(self) :
             return "{} {}".format(self.vendor,self.item,)
 
+
+
+
 class Purchase(models.Model):
   
     po=models.CharField(max_length=200,blank=False)
     vendor=models.ForeignKey(Vendor,blank=False,on_delete=models.CASCADE)
-    items=models.ForeignKey(Item, null=True,on_delete=models.CASCADE)
+    items=models.ManyToManyField(VendorPrice,through='PurchaseItem')
     purchased_qty=models.IntegerField(default=0,blank=False,validators=[MinValueValidator(0)])
+    price=models.IntegerField(default=0,blank=False,null=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+    
 
     def __str__(self) :
         return "{}".format(self.po)
+
+class PurchaseItem(models.Model):
+    item=models.ForeignKey(VendorPrice,on_delete=models.CASCADE)
+    quantity=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
+    po=models.ForeignKey(Purchase,null=True,on_delete=models.CASCADE)
+    def __str__(self) :
+        return "{}".format(self.item)
     
 class Stock(models.Model):
     
@@ -140,7 +165,7 @@ class Stock(models.Model):
     status=models.CharField(max_length=200,null=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-   
+    
 #request made by  Teamleaders to Admin
 class TeamleaderRequest(models.Model):
   
@@ -150,13 +175,14 @@ class TeamleaderRequest(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-
+    
 class TeamleaderStock(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
     quantity= models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+    
 
 #items returned by teamlead recieved by Admin
 class TeamleadReturns(models.Model):
@@ -165,7 +191,7 @@ class TeamleadReturns(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-
+    
     def __str__(self) :
             return "{} {}".format(self.item,self.returned_by)
 
@@ -188,6 +214,7 @@ class EngineerRequest(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+    
 
 class EngineerStock(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.CASCADE)
@@ -196,6 +223,7 @@ class EngineerStock(models.Model):
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
+
 class EngineerReturns(models.Model):
     item=models.ForeignKey(Item,null=True,on_delete=models.SET_NULL)
     returned_qty=models.IntegerField(default=0,blank=True,validators=[MinValueValidator(0)])
@@ -203,21 +231,14 @@ class EngineerReturns(models.Model):
     date_created=models.DateTimeField(auto_now_add=True)
     date_updated=models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-
+    
     def __str__(self) :
             return "{} {}".format(self.item,self.returned_by)
 
-
+class Alert(models.Model):
+    message=models.CharField(null=True, max_length=200)
  
-   
-class Store(models.Model):
-    name=models.CharField(max_length=200,blank=False,unique=True)
-    teamleader=models.ForeignKey(Teamleader,null=True,blank=False,on_delete=models.CASCADE)
-    date_updated=models.DateTimeField(auto_now=True)
-    date_created=models.DateTimeField(auto_now_add=True)
-    history = HistoricalRecords()
-    def __str__(self) :
-        return self.name
+
 
 
 

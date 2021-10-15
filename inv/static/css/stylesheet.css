@@ -5,6 +5,12 @@ body {
     color: #333;
     list-style: 26px;
     font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    background-image: url(../img/login2.png);
+    background-color: #ebedf1;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 

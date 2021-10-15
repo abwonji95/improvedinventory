@@ -18,6 +18,7 @@
                      <table id="example" class="table table-bordered  table-hover table-sm " >
                             <thead class="thead-dark">
                                 <tr>
+                                    <th><input type="checkbox" onclick="toggle(this)" value=""></th>
                                     <th></th>
                                     <th>Name</th>
                                     <th>Emp No</th>
@@ -30,6 +31,7 @@
                             <tbody>
                                 {% for instance in list %}
                                 <tr>
+                                <td><input type="checkbox" name="checkbox" value=""></td>
                                 <th>{{forloop.counter}}</th>
                                 <td>{{instance.first_name}}
                                     {{instance.last_name}}
@@ -68,5 +70,6 @@
                  </div>
               </div>
               </div>
+              
     
     {%endblock%} 

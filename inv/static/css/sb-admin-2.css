@@ -11656,6 +11656,14 @@ body.sidebar-toggled footer.sticky-footer {
     width: 100%;
 }
 
-.float-right {
+.profile {
     float: right;
+    position: relative;
+    padding-left: 90%;
+    padding-right: 5%;
+}
+
+.bg-mid {
+    background-color: rgb(18, 18, 19);
+    color: black;
 }

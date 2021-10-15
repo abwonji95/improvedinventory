@@ -2,13 +2,15 @@ from collections import namedtuple
 from django.urls import path,include
 from  . import views
 from django.conf.urls import url
+from .views import *
 from django.contrib.auth import views as auth_views
 
 urlpatterns=[
 
 #home
     path('',views.home,name='home'),
- 
+    path('test/', views.test,name='test'),
+    #path('edit_profile/', UserEditView.as_view(),name='edit_profile'),   
 
 #stock
     path('stock/',views.stock,name='stock'),
@@ -87,8 +89,11 @@ urlpatterns=[
    #common actions
     path('loginpage/',views.loginpage,name='loginpage'),
     path('logoutpage/',views.logout_view,name='logout_view'),
-    path('reset_password/',auth_views.PasswordResetView.as_view(),name='reset_password'),
-    path('reset_password_sent/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
+    path('reset_password/',views.password_reset_request,name='reset_password'),
+    path('password_reset_form',views.password_reset_form,name='reset_password_form'),
+    path('password/',Passwords_ChangeView.as_view(template_name='inv/change_password.html'),name='change_password'),
+    path('password_success/',views.password_success,name='password_success'),
+    path('reset_password_done/',views.password_reset_done,name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('password_change_done/',auth_views.PasswordChangeDoneView.as_view()),
@@ -122,7 +127,7 @@ urlpatterns=[
     path('teamleader_return/',views.teamleader_return,name='teamleader_return'),
     path('teamleader_make_return/',views.teamleader_make_return,name='teamleader_make_return'),
     path('engineer_stock/',views.engineer_stock,name='engineer_stock'),
-    path('engineer_request/',views.engineer_request,name='engineer_request'),
+    path('engineer_make_request/',views.engineer_make_request,name='engineer_make_request'),
     path('engineer_make_return/',views.engineer_make_return,name='engineer_make_return'),
 
     path('restricted/',views.restricted,name='restricted'),

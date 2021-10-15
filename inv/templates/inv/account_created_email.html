@@ -1,9 +1,12 @@
-hey {{name}}
+{%{% autoescape off %}
+
+hey {{user.username}}
 
 An account was created for you in Btn website.
-click  href="http://127.0.0.1:8000/> to login and change your Password.
+click  {{protocol}}://{{domain}}{%url 'loginpage'%} to login and change your Password.
 your default password is {{random}}
 Welcome to BTN family .
 
-Ignore if not email sent to wrong account.Thank you!!
-Btn
+
+BTN Kenya.
+{% endautoescape %}%}

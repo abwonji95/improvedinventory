@@ -24,6 +24,7 @@
             <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
+                                        <th><input type="checkbox" onClick="toggle(this)" value=""></th>
                                         <th></th>
                                         <th>PO</th>
                                         <th>Item</th>
@@ -38,6 +39,7 @@
                         <tbody>
                             {% for instance in list %}
                             <tr>
+                            <td><input type="checkbox" name="checkbox" value="purchases"></td>
                             <td scope="row">{{forloop.counter}}</td>
                             <td><a href="{%url 'purchase_view' instance.id %}">{{instance.po}}</a></td>
                             <td>{{instance.items}}</a></td>
@@ -75,7 +77,14 @@
     
   </div>  
 
-
+<script>
+function toggle(source) {
+checkboxes = document.getElementsByName('checkbox');
+for(var i=0, n=checkboxes.length;i<n;i++) {
+checkboxes[i].checked = source.checked;
+}
+}
+</script>
 
 
 {%endblock%}

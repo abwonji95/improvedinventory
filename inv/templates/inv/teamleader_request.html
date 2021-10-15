@@ -1,0 +1,80 @@
+{%extends 'inv/sidebar.html'%}
+
+{%block content%}
+
+
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col">
+
+                <h1 class="display-4">Requests </h1>
+                <p class="lead font-italic">List of Requests made</p>
+                
+                <hr>
+                <div class="card mb-4">
+                      <div class="card-body">
+                   
+                    {% if list %}
+        <div class="table-responsive-sm">
+            <table id="example" class="table table-bordered  table-hover table-sm " >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th><input type="checkbox" onClick="toggle(this)"  value=""></th>
+                                    <th></th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Status</th>
+                                   
+                                    
+                                 
+                                   
+                                   
+                                    <th><a class="btn btn-light" href=" {%url 'teamleader_request'%}" ><i class="fa fa-plus-circle" ></i>Add New</a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in list %}
+                                <tr>
+                                <td><input type="checkbox" name="checkbox" value="vendors"></td>
+                                <th>{{forloop.counter}}</th>
+                                <td>{{instance.date_created}}</td>
+                               
+                                <td>
+                                {% for item in instance.items.all %}
+                                        {{forloop.counter}}.{{ item.name }}{{item.requested_qty}}
+                                        <br>
+                                    {% endfor %}
+                                
+                                </td>
+                                <td>{{instance.approval}}</td>
+                                
+                                </tr>
+                                  {% endfor %}
+                        </tbody>
+                        
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <br>
+                    {% else %}
+                            <p>No details are  available.</p>
+                    {% endif %}
+                
+                </div>
+                  <hr class="my-4">
+              </div>
+ 
+  </div>
+   </div>
+    </div>
+ 
+ <script>
+function toggle(source) {
+checkboxes = document.getElementsByName('checkbox');
+for(var i=0, n=checkboxes.length;i<n;i++) {
+checkboxes[i].checked = source.checked;
+}
+}
+</script>
+    {%endblock%} 

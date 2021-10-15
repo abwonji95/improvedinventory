@@ -75,3 +75,79 @@ def postFriend(request):
     })
 </script>
 {% endblock javascript %}
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''
+</button>
+    <button class="btn btn-round delete-btn" data-toggle="modal">
+  <i class="material-icons" action >delete</i>   Delete
+</button>
+
+<div class="table-container">
+            <table id="fresh-table" class="table table-striped test-list">
+                    <thead class="thead-table-list">
+                      <tr>
+                        <th scope="col">
+                          <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" id="checkall" type="checkbox" value="">
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                          </div>
+                        </th>
+                        <th scope="col">#</th>
+                        <th scope="col">Test</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Test Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for test in tests %}
+                        <tr data-id="{{ test.id }}">
+                            <td>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input check-ele" type="checkbox" value="">
+                                        <span class="form-check-sign">
+                                        <span class="check"></span>
+                                        </span>
+                                    </label>
+                                  </div>
+                            </td>
+                            <td>{{ test.id}}</td>
+                            <td>{{ test.test_name}}</td>
+                            <td>{{ test.test_type}}</td>
+                            <td>{{ test.test_date}}</td>  
+                        </tr>      
+                        {% endfor %}
+                    </tbody>
+                  </table>
+{% csrf_token %}
+</div>
+
+<script type='text/javascript'>
+$(".delete-btn").click(function(){
+
+  var selected_rows=[];
+
+  $('.test-list').find('tr').each(function(){
+    var row=$(this);
+    console.log(row.find('input[type="checkbox"]').is(':checked'));
+    if (row.find('input[type="checkbox"]').is(':checked')) {
+        console.log(row.attr('data-id'));
+        selected_rows.push(row.attr('data-id'));
+        };
+    });
+    var selected_rows = JSON.stringify(selected_rows);
+    $.ajax({
+        url: "{% url 'delete_item' %}",
+        type: 'POST',
+        data: {'test_list_ids': selected_rows,'csrfmiddlewaretoken': $("[name=csrfmiddlewaretoken]").val()},
+    })
+});
+</script>
+
+<i class="fa fa-eye"></i>
+<i class="fa fa-pencil-square-o" ></i>
+<i class="fa fa-trash"></i>

@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>BTN Kenya</title>
 
     <!-- CDN Links-->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -19,13 +19,15 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
  
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  
 
   
  <!--   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>-->
 
     <!-- Custom styles -->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
 
 </head>
 
@@ -42,7 +44,9 @@
                <div class="navbar-brand justify-content-center bg-light d-flex flex-column"  style="width:250px;margin:0px; height:70px;" >
                 <div class="container-fluid  bg-light"  style="width:200px;margin:0px;" >
                   <a  href="{%url 'admin_dashboard'%}">
-                 
+                  <div class="container-fluid">
+                     <img class="bg-light" src="{% static 'img/btn.png'%}"   alt="btn logo" width="50" height="50" class="d-inline-block align-text-top">
+                    </div>
                   
                   </a>
                 </div>
@@ -60,6 +64,16 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'admin_dashboard'%}">
                     <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_report'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
                 </a>
             </li>
 
@@ -126,17 +140,8 @@
                 Statistics
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                 <a class="nav-link" href="{% url 'admin_stock'%}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
-                </a>
-            </li>
-             <li class="nav-item">
-                 <a class="nav-link" href="{% url 'admin_report'%}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
-                </a>
-            </li>
+
+          
 
 
             <!-- Divider -->
@@ -164,6 +169,16 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_stock'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
+                </a>
+            </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{% url 'admin_report'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
+                </a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -227,18 +242,6 @@
             <div class="sidebar-heading">
                 Statistics
             </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                 <a class="nav-link" href="{% url 'admin_stock'%}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i> Stock
-                </a>
-            </li>
-             <li class="nav-item">
-                 <a class="nav-link" href="{% url 'admin_report'%}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i> Reports
-                </a>
-            </li>
 
 
             <!-- Divider -->
@@ -288,6 +291,11 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i> Request items
                 </a>
             </li>
+             <li class="nav-item">
+               <a class="nav-link" href="{% url 'teamleader_make_return'%}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> Return items
+                </a>
+            </li>
                <li class="nav-item">
                <a class="nav-link" href="{% url 'teamleader_approval'%}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>Engineer Requests
@@ -298,11 +306,7 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>Engineer Returned items
                 </a>
             </li>
-             <li class="nav-item">
-               <a class="nav-link" href="{% url 'teamleader_make_return'%}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i> Return items
-                </a>
-            </li>
+            
                
               <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -340,7 +344,7 @@
 
             <!-- Nav Item  -->
             <li class="nav-item">
-               <a class="nav-link" href="{% url 'engineer_request'%}">
+               <a class="nav-link" href="{% url 'engineer_make_request'%}">
                     <i class="fas fa-fw fa-tachometer-alt"></i> Request items
                 </a>
             </li>
@@ -376,28 +380,18 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <div class="justify-content-center">
-                     <img class="bg-light" src="{% static 'img/BTNLogo.png'%}"   alt="btn logo" width="180" height="50" class="d-inline-block align-text-top">
-                     </div>
-<div class="float-right">
-<div class="float-right">
-  <!-- Dropdown Trigger -->
-  <a class='dropdown-trigger ' href='#' data-target='dropdown1'><i class="material-icons">account_circle</i></a>
-
-  <!-- Dropdown Structure -->
-  <ul id='dropdown1' class='dropdown-content'>
-    
-    <li class="divider" tabindex="-1"></li>
-    <li><a href="#!">Profile</a></li>
-    <li class="divider" tabindex="-1"></li>
-    <li><a href="#!">Change Password</a></li>
-    <li class="divider" tabindex="-1"></li>
-    <li><a href="{% url 'logout_view'%}">Logout</a></li>
-    <li class="divider" tabindex="-1"></li>
-  </ul>
-</div>
-</div>
-                    
+<div class="dropdown">
+  <a class="dropdown-toggle"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-user-alt"></i>
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Profile</a>
+    <a class="dropdown-item" href="{% url 'change_password' %}">Change password</a>
+    <a class="dropdown-item" href="{% url 'logout_view' %}">Log out</a>
+  </div>
+</div
+    </div>
+               
 
 
                   
@@ -445,7 +439,7 @@
     
 
     <!-- Bootstrap core JavaScript-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 

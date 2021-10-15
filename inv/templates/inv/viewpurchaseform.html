@@ -16,7 +16,11 @@
               
                   <div class="col">
                     <label for="item" style="font-size: 18px;font-weight: 300;">Item : </label>
-                    {{item|capfirst}}
+                  
+                    {% for item in instance.items.all %}
+                                        {{forloop.counter}}.{{ item.name }}
+                                        <br>
+                                    {% endfor %}
                   </div>
                   <div class="col">
                     <label for="vendor" style="font-size: 18px;font-weight: 300;">Vendor :</label>

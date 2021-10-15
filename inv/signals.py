@@ -6,12 +6,16 @@ from .views import *
 def engineer_profile(sender,instance,created, **kwargs):
    
     if created:
+        group=Group() 
+        if Group.objects.all().filter(name=group).exists():
+            group=Group.objects.get(name="staff")
+            instance.groups.add(group)
+            instance.save()
+            group.save()
+       
         #test if groups exists 
         #if exists assign to user
         #if not exist create new groups and assign to user
-        group=Group.objects.get(name="staff")
-        instance.groups.add(group)
-        print("you are a genius")
 
 post_save.connect(engineer_profile,sender=User)
 

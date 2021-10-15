@@ -1,25 +1,24 @@
-{%load static %}
+
+{% extends 'inv/base.html'%}
 {% block content %}
-<link href="{%  static 'css/stylesheet2.css'%}" rel="stylesheet">
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<body>
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <label>Inventory Management System</label>
-    <form method="POST" action="" >
-      {%csrf_token%}
-     
-      <input type="text" id="login" class="fadeIn second" name="username" placeholder="Username">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-      <li><a href="{% url 'password_reset' %}">Forgot password?</a></li>
-  
-    </form>
+          <form method="POST" action=""  >
+          {%csrf_token%}
 
-  </div>
-</div>
-</body>
+
+          <input type="text" id="login" class="fadeIn second" name="username" placeholder="Email">
+          <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
+          <div class="messages-menu">
+          {%for message in messages%}
+                  <h5>{{message}}</h5>
+          {%endfor%}
+          </div>
+
+          <input type="submit" class="fadeIn fourth" value="Log In">
+          <li><a href="{% url 'reset_password' %}">Forgot password?</a></li>
+
+          </form>
+
+
 {% endblock %}
+

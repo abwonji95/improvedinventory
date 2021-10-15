@@ -4,10 +4,14 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm
 from django.contrib.auth.views import *
+from django.contrib.auth.models import *
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
 from django.db.models import Count
+from django.db.models.query_utils import Q
 from .models import *
 from .forms import *
 from inv.forms import *
@@ -16,16 +20,101 @@ from django.utils.translation import gettext_lazy as _
 from .filters import *
 from django.urls import reverse_lazy
 import csv
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage,send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.views.generic import View
 
 
-    
-   
-    
+def sidebar(request):
+    if request.user.groups.all()[0].name=='admin':
+        group=admin
+    elif request.user.groups.all()[1].name=='teamleader':
+        group=teamleader_approval
+    else :
+        group=engineer
+    context={'group':group }
+    return render(request,'inv/sidebar.html',context)
 
-    
+
+def base(request):
+    return render(request,'inv/base.html')
+
+
+class Passwords_ChangeView(PasswordChangeView):
+    form_class=ChangingPasswordForm
+    success_url=reverse_lazy('password_success')
+
+def password_reset_request(request):
+    if request.method=="POST":
+        form= PasswordResetForm(request.POST)
+        if form.is_valid():
+            data=form.cleaned_data['email']
+            user_email=User.objects.filter(Q(email=data))
+            if user_email.exists():
+                for user in user_email:
+                    subject=" request password request "
+                    email_template_name="inv/reset_password_email.html"
+                    parameters={
+                        'email':user.email,
+                        'domain':'127.0.0.1:8000',
+                        'site_name':'BTN ',
+                        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token':default_token_generator.make_token(user),
+                        'protocol':'http',
+
+
+                    }
+                    email=render_to_string(email_template_name,parameters)
+                    try:
+                        send_mail(subject,email,'',[user.email],fail_silently=False)
+                    except:
+                        return HttpResponse('Invalid Header')
+                    return redirect('password_reset_done')
+            else:
+                messages.info(request,'Error! Email is does not Exist. .')
+                return render(request,'inv/password_reset.html')
+        else:
+            messages.info(request,'Error! Email is not Valid ')
+            return render(request,'inv/password_reset.html')
+
+    else:
+        form=PasswordResetForm()
+        context={
+            'form':form
+
+        }
+        return render (request,'inv/password_reset.html',context)
+
+
+def password_reset_form(request):
+    if request.method=='POST':
+        form=ResetPasswordForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect('loginpage')
+        else:
+            messages.info(request,'Passwords do not match .')
+            return render(request,'inv/password_reset_form.html')
+    else:
+         form=ResetPasswordForm()
+
+    context={
+            'form':form}
+    return render (request,'inv/password_reset_form.html',context)
+
+
+
+def password_reset_done(request):
+    return render(request,'inv/password_reset_done.html')
+
+def password_success(request):
+    return render(request,'inv/password_success.html')  
+
+def test(request):
+    return render(request,'inv/test.html')
+
 
 
 def account_created(request):
@@ -54,12 +143,16 @@ def request_created(request):
     
     return render(request,'inv/account_created_email.html')
 
+
+
 @login_required(login_url='loginpage')
+@admin_only
 def vendorprice_list(request):
     list=VendorPrice.objects.all()
     return render(request,'inv/vendorprice_list.html',{'list':list})
 
 @login_required(login_url='loginpage')
+@admin_only
 def vendorpriceform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -82,7 +175,7 @@ def vendorpriceform(request,id=0):
         return redirect('/vendorprice_list')
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def viewvendorpriceform(request,id=0):
     if request.method=="GET":
         vendorprice=VendorPrice.objects.get(pk=id)
@@ -107,28 +200,32 @@ def viewvendorpriceform(request,id=0):
         return render(request,'inv/viewvendorpriceform.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def vendorpricedelete(request,id):
     vendorprice=VendorPrice.objects.get(pk=id)
     vendorprice.delete()
     return redirect('/vendorprice_list')
 
 @login_required(login_url='loginpage')
+@admin_only
 def admin_approval(request):
     return render(request,'inv/admin_approval.html')
 
 @login_required(login_url='loginpage')
+@admin_only
 def admin_return(request):
     return render(request,'inv/admin_return.html')
 
 
 @login_required(login_url='loginpage')
+@admin_only
 def admin_stock(request):
     list=Stock.objects.all()
     return render(request,'inv/admin_stock.html',{'list':list})
 
 
 @login_required(login_url='loginpage')
+@admin_only
 def admin_report(request):
     return render(request,'inv/admin_report.html')
 
@@ -182,68 +279,75 @@ def teamleader_return(request):
     return render(request,'inv/teamleader_return.html')
 
 @login_required(login_url='loginpage')
-def teamleader_make_return(request):
+def teamleader_make_return(request,id=0):
     if request.method=="GET":
         if id==0:
-            form=AdminReturnsForm()
+            form=TeamleadReturnsForm
         else:
-            myreturn=AdminReturns.objects.get(pk=id)
-            form=AdminReturnsForm(instance=myreturn)
-        return render(request,'inv/teamleader_request.html',{'form':form})
+            myreturn=TeamleadReturns.objects.get(pk=id)
+            form=TeamleadReturnsForm(instance=myreturn)
+        return render(request,'inv/teamleader_make_return.html',{'form':form})
     else:
         if id==0:
-            form=AdminReturnsForm(request.POST)
+            form=TeamleadReturnsForm(request.POST)
         else:
-           myrequest=AdminReturns.objects.get(pk=id)
-           form=AdminReturnsForm(request.POST,instance=myreturn)
+           myrequest=TeamleadReturns.objects.get(pk=id)
+           form=TeamleadReturnsForm(request.POST,instance=myreturn)
         if form.is_valid():
             form.save()
+        return redirect('teamleader_return')
        
-    return render(request,'inv/.html')
+    return render(request,'inv/teamleader_make_return.html')
 
 @login_required(login_url='loginpage')
 def engineer_stock(request):
     return render(request,'inv/engineer_stock.html')
 
 @login_required(login_url='loginpage')
-def engineer_request(request):
+def engineer_make_request(request,id=0):
     if request.method=="GET":
         if id==0:
             form=EngineerRequestForm()
         else:
             myrequest=EngineerRequest.objects.get(pk=id)
             form=EngineerRequest(instance=myrequest)
-        return render(request,'inv/engineer_request.html',{'form':form})
+        return render(request,'inv/engineer_make_request.html',{'form':form})
     else:
         if id==0:
             form=EngineerRequest(request.POST)
         else:
            myrequest=EngineerRequest.objects.get(pk=id)
            form=EngineerRequestForm(request.POST,instance=myrequest)
-        if form.is_valid():
-            form.save()
+           if form.is_valid():
+                form.save()
+                messages.info(request,'Request successful .')
+                return render(request,'inv/engineer_dashboard.html')
+        return redirect('engineer_dashboard')
        
 
-    return render(request,'inv/engineer_request.html')
+    return render(request,'inv/engineer_make_request.html')
 
 
 @login_required(login_url='loginpage')
 def engineer_make_return(request,id=0):
     if request.method=="GET":
         if id==0:
-            form=TeamleadReturnsForm()
+            form=EngineerReturnsForm()
         else:
-            myreturn=TeamleadReturns.objects.get(pk=id)
-            form=TeamleadReturnsForm(instance=myreturn)
+            myreturn=EngineerReturns.objects.get(pk=id)
+            form=EngineerReturnsForm(instance=myreturn)
         return render(request,'inv/engineer_make_return.html',{'form':form})
     else:
         if id==0:
-            form=TeamleadReturnsForm(request.POST)
+            form=EngineerReturnsForm(request.POST)
         else:
-           myreturn=TeamleadReturns.objects.get(pk=id)
-           form=TeamleadReturnsForm(request.POST,instance=myreturn)
-        if form.is_valid():
-            form.save()
+           myreturn=EngineerReturns.objects.get(pk=id)
+           form=EngineerReturnsForm(request.POST,instance=myreturn)
+           if form.is_valid():
+                form.save()
+                messages.info(request,'Return successful .')
+                return render(request,'inv/engineer_dashboard.html')
+        return redirect('engineer_dashboard')
        
     return render(request,'inv/engineer_make_return.html')
 
@@ -333,7 +437,7 @@ def teamleader_cards(request):
 
 
 @login_required(login_url='loginpage')
-#@admin_only
+@admin_only
 def admin_dashboard(request):
     
     engineerscount=Engineer.objects.all().count()
@@ -374,6 +478,7 @@ def home(request):
 
 
 @login_required(login_url='loginpage')
+@admin_only
 def engineers(request):
     engineers = Engineer.objects.all()
     engineercount = Engineer.objects.count()
@@ -400,7 +505,7 @@ def loginpage(request):
                 login(request,user)
                 return redirect('admin_dashboard')
             else:
-                messages.info(request,'username or password incorect')
+                messages.info(request,'Email or Password Incorrect .')
                 return render(request,'inv/loginpage.html')
         
     context={}
@@ -408,7 +513,7 @@ def loginpage(request):
 
 
 @login_required(login_url='loginpage')
-
+@admin_only
 def engineerlist(request):
     list=Engineer.objects.all()
     context={
@@ -417,7 +522,7 @@ def engineerlist(request):
     return render(request,'inv/engineers.html',context)
 
 @login_required(login_url='loginpage')
-
+@admin_only
 def viewengineer(request,id=0):
     if request.method=="GET":
         engineer=Engineer.objects.get(pk=id)
@@ -446,7 +551,7 @@ def viewengineer(request,id=0):
 
 
 @login_required(login_url='loginpage')
-
+@admin_only
 def engineerform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -466,22 +571,20 @@ def engineerform(request,id=0):
         return redirect('/engineerlist')
 
 @login_required(login_url='loginpage')
-
+@admin_only
 def engineerdelete(request,id):
     eng=Engineer.objects.get(pk=id)
     eng.delete()
     return redirect('/engineerlist')
 
 @login_required(login_url='loginpage')
-
-
-
+@admin_only
 def vendorlist(request):
     list=Vendor.objects.all()
     return render(request,'inv/vendors.html',{'list':list})
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def viewvendor(request,id=0):
     if request.method=="GET":
         vendor=Vendor.objects.get(pk=id)
@@ -518,7 +621,7 @@ def viewvendor(request,id=0):
         return render(request,'inv/viewvendorform.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def vendorform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -544,20 +647,20 @@ def vendorform(request,id=0):
 
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def vendordelete(request,id):
     vendor=Vendor.objects.get(pk=id)
     vendor.delete()
     return redirect('/vendorslist')
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def userslist(request):
     list=User.objects.all()
     return render(request,'inv/accounts.html',{'list':list})
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def register(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -585,7 +688,7 @@ def register(request,id=0):
 
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def userdelete(request,id):
     user=User.objects.get(pk=id)
     user.delete()
@@ -593,13 +696,13 @@ def userdelete(request,id):
 
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def storeslist(request):
     list=Store.objects.all()
     return render(request,'inv/stores.html',{'list':list})
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def viewstore(request,id=0):
     if request.method=="GET":
         store=Store.objects.get(pk=id)
@@ -701,23 +804,11 @@ def itemdelete(request,id):
     item.delete()
     return redirect('/itemslist')
 
-@login_required(login_url='loginpage')
-def sidebar(request):
-    if request.user.groups.all()[0].name=='admin':
-        group=admin
-    elif request.user.groups.all()[1].name=='teamleader':
-        group=teamleader_approval
-    else :
-        group=engineer
-    context={'group':group }
-    return render(request,'inv/sidebar.html',context)
+
+
 
 @login_required(login_url='loginpage')
-def base(request):
-    return render(request,'inv/base.html')
-
-@login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def purchaseslist(request):
     list=Purchase.objects.all()
 
@@ -728,26 +819,25 @@ def purchaseslist(request):
     return render(request,'inv/purchases.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin','superadmin'])
+@admin_only
 def viewpurchase(request,id=0):
     if request.method=="GET":
         purchase=Purchase.objects.get(pk=id)
-        item=purchase.item
+        items=purchase.items
         po=purchase.po
         vendor=purchase.vendor
         purchased_qty=purchase.purchased_qty
         price=purchase.price
-        total_price=purchase.total_price
         date_created=purchase.date_created
         date_updated=purchase.date_updated
 
         context={
-            'item':item,
+            'items':items,
             'po': po,
             'vendor': vendor,
             'purchased_qty':purchased_qty ,
             'price': price,
-            'total_price': total_price,
+            
             'date_created':date_created ,
             'date_updated':date_updated ,
             
@@ -757,7 +847,7 @@ def viewpurchase(request,id=0):
         return render(request,'inv/viewpurchaseform.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def purchaseform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -788,7 +878,7 @@ def purchaseform(request,id=0):
 
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def purchasedelete(request,id):
     purchase=Purchase.objects.get(pk=id)
     if request.method=='POST':
@@ -797,13 +887,13 @@ def purchasedelete(request,id):
     return render(request,'inv/purchase_delete.html')
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def issuancelist(request):
     list=Issuance.objects.all()
     return render(request,'inv/issuance.html',{'list':list})
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def viewissuance(request,id=0):
     if request.method=="GET":
         issuance=Issuance.objects.get(pk=id)
@@ -827,7 +917,7 @@ def viewissuance(request,id=0):
         return render(request,'inv/viewissuanceform.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def issuanceform(request,id=0):
     if request.method=="GET":
         if id==0:
@@ -847,7 +937,7 @@ def issuanceform(request,id=0):
         return redirect('/issuancelist')
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def issuancedelete(request,id):
     issuance=Issuance.objects.get(pk=id)
     if request.method=='POST':
@@ -857,13 +947,13 @@ def issuancedelete(request,id):
 
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def returneditemslist(request):
     list=Returneditems.objects.all()
     return render(request,'inv/returneditems.html',{'list':list})
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def viewreturneditems(request,id=0):
     if request.method=="GET":
         returneditem=Returneditems.objects.get(pk=id)
@@ -886,7 +976,7 @@ def viewreturneditems(request,id=0):
         return render(request,'inv/viewreturneditemsform.html',context)
 
 @login_required(login_url='loginpage')
-#@allowed_users(allowed_roles=['admin'])
+@admin_only
 def returneditemsdelete(request,id):
     if request.method=='POST':
         returneditems=Returneditems.objects.get(pk=id)

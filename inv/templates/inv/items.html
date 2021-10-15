@@ -14,26 +14,29 @@
                 <div class="card">
 
                 {% if list %}
+                {% csrf_token %}
                   <div class="card-body mb-4 ">
                 <div class="table-responsive-sm">
                 <table id="example" class="table table-bordered  table-hover table-sm ">
                         <thead class="thead-dark">
                                 <tr>
                                         
-                                        <th><input type="checkbox" id="checkboxNoLabel" value=""></th>
+                                        <th><input type="checkbox" onClick="toggle(this)" value="">
+                                        <button id="delete_btn" class="btn btn-dark delete_btn">Delete</button></th>
                                         <th>NO.</th>
                                         <th>Name</th>
                                         <th>SKU</th>
                                         <th>Type</th>
                                         <th>Units</th>
-                                        <th><a href="{% url 'item_insert' %}" class="btn btn-light"><i class="fa fa-plus-circle" ></i>Add New</a></th>
+                                        <th><a href="{% url 'item_list' %}" class="btn btn-light"><i class="fa fa-plus-circle" ></i>Add New</a></th>
                                          
                                 </tr>
                         </thead>
                         <tbody>
+                        
                             {% for instance in list %}
-                            <tr>
-                                <td><input type="checkbox" id="checkboxNoLabel" value=""></td>
+                            <tr data-id="{{ item.id }}">
+                                <td><input type="checkbox" name="item_id[]" id="delete_item" value=""></td>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{instance.name}}</td>
                                 <td>{{instance.sku}}</td>
@@ -48,10 +51,10 @@
                                         
                                         {%csrf_token%}
                                 <button type="submit" class="btn">
-                                <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="material-icons">delete</i></a></button>
+                                <a href="#" onclick="return confirm('Are you sure you want to delete {{instance.name}} ?');"><i class="fas fa-trash"></i></a></button>
                                 </form>
                                 </td>
-                              
+                        
                             </tr>
                             {% endfor %}
                     </tbody>
@@ -68,5 +71,34 @@
     </div>
       </div>
         </div>
-   
+
+<script>
+function toggle(source) {
+checkboxes = document.getElementsByName('item_id[]');
+for(var i=0, n=checkboxes.length;i<n;i++) {
+checkboxes[i].checked = source.checked;
+}
+}
+</script>
+<script type='text/javascript'>
+$(".delete-btn").click(function(){
+
+  var selected_rows=[];
+
+  $('.table-sm').find('tr').each(function(){
+    var row=$(this);
+    console.log(row.find('input[type="checkbox"]').is(':checked'));
+    if (row.find('input[type="checkbox"]').is(':checked')) {
+        console.log(row.attr('data-id'));
+        selected_rows.push(row.attr('data-id'));
+        };
+    });
+    var selected_rows = JSON.stringify(selected_rows);
+    $.ajax({
+        url: "{% url 'delete_item' %}",
+        type: 'POST',
+        data: {'items_list_ids': selected_rows,'csrfmiddlewaretoken': $("[name=csrfmiddlewaretoken]").val()},
+    })
+});
+</script>
 {%endblock%}
